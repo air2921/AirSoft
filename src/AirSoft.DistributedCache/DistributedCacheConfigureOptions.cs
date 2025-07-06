@@ -5,15 +5,15 @@ namespace AirSoft.DistributedCache
     /// <summary>
     /// Class for configuring cache settings.
     /// </summary>
-    public class ConfigureOptions
+    public class DistributedCacheConfigureOptions
     {
         private JsonNamingPolicy _jsonNamingPolicy;
         private JsonSerializerOptions _jsonSerializerSettings;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ConfigureOptions"/> class.
+        /// Initializes a new instance of the <see cref="DistributedCacheConfigureOptions"/> class.
         /// </summary>
-        public ConfigureOptions()
+        public DistributedCacheConfigureOptions()
         {
             _jsonNamingPolicy = JsonNamingPolicy.CamelCase;
             _jsonSerializerSettings = new JsonSerializerOptions

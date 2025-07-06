@@ -1,6 +1,9 @@
 ﻿namespace AirSoft.MongoDb
 {
-    public class ConfigureOptions
+    /// <summary>
+    /// Class for configuring MongoDB settings.
+    /// </summary>
+    public class MongoConfigureOptions
     {
         /// <summary>
         /// Gets or sets the connection string for the MongoDB database.

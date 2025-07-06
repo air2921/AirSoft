@@ -23,7 +23,7 @@ namespace AirSoft.MongoDb.MongoContexts
         /// Initializes a new instance of the <see cref="MongoContext"/> class.
         /// </summary>
         /// <param name="configureOptions">Configuration options for connecting to MongoDB.</param>
-        protected MongoContext(ConfigureOptions configureOptions)
+        protected MongoContext(MongoConfigureOptions configureOptions)
         {
             _client = new MongoClient(configureOptions.Connection);
             _database = new Lazy<IMongoDatabase>(() => _client.GetDatabase(configureOptions.Database));

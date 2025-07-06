@@ -15,7 +15,7 @@ namespace AirSoft.DistributedCache.Implementations
     /// This class provides methods to interact with a distributed cache, such as getting, setting, removing, and checking the existence of cached items.
     /// It handles serialization and deserialization of objects using the provided JSON serializer settings.
     /// </remarks>
-    public class CacheClient(IDistributedCache cache, ConfigureOptions configureOptions) : ICacheClient
+    public class CacheClient(IDistributedCache cache, DistributedCacheConfigureOptions configureOptions) : ICacheClient
     {
         /// <summary>
         /// Retrieves an object from the cache associated with the specified key.

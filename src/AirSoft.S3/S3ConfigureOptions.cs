@@ -3,7 +3,7 @@
     /// <summary>
     /// Class for configuring Amazon S3 settings.
     /// </summary>
-    public class ConfigureOptions
+    public class S3ConfigureOptions
     {
         /// <summary>
         /// Gets or sets the access key for Amazon S3.
@@ -29,7 +29,7 @@
         /// <value>The endpoint for the S3 storage provider.</value>
         /// <remarks>
         /// This property is required for Yandex Object Storage and should be set to the provider's endpoint (e.g., "https://storage.yandexcloud.net").
-        /// For Amazon S3, this property is optional and can be left null.
+        /// For Amazon S3, this property is required.
         /// </remarks>
         public string Endpoint { internal get; set; } = null!;
     }
