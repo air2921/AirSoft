@@ -6,6 +6,7 @@ using AirSoft.EntityFrameworkCore.Builders.State.Update;
 using AirSoft.EntityFrameworkCore.Details;
 using AirSoft.EntityFrameworkCore.Entities;
 using Microsoft.EntityFrameworkCore;
+using AirSoft.Exceptions;
 using System.Linq.Expressions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions
@@ -62,7 +63,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions
         /// </summary>
         /// <param name="builder">Configured query builder</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A <see cref="ChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
+        /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
         public Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(RangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default);
 
         /// <summary>

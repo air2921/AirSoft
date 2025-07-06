@@ -26,7 +26,6 @@ namespace AirSoft.Communication.Implementations.Smtp
         /// Initializes a new instance of the <see cref="SmtpClientWrapper"/> class.
         /// Connects to the SMTP provider and authenticates using the provided configuration options.
         /// </summary>
-        /// <param name="logger">A logger for tracking errors and operations performed by this class.</param>
         /// <param name="configureOptions">Configuration options containing SMTP provider, port, address, and password for authentication.</param>
         /// <exception cref="SmtpClientException">Thrown if authentication or connection fails.</exception>
         public SmtpClientWrapper(SmtpConfigureOptions configureOptions)

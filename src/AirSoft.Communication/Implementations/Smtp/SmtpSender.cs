@@ -9,7 +9,6 @@ namespace AirSoft.Communication.Implementations.Smtp
     /// <summary>
     /// A class responsible for sending emails using an SMTP client. This class implements the <see cref="ISender{MailDetails}"/> interface to send emails asynchronously.
     /// </summary>
-    /// <param name="logger">A logger for tracking errors and operations performed by this class.</param>
     /// <param name="configureOptions">Configuration options containing SMTP provider settings like the sender's name and address.</param>
     /// <param name="smtpClient">An instance of <see cref="SmtpClientWrapper"/> that handles the actual email sending process.</param>
     /// <remarks>

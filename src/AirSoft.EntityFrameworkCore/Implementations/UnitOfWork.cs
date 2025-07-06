@@ -9,7 +9,6 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     /// </summary>
     /// <typeparam name="TDbContext">The type of the database context, which must inherit from DbContext.</typeparam>
     /// <param name="context">The database context instance that this unit of work will operate on.</param>
-    /// <param name="logger">The enhanced logger instance used for logging operations and errors.</param>
     public class UnitOfWork<TDbContext>(TDbContext context) : IUnitOfWork, IUnitOfWork<TDbContext> where TDbContext : DbContext
     {
         /// <summary>

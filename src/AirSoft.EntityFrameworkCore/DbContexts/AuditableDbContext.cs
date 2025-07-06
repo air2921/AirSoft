@@ -145,9 +145,9 @@ namespace AirSoft.EntityFrameworkCore.DbContexts
         /// - For <see cref="EntityState.Modified"/>:
         ///   - Updates <c>UpdatedAt</c> timestamp via <see cref="OnModifying"/>.
         /// - For <see cref="EntityState.Deleted"/>:
-        ///   - If the entity inherits from <see cref="SoftEntityBase"/>:
+        ///   - If the entity inherits from <see cref="SoftableEntityBase"/>:
         ///     - Performs a soft delete (sets <c>IsDeleted</c> to true and updates <c>UpdatedAt</c>) via <see cref="OnSoftRemoving"/>.
-        ///   - If the entity inherits from <see cref="HardEntityBase"/>:
+        ///   - If the entity inherits from <see cref="ForceableEntityBase"/>:
         ///     - Leaves the deletion as-is for physical removal via <see cref="OnHardRemoving"/>.
         ///   - Otherwise:
         ///     - Calls <see cref="OnRemoving"/> as fallback.
@@ -214,7 +214,7 @@ namespace AirSoft.EntityFrameworkCore.DbContexts
         }
 
         /// <summary>
-        /// Fallback method invoked when an entity marked as deleted does not match <see cref="SoftEntityBase"/> or <see cref="HardEntityBase"/>.
+        /// Fallback method invoked when an entity marked as deleted does not match <see cref="SoftableEntityBase"/> or <see cref="ForceableEntityBase"/>.
         /// </summary>
         /// <param name="entry">The change tracker entry for the entity.</param>
         /// <param name="entity">The entity being removed.</param>

@@ -22,6 +22,7 @@ public class S3Client(IAmazonS3 s3Client) : IS3Client
     /// </summary>
     /// <param name="bucket">The name of the S3 bucket containing the object.</param>
     /// <param name="key">The key (path) of the object in the S3 bucket.</param>
+    /// <param name="verb">The http verb for creating url.</param>
     /// <param name="expires">The expiration date and time for the pre-signed URL.</param>
     /// <returns>
     /// A <see cref="ValueTask{S3ObjectUrlDetails}"/> containing:

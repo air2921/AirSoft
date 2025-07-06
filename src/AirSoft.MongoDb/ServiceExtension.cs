@@ -7,8 +7,28 @@ using System.Collections.Immutable;
 
 namespace AirSoft.MongoDb
 {
+    /// <summary>
+    /// Provides extension methods for configuring services in <see cref="IServiceCollection"/>.
+    /// </summary>
     public static class ServiceExtension
     {
+        /// <summary>
+        /// Registers MongoDB repository pattern services for the specified MongoContext.
+        /// </summary>
+        /// <typeparam name="TMongoContext">The MongoContext type to register repositories for.</typeparam>
+        /// <param name="services">The service collection to add the services to.</param>
+        /// <param name="action">Configuration action for <see cref="MongoConfigureOptions"/>.</param>
+        /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
+        /// <remarks>
+        /// Configures and registers the following services:
+        /// - <see cref="MongoConfigureOptions"/> as singleton
+        /// - <typeparamref name="TMongoContext"/> as scoped
+        /// - Session factories (<see cref="IMongoSessionFactory"/> and <see cref="IMongoSessionFactory{TMongoContext}"/>)
+        /// - Repository implementations for all document types (<see cref="IMongoRepository{TDocument}"/> and <see cref="IMongoRepository{TDocument, TMongoContext}"/>)
+        /// 
+        /// Scans the <typeparamref name="TMongoContext"/> for all <see cref="IMongoCollection{TDocument}"/> properties
+        /// and registers corresponding repositories with scoped lifetime.
+        /// </remarks>
         public static IServiceCollection AddMongoRepository<TMongoContext>(this IServiceCollection services, Action<MongoConfigureOptions> action) where TMongoContext : MongoContext
         {
             var options = new MongoConfigureOptions();

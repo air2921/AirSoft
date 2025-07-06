@@ -15,7 +15,6 @@ namespace AirSoft.Communication.Implementations.Sms
     /// The wrapper supports both synchronous and asynchronous message sending operations, while also ensuring proper client initialization.
     /// </remarks>
     /// <param name="options">The configuration options containing Twilio username, password, Account SID, and phone number.</param>
-    /// <param name="logger">A logger for tracking errors and operations performed by this class.</param>
     public class SmsClientWrapper(TelecomConfigureOptions options)
     {
         /// <summary>

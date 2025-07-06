@@ -247,7 +247,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// </summary>
         /// <param name="builder">A <see cref="RangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
-        /// <returns>A <see cref="ChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
+        /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation.</exception>
         public async Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(RangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default)
         {

@@ -15,6 +15,7 @@ namespace AirSoft.S3.Abstractions
         /// </summary>
         /// <param name="bucket">The name of the S3 bucket containing the object.</param>
         /// <param name="key">The key (path) of the object in the bucket.</param>
+        /// <param name="verb">The http verb for creating url.</param>
         /// <param name="expires">The expiration date and time of the pre-signed URL.</param>
         /// <returns>
         /// A <see cref="ValueTask{S3ObjectUrlDetails}"/> containing:
@@ -24,7 +25,7 @@ namespace AirSoft.S3.Abstractions
         /// - Expiration timestamp (Expires)
         /// </returns>
         /// <exception cref="S3ClientException">Thrown when URL generation fails.</exception>
-        public Task<S3ObjectUrlDetails> SignUrlAsync(string bucket, string key, HttpVerb s3Verb, DateTime expires);
+        public Task<S3ObjectUrlDetails> SignUrlAsync(string bucket, string key, HttpVerb verb, DateTime expires);
 
         /// <summary>
         /// Downloads an object with complete content metadata from S3 storage.

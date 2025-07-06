@@ -343,15 +343,6 @@ namespace AirSoft.Cryptography.Oqs
         /// </para>
         /// 
         /// <para>
-        /// Logger configuration details:
-        /// <list type="bullet">
-        ///   <item><description>Automatically integrates with Serilog if <see cref="Log.Logger"/> is configured</description></item>
-        ///   <item><description>Adds console logging as a fallback output</description></item>
-        ///   <item><description>Logs errors during temporary file cleanup</description></item>
-        /// </list>
-        /// </para>
-        /// 
-        /// <para>
         /// Note: The temporary OQS library file file (<see cref="_oqsPath"/>) is automatically deleted when the process exits.
         /// Any errors during deletion are logged but otherwise ignored.
         /// </para>

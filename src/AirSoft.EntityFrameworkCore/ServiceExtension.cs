@@ -6,8 +6,26 @@ using System.Collections.Immutable;
 
 namespace AirSoft.EntityFrameworkCore
 {
+    /// <summary>
+    /// Provides extension methods for configuring services in <see cref="IServiceCollection"/>.
+    /// </summary>
     public static class ServiceExtension
     {
+        /// <summary>
+        /// Registers Entity Framework Core repository pattern services for the specified DbContext.
+        /// </summary>
+        /// <typeparam name="TDbContext">The DbContext type to register repositories for.</typeparam>
+        /// <param name="services">The service collection to add the services to.</param>
+        /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
+        /// <remarks>
+        /// Automatically registers the following services:
+        /// - Unit of Work implementations (<see cref="IUnitOfWork"/> and <see cref="IUnitOfWork{TDbContext}"/>)
+        /// - Transaction factories (<see cref="ITransactionFactory"/> and <see cref="ITransactionFactory{TDbContext}"/>)
+        /// - Repository implementations for all entity types (<see cref="IRepository{TEntity}"/> and <see cref="IRepository{TEntity, TDbContext}"/>)
+        /// 
+        /// Scans the <typeparamref name="TDbContext"/> for all <see cref="DbSet{TEntity}"/> properties
+        /// and registers corresponding repositories with scoped lifetime.
+        /// </remarks>
         public static IServiceCollection AddEntityFrameworkCoreRepository<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
         {
             services.AddScoped<IUnitOfWork, UnitOfWork<TDbContext>>();

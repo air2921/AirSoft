@@ -62,7 +62,7 @@ namespace AirSoft.MongoDb.Abstractions
         /// </summary>
         /// <param name="builder">Configured query builder with filter, sorting, pagination and timeout options</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A <see cref="ChunkDetails{TDocument}"/> containing the document subset and total count</returns>
+        /// <returns>A <see cref="DocumentChunkDetails{TDocument}"/> containing the document subset and total count</returns>
         Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(RangeQueryDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>

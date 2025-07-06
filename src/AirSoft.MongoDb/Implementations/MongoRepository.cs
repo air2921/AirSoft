@@ -214,7 +214,7 @@ namespace AirSoft.MongoDb.Implementations
         /// </summary>
         /// <param name="builder">A <see cref="RangeQueryDocumentBuilder{TDocument}"/> that defines the query criteria.</param>
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>A <see cref="ChunkDetails{TDocument}"/> containing the paginated results and total count.</returns>
+        /// <returns>A <see cref="DocumentChunkDetails{TDocument}"/> containing the paginated results and total count.</returns>
         /// <exception cref="DocumentException">Thrown when an error occurs during the retrieval operation.</exception>
         public async Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(RangeQueryDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
@@ -451,7 +451,6 @@ namespace AirSoft.MongoDb.Implementations
         /// Defines a filter for removing a single document based on the provided builder and remove mode.
         /// </summary>
         /// <param name="builder">The <see cref="RemoveSingleDocumentBuilder{TDocument}"/> containing removal criteria.</param>
-        /// <param name="document">The document instance used for type conversion reference.</param>
         /// <returns>A <see cref="FilterDefinition{TDocument}"/> configured for the removal operation.</returns>
         /// <exception cref="DocumentException">Throws when invalid RemoveMode</exception>
         private static FilterDefinition<TDocument> DefineSingleRemoveFilter(RemoveSingleDocumentBuilder<TDocument> builder)
@@ -470,7 +469,6 @@ namespace AirSoft.MongoDb.Implementations
         /// Defines a filter for removing multiple documents based on the provided builder and remove mode.
         /// </summary>
         /// <param name="builder">The <see cref="RemoveRangeDocumentBuilder{TDocument}"/> containing removal criteria.</param>
-        /// <param name="document">The document instance used for type conversion reference.</param>
         /// <returns>A <see cref="FilterDefinition{TDocument}"/> configured for the bulk removal operation.</returns>
         /// <exception cref="DocumentException">Throws when invalid RemoveMode</exception>
         private static FilterDefinition<TDocument> DefineRangeRemoveFilter(RemoveRangeDocumentBuilder<TDocument> builder)
