@@ -1,0 +1,58 @@
+﻿using AirSoft.Cryptography.Abstractions;
+using AirSoft.Exceptions;
+using BCrypt.Net;
+using System;
+using static BCrypt.Net.BCrypt;
+
+namespace AirSoft.Cryptography.Hasher
+{
+    /// <summary>
+    /// A class responsible for hashing and verifying strings using the BCrypt algorithm.
+    /// This class implements the <see cref="IHasher"/> interface to provide hashing and verification functionality.
+    /// </summary>
+    /// <remarks>
+    /// This class uses the BCrypt algorithm to hash and verify strings. It supports enhanced hashing with different hash types,
+    /// such as SHA512. Errors during hashing or verification are logged using the provided logger.
+    /// </remarks>
+    public class BCryptHasher : IHasher
+    {
+        /// <summary>
+        /// Hashes a password using the BCrypt algorithm.
+        /// </summary>
+        /// <param name="password">The password to hash.</param>
+        /// <param name="hashType">The hash type to use for enhanced hashing. Defaults to <see cref="HashType.SHA512"/>.</param>
+        /// <returns>A hashed string representation of the password.</returns>
+        /// <exception cref="CryptographyException">Thrown if an error occurs during hashing.</exception>
+        public string Hash(string password, HashType hashType = HashType.SHA512)
+        {
+            try
+            {
+                return EnhancedHashPassword(password, hashType);
+            }
+            catch (Exception ex)
+            {
+                throw new CryptographyException("An error occurred while hashing the object", ex);
+            }
+        }
+
+        /// <summary>
+        /// Verifies if an input string matches a previously hashed string.
+        /// </summary>
+        /// <param name="input">The input string to verify (e.g., a password).</param>
+        /// <param name="src">The previously hashed string to compare against.</param>
+        /// <param name="hashType">The hash type used for enhanced verification. Defaults to <see cref="HashType.SHA512"/>.</param>
+        /// <returns><c>true</c> if the input matches the hashed string; otherwise, <c>false</c>.</returns>
+        /// <exception cref="CryptographyException">Thrown if an error occurs during verification.</exception>
+        public bool Verify(string input, string src, HashType hashType = HashType.SHA512)
+        {
+            try
+            {
+                return EnhancedVerify(input, src, hashType);
+            }
+            catch (Exception ex)
+            {
+                throw new CryptographyException("An error occurred while checking the hash", ex);
+            }
+        }
+    }
+}
