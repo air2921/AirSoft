@@ -1,9 +1,9 @@
 ﻿using AirSoft.EntityFrameworkCore.Builders.Base;
 using AirSoft.EntityFrameworkCore.Entities;
+using AirSoft.EntityFrameworkCore.Enums;
 using AirSoft.Exceptions;
 using System.ComponentModel;
 using System.Linq.Expressions;
-using AirSoft.EntityFrameworkCore.Enums;
 
 namespace AirSoft.EntityFrameworkCore.Builders.State.Remove
 {

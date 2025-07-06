@@ -1,5 +1,5 @@
-﻿using BCrypt.Net;
-using AirSoft.Exceptions;
+﻿using AirSoft.Exceptions;
+using BCrypt.Net;
 
 namespace AirSoft.Cryptography.Abstractions
 {

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AirSoft.S3
+﻿namespace AirSoft.S3
 {
     /// <summary>
     /// Class for configuring Amazon S3 settings.

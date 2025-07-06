@@ -267,7 +267,7 @@ namespace AirSoft.MongoDb.Implementations
                 else
                     await _collection.Value.InsertOneAsync(builder.Session, builder.Document, builder.Options, cancellationToken);
             }
-            catch (OperationCanceledException ex) 
+            catch (OperationCanceledException ex)
             {
                 throw new DocumentException("The operation was cancelled due to waiting too long for completion or due to manual cancellation", ex);
             }
