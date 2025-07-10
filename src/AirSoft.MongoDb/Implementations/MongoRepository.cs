@@ -226,7 +226,11 @@ namespace AirSoft.MongoDb.Implementations
                 cancellationToken = linkedToken.Token;
 
                 var collectionQuery = _collection.Value.ApplyBuilder(builder);
-                var countQuery = _collection.Value.Find(builder.Filter ?? Builders<TDocument>.Filter.Empty);
+
+                var filters = builder.Filters.Select(expr => Builders<TDocument>.Filter.Where(expr)).ToArray();
+                var filter = filters.Length != 0 ? Builders<TDocument>.Filter.And(filters) : Builders<TDocument>.Filter.Empty;
+
+                var countQuery = _collection.Value.Find(filter);
 
                 var chunk = await collectionQuery.ToListAsync(cancellationToken);
                 var count = await countQuery.CountDocumentsAsync(cancellationToken);

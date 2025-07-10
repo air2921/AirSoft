@@ -50,10 +50,10 @@ namespace AirSoft.EntityFrameworkCore.Builders.Query
         internal Includer<TEntity>? Joiner { get; private set; }
 
         /// <summary>
-        /// Filter expression for the query.
+        /// An expressions for filtering entities based on a condition.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal Expression<Func<TEntity, bool>>? Filter { get; private set; }
+        internal IList<Expression<Func<TEntity, bool>>> Filters { get; private set; } = [];
 
         /// <summary>
         /// Gets the projection selector expression that transforms the query results.
@@ -144,7 +144,8 @@ namespace AirSoft.EntityFrameworkCore.Builders.Query
         /// <returns>The current builder instance.</returns>
         public SingleQueryBuilder<TEntity> WithFilter(Expression<Func<TEntity, bool>> filter)
         {
-            Filter = filter ?? throw new InvalidArgumentException($"Using a {nameof(WithFilter)} without filter expression is not allowed");
+            _ = filter ?? throw new InvalidArgumentException($"Using a {nameof(WithFilter)} without filter expression is not allowed");
+            Filters.Add(filter);
             return this;
         }
 
@@ -160,7 +161,7 @@ namespace AirSoft.EntityFrameworkCore.Builders.Query
         }
 
         /// <summary>
-        /// Sets the primary ordering for the query.
+        /// Specifies an ordering expression and direction.If there is at least one ordering expression and direction, adds the next ordering expression and direction. (Does not overwrite !)
         /// </summary>
         /// <param name="expression">The ordering expression.</param>
         /// <param name="descending">True for descending order.</param>
@@ -171,27 +172,6 @@ namespace AirSoft.EntityFrameworkCore.Builders.Query
         {
             if (expression is null)
                 throw new InvalidArgumentException($"Using a {nameof(WithOrdering)} without order expression is not allowed");
-
-            SortOptions.Clear();
-            SortOptions.Add((expression, descending));
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a secondary ordering for the query.
-        /// </summary>
-        /// <param name="expression">The ordering expression.</param>
-        /// <param name="descending">True for descending order.</param>
-        /// <returns>The current builder instance.</returns>
-        public SingleQueryBuilder<TEntity> WithThenOrdering(
-            Expression<Func<TEntity, object?>> expression,
-            bool descending = false)
-        {
-            if (expression is null)
-                throw new InvalidArgumentException($"Using a {nameof(WithThenOrdering)} without order expression is not allowed");
-
-            if (!SortOptions.Any())
-                throw new InvalidOperationException($"Cannot use {nameof(WithThenOrdering)} without first calling {nameof(WithOrdering)}");
 
             SortOptions.Add((expression, descending));
             return this;

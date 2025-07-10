@@ -14,10 +14,10 @@ namespace AirSoft.MongoDb.Builders.Query
     public sealed class SingleQueryDocumentBuilder<TDocument> : BaseDocumentBuilder<RangeQueryDocumentBuilder<TDocument>, TDocument> where TDocument : DocumentBase
     {
         /// <summary>
-        /// An expression for filtering documents based on a condition.
+        /// An expressions for filtering documents based on a condition.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal Expression<Func<TDocument, bool>>? Filter { get; private set; }
+        internal IList<Expression<Func<TDocument, bool>>> Filters { get; private set; } = [];
 
         /// <summary>
         /// Gets the projection selector expression that transforms the query results.
@@ -44,7 +44,8 @@ namespace AirSoft.MongoDb.Builders.Query
         /// <exception cref="InvalidArgumentException">Thrown when the filter expression is null.</exception>
         public SingleQueryDocumentBuilder<TDocument> WithFilter(Expression<Func<TDocument, bool>> filter)
         {
-            Filter = filter ?? throw new InvalidArgumentException($"Using a {nameof(WithFilter)} without filter expression is not allowed");
+            _ = filter ?? throw new InvalidArgumentException($"Using a {nameof(WithFilter)} without filter expression is not allowed");
+            Filters.Add(filter);
             return this;
         }
 
@@ -60,7 +61,7 @@ namespace AirSoft.MongoDb.Builders.Query
         }
 
         /// <summary>
-        /// Sets the primary ordering expression and direction.
+        /// Specifies an ordering expression and direction.If there is at least one ordering expression and direction, adds the next ordering expression and direction. (Does not overwrite !)
         /// </summary>
         /// <param name="expression">The ordering expression.</param>
         /// <param name="descending">True for descending order (default is true).</param>
@@ -70,27 +71,6 @@ namespace AirSoft.MongoDb.Builders.Query
         {
             if (expression is null)
                 throw new InvalidArgumentException($"Using a {nameof(WithOrdering)} without order expression is not allowed");
-
-            SortOptions.Clear();
-            SortOptions.Add((expression, descending));
-            return this;
-        }
-
-        /// <summary>
-        /// Adds a secondary ordering expression and direction.
-        /// </summary>
-        /// <param name="expression">The ordering expression.</param>
-        /// <param name="descending">True for descending order (default is true).</param>
-        /// <returns>The current builder instance.</returns>
-        /// <exception cref="InvalidArgumentException">Thrown when the expression is null.</exception>
-        /// <exception cref="InvalidOperationException">Thrown when no primary ordering has been set.</exception>
-        public SingleQueryDocumentBuilder<TDocument> WithThenOrdering(Expression<Func<TDocument, object?>> expression, bool descending = true)
-        {
-            if (expression is null)
-                throw new InvalidArgumentException($"Using a {nameof(WithThenOrdering)} without order expression is not allowed");
-
-            if (!SortOptions.Any())
-                throw new InvalidOperationException($"Cannot use {nameof(WithThenOrdering)} without first calling {nameof(WithOrdering)}");
 
             SortOptions.Add((expression, descending));
             return this;

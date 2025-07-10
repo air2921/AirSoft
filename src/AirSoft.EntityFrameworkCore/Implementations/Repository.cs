@@ -262,8 +262,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 IQueryable<TEntity> collectionQuery = _dbSet;
                 IQueryable<TEntity> countQuery = _dbSet;
 
-                var count = builder?.Filter is null ? await countQuery.CountAsync(cancellationToken) :
-                    await countQuery.Where(builder.Filter).CountAsync(cancellationToken);
+                foreach (var filter in builder?.Filters ?? [])
+                    countQuery = countQuery.Where(filter);
+
+                var count = await countQuery.CountAsync(cancellationToken);
 
                 if (builder is null)
                     collection = await collectionQuery.ToArrayAsync(cancellationToken);

@@ -61,8 +61,8 @@ namespace AirSoft.EntityFrameworkCore.Extensions
             else
                 query = query.AsSingleQuery();
 
-            if (builder.Filter is not null)
-                query = query.Where(builder.Filter);
+            foreach (var filter in builder.Filters)
+                query = query.Where(filter);
 
             if (builder.Selector is not null)
                 query = query.Select(builder.Selector);

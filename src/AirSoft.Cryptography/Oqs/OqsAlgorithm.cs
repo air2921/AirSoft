@@ -669,6 +669,12 @@ namespace AirSoft.Cryptography.Oqs
                 }
             }
 
+            if (disposing)
+            {
+                // Call Dispose() on all objects implementing IDisposable, if any.
+                // This object does not own any objects that implement IDisposable.
+            }
+
             _disposed = true;
         }
 

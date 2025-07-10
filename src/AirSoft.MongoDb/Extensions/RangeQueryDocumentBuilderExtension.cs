@@ -33,7 +33,10 @@ namespace AirSoft.MongoDb.Extensions
         /// </remarks>
         internal static IFindFluent<TDocument, TDocument> ApplyBuilder<TDocument>(this IMongoCollection<TDocument> collection, RangeQueryDocumentBuilder<TDocument> builder) where TDocument : DocumentBase
         {
-            var query = collection.Find(builder.Filter ?? Builders<TDocument>.Filter.Empty);
+            var filters = builder.Filters.Select(expr => Builders<TDocument>.Filter.Where(expr)).ToArray();
+            var filter = filters.Length != 0 ? Builders<TDocument>.Filter.And(filters) : Builders<TDocument>.Filter.Empty;
+
+            var query = collection.Find(filter);
 
             if (builder.Selector is not null)
                 query = query.Project(builder.Selector);
