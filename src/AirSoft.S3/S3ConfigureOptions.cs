@@ -1,4 +1,6 @@
-﻿namespace AirSoft.S3
+﻿using Amazon.S3;
+
+namespace AirSoft.S3
 {
     /// <summary>
     /// Class for configuring Amazon S3 settings.
@@ -24,13 +26,9 @@
         public string Region { internal get; set; } = null!;
 
         /// <summary>
-        /// Gets or sets the endpoint for the S3 storage provider.
+        /// Advanced AmazonS3Config settings (e.g., ForcePathStyle, ServiceURL, Proxy settings).
         /// </summary>
-        /// <value>The endpoint for the S3 storage provider.</value>
-        /// <remarks>
-        /// This property is required for Yandex Object Storage and should be set to the provider's endpoint (e.g., "https://storage.yandexcloud.net").
-        /// For Amazon S3, this property is required.
-        /// </remarks>
-        public string Endpoint { internal get; set; } = null!;
+        /// <value>AmazonS3Config settings.</value>
+        public AmazonS3Config S3Config { internal get; set; } = null!;
     }
 }

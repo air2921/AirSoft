@@ -11,6 +11,27 @@ namespace AirSoft.S3.Abstractions
     public interface IS3Client
     {
         /// <summary>
+        /// Checks whether an object exists in the specified S3 bucket.
+        /// </summary>
+        /// <param name="bucket">The name of the S3 bucket to check.</param>
+        /// <param name="key">The key (path) of the object in the bucket.</param>
+        /// <param name="cancellationToken">A cancellation token to cancel the operation (optional).</param>
+        /// <returns>
+        /// A <see cref="Task{Boolean}"/> that represents the asynchronous operation.
+        /// The task result contains:
+        /// - <c>true</c> if the object exists
+        /// - <c>false</c> if the object does not exist
+        /// </returns>
+        /// <exception cref="S3ClientException">
+        /// Thrown when the existence check fails for reasons other than "not found" status.
+        /// </exception>
+        /// <remarks>
+        /// This method performs a lightweight HEAD request to verify object existence
+        /// without downloading the object content.
+        /// </remarks>
+        public Task<bool> IsExistsAsync(string bucket, string key, CancellationToken cancellationToken = default);
+
+        /// <summary>
         /// Generates a pre-signed URL with comprehensive access details for an S3 object.
         /// </summary>
         /// <param name="bucket">The name of the S3 bucket containing the object.</param>

@@ -3,6 +3,7 @@ using AirSoft.S3.Abstractions;
 using AirSoft.S3.Details;
 using Amazon.S3;
 using Amazon.S3.Model;
+using System.Net;
 
 namespace AirSoft.S3.Implementations;
 
@@ -17,6 +18,48 @@ namespace AirSoft.S3.Implementations;
 /// </remarks>
 public class S3Client(IAmazonS3 s3Client) : IS3Client
 {
+    /// <summary>
+    /// Checks whether an object exists in the specified S3 bucket.
+    /// </summary>
+    /// <param name="bucket">The name of the S3 bucket to check.</param>
+    /// <param name="key">The key (path) of the object in the bucket.</param>
+    /// <param name="cancellationToken">A cancellation token to cancel the operation (optional).</param>
+    /// <returns>
+    /// A <see cref="Task{Boolean}"/> that represents the asynchronous operation.
+    /// The task result contains:
+    /// - <c>true</c> if the object exists
+    /// - <c>false</c> if the object does not exist
+    /// </returns>
+    /// <exception cref="S3ClientException">
+    /// Thrown when the existence check fails for reasons other than "not found" status.
+    /// </exception>
+    /// <remarks>
+    /// This method performs a lightweight HEAD request to verify object existence
+    /// without downloading the object content.
+    /// </remarks>
+    public async Task<bool> IsExistsAsync(string bucket, string key, CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            var request = new GetObjectMetadataRequest
+            {
+                BucketName = bucket,
+                Key = key
+            };
+
+            var response = await s3Client.GetObjectMetadataAsync(request, cancellationToken);
+            return true;
+        }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+            return false;
+        }
+        catch (Exception ex)
+        {
+            throw new S3ClientException("An error occurred while attempting to check existing an object", ex);
+        }
+    }
+
     /// <summary>
     /// Generates a pre-signed URL for accessing an S3 object with comprehensive metadata.
     /// </summary>

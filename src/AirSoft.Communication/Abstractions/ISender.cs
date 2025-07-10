@@ -4,7 +4,7 @@
     /// Interface for message senders.
     /// </summary>
     /// <typeparam name="TMessage">The type of message, must be a class.</typeparam>
-    public interface ISender<TMessage> where TMessage : class
+    public interface ISender<in TMessage> where TMessage : class
     {
         /// <summary>
         /// Asynchronously sends a message.

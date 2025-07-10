@@ -19,7 +19,7 @@ namespace AirSoft.S3
         /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
         /// <remarks>
         /// Configures and registers the following services:
-        /// - <see cref="IAmazonS3"/> client configured with provided credentials and endpoint
+        /// - <see cref="IAmazonS3"/> client configured with provided credentials and s3 config
         /// - <see cref="IS3Client"/> implementation as scoped service
         /// </remarks>
         public static IServiceCollection AddS3Client(this IServiceCollection services, Action<S3ConfigureOptions> action)
@@ -27,16 +27,9 @@ namespace AirSoft.S3
             var options = new S3ConfigureOptions();
             action.Invoke(options);
 
-            var s3Config = new AmazonS3Config
-            {
-                ServiceURL = options.Endpoint,
-                ForcePathStyle = true,
-                UseHttp = options.Endpoint?.StartsWith("http://") == true,
-            };
-
             var awsCredentials = new BasicAWSCredentials(options.AccessKey, options.SecretKey);
 
-            services.AddSingleton<IAmazonS3>(_ => new AmazonS3Client(awsCredentials, s3Config));
+            services.AddSingleton<IAmazonS3>(_ => new AmazonS3Client(awsCredentials, options.S3Config));
             services.AddScoped<IS3Client, S3Client>();
 
             return services;
