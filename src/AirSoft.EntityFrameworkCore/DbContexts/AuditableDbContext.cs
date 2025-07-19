@@ -68,7 +68,16 @@ namespace AirSoft.EntityFrameworkCore.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+
+            var entityTypes = modelBuilder.Model.GetEntityTypes()
+                .Where(e => typeof(EntityBase).IsAssignableFrom(e.ClrType));
+
+            foreach (var entityType in entityTypes)
+            {
+                modelBuilder.Entity(entityType.ClrType)
+                    .HasIndex(nameof(EntityBase.IsDeleted))
+                    .IsUnique(false);
+            }
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
