@@ -1,6 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Entities;
-
-namespace AirSoft.EntityFrameworkCore.Abstractions.Details
+﻿namespace AirSoft.EntityFrameworkCore.Abstractions.Details
 {
     /// <summary>
     /// Represents a data chunk (subset) with total record count.
@@ -11,7 +9,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Details
     /// Combines a slice of data with the total available count, enabling operations like
     /// "showing 20 of 1000 records" while processing in manageable chunks.
     /// </remarks>
-    public class EntityChunkDetails<TValue> where TValue : EntityBase
+    public class EntityChunkDetails<TValue> where TValue : IEntityBase
     {
         /// <summary>
         /// Gets or sets the current data chunk (subset of records).
