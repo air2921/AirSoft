@@ -1,4 +1,4 @@
-﻿using AirSoft.Communication.Enums;
+﻿using AirSoft.Communication.Abstractions.Enums;
 
 namespace AirSoft.Communication.Options
 {

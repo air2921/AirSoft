@@ -1,4 +1,4 @@
-﻿namespace AirSoft.Communication.Enums
+﻿namespace AirSoft.Communication.Abstractions.Enums
 {
     /// <summary>
     /// Specifies the allowed usage mode for a Twilio phone number.
@@ -18,7 +18,7 @@
         /// - Voice capabilities enabled
         /// - SMS/MMS capabilities disabled
         /// </remarks>
-        CallOnly,
+        CallOnly = 101,
 
         /// <summary>
         /// The phone number can only be used for sending and receiving text messages (SMS/MMS).
@@ -29,7 +29,7 @@
         /// - SMS/MMS capabilities enabled
         /// - Voice capabilities disabled
         /// </remarks>
-        MessageOnly,
+        MessageOnly = 102,
 
         /// <summary>
         /// The phone number can be used for both voice calls and text messages.
@@ -38,6 +38,6 @@
         /// When selected, the number should be configured in Twilio console with:
         /// - Both Voice and SMS/MMS capabilities enabled
         /// </remarks>
-        All
+        All = 200
     }
 }

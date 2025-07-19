@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace AirSoft.Cryptography.Oqs
 {
@@ -51,7 +52,7 @@ namespace AirSoft.Cryptography.Oqs
     /// <seealso cref="IDisposable"/>
     /// <seealso cref="IOqsAlgorithmFormat"/>
     /// </remarks>
-    public class OqsAlgorithm : IDisposable
+    public class OqsAlgorithm : IDisposable, IAsyncDisposable
     {
         /// <summary>
         /// The algorithm format specification containing parameters and metadata for the quantum-safe cryptographic algorithm.
@@ -679,6 +680,65 @@ namespace AirSoft.Cryptography.Oqs
         }
 
         /// <summary>
+        /// Asynchronously releases the unmanaged resources used by the <see cref="OqsAlgorithm"/> 
+        /// and optionally releases the managed resources.
+        /// </summary>
+        /// <param name="disposing">
+        /// <c>true</c> to release both managed and unmanaged resources;
+        /// <c>false</c> to release only unmanaged resources.
+        /// </param>
+        /// <returns>
+        /// A <see cref="ValueTask"/> that represents the asynchronous dispose operation.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This asynchronous version of <see cref="Dispose(bool)"/> performs the same cleanup operations
+        /// but returns a <see cref="ValueTask"/> to support asynchronous disposal scenarios.
+        /// </para>
+        /// <para>
+        /// The method performs the following operations:
+        /// 1. Checks the disposal state via <see cref="_disposed"/> flag
+        /// 2. Uses <see cref="_pointerLock"/> to ensure thread-safe cleanup
+        /// 3. Releases the signature object via <see cref="_oqsSigFree"/> if initialized
+        /// 4. Frees the native library handle when <paramref name="disposing"/> is true
+        /// 5. Sets the <see cref="_disposed"/> flag
+        /// </para>
+        /// <para>
+        /// Note: The current implementation performs synchronous cleanup, but returns ValueTask
+        /// for future compatibility with truly asynchronous cleanup scenarios.
+        /// </para>
+        /// </remarks>
+        protected virtual ValueTask DisposeAsync(bool disposing)
+        {
+            if (_disposed)
+                return new ValueTask();
+
+            lock (_pointerLock)
+            {
+                if (_sig != IntPtr.Zero)
+                {
+                    _oqsSigFree(_sig);
+                    _sig = IntPtr.Zero;
+                }
+
+                if (_oqsLibraryHandle != IntPtr.Zero)
+                {
+                    NativeLibrary.Free(_oqsLibraryHandle);
+                    _oqsLibraryHandle = IntPtr.Zero;
+                }
+            }
+
+            if (disposing)
+            {
+                // Call Dispose() on all objects implementing IDisposable, if any.
+                // This object does not own any objects that implement IDisposable.
+            }
+
+            _disposed = true;
+            return new ValueTask();
+        }
+
+        /// <summary>
         /// Releases all resources used by the current instance of <see cref="OqsAlgorithm"/>.
         /// </summary>
         /// <remarks>
@@ -692,6 +752,33 @@ namespace AirSoft.Cryptography.Oqs
         public void Dispose()
         {
             Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Asynchronously releases all resources used by the current instance of <see cref="OqsAlgorithm"/>.
+        /// </summary>
+        /// <returns>
+        /// A <see cref="ValueTask"/> that represents the asynchronous dispose operation.
+        /// </returns>
+        /// <remarks>
+        /// <para>
+        /// This method:
+        /// 1. Calls <see cref="DisposeAsync(bool)"/> with <c>true</c> to release all resources
+        /// 2. Suppresses finalization via <see cref="GC.SuppressFinalize"/>
+        /// 3. Should be awaited when the instance is no longer needed
+        /// </para>
+        /// <para>
+        /// After awaiting DisposeAsync(), the object should not be used as it may leave
+        /// the instance in an unusable state.
+        /// </para>
+        /// <para>
+        /// Prefer this method over <see cref="Dispose()"/> in asynchronous contexts.
+        /// </para>
+        /// </remarks>
+        public async ValueTask DisposeAsync()
+        {
+            await DisposeAsync(true);
             GC.SuppressFinalize(this);
         }
 

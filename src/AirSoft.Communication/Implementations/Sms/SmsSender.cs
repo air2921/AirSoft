@@ -1,5 +1,5 @@
 ﻿using AirSoft.Communication.Abstractions;
-using AirSoft.Communication.Details;
+using AirSoft.Communication.Abstractions.Details.Telecom;
 using AirSoft.Exceptions;
 using Microsoft.Extensions.Logging;
 

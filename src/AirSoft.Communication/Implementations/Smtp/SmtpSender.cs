@@ -1,8 +1,8 @@
 ﻿using AirSoft.Communication.Abstractions;
-using AirSoft.Communication.Details;
+using AirSoft.Communication.Abstractions.Details.Mail;
+using AirSoft.Communication.Extensions;
 using AirSoft.Communication.Options;
 using AirSoft.Exceptions;
-using MimeKit;
 
 namespace AirSoft.Communication.Implementations.Smtp
 {
@@ -27,13 +27,8 @@ namespace AirSoft.Communication.Implementations.Smtp
         {
             try
             {
-                using var emailMessage = new MimeMessage();
-                emailMessage.From.Add(new MailboxAddress(configureOptions.SenderName, configureOptions.Address));
-                emailMessage.To.Add(new MailboxAddress(mail.UsernameTo, mail.To));
-                emailMessage.Subject = mail.Subject;
-                emailMessage.Body = mail.Entity;
-
-                await smtpClient.SendAsync(emailMessage, cancellationToken);
+                using var message = mail.ToMailKitMessage(configureOptions.SenderName, configureOptions.Address);
+                await smtpClient.SendAsync(message, cancellationToken);
             }
             catch (Exception ex) when (ex is not SmtpClientException)
             {
@@ -50,13 +45,8 @@ namespace AirSoft.Communication.Implementations.Smtp
         {
             try
             {
-                using var emailMessage = new MimeMessage();
-                emailMessage.From.Add(new MailboxAddress(configureOptions.SenderName, configureOptions.Address));
-                emailMessage.To.Add(new MailboxAddress(mail.UsernameTo, mail.To));
-                emailMessage.Subject = mail.Subject;
-                emailMessage.Body = mail.Entity;
-
-                smtpClient.Send(emailMessage);
+                using var message = mail.ToMailKitMessage(configureOptions.SenderName, configureOptions.Address);
+                smtpClient.Send(message);
             }
             catch (Exception ex) when (ex is not SmtpClientException)
             {

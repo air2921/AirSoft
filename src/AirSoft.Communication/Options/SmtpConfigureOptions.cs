@@ -1,4 +1,4 @@
-﻿using AirSoft.Communication.Enums;
+﻿using AirSoft.Communication.Abstractions.Enums;
 using MailKit.Security;
 
 namespace AirSoft.Communication.Options

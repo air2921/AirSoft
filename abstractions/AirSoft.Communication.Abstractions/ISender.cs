@@ -3,8 +3,8 @@
     /// <summary>
     /// Interface for message senders.
     /// </summary>
-    /// <typeparam name="TMessage">The type of message, must be a class.</typeparam>
-    public interface ISender<in TMessage> where TMessage : class
+    /// <typeparam name="TMessage">The type of message, must be <see cref="IMessage"/>.</typeparam>
+    public interface ISender<in TMessage> where TMessage : IMessage
     {
         /// <summary>
         /// Asynchronously sends a message.

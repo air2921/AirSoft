@@ -1,4 +1,4 @@
-﻿using AirSoft.Communication.Enums;
+﻿using AirSoft.Communication.Abstractions.Enums;
 using AirSoft.Communication.Options;
 using AirSoft.Exceptions;
 using Twilio.Rest.Api.V2010.Account;

@@ -1,4 +1,4 @@
-﻿namespace AirSoft.Communication.Details
+﻿namespace AirSoft.Communication.Abstractions.Details.Telecom
 {
     /// <summary>
     /// Represents the details of an SMS message, including the recipient's phone number and the message content.
@@ -9,7 +9,7 @@
     /// - The content of the message to be sent
     /// - The optional sender phone number
     /// </remarks>
-    public class SmsDetails
+    public class SmsDetails : IMessage
     {
         /// <summary>
         /// Gets or sets the recipient of the message.

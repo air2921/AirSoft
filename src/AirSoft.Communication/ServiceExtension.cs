@@ -1,5 +1,6 @@
 ﻿using AirSoft.Communication.Abstractions;
-using AirSoft.Communication.Details;
+using AirSoft.Communication.Abstractions.Details.Mail;
+using AirSoft.Communication.Abstractions.Details.Telecom;
 using AirSoft.Communication.Implementations.Sms;
 using AirSoft.Communication.Implementations.Smtp;
 using AirSoft.Communication.Options;

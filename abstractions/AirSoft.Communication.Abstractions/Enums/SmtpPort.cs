@@ -1,4 +1,4 @@
-﻿namespace AirSoft.Communication.Enums
+﻿namespace AirSoft.Communication.Abstractions.Enums
 {
     /// <summary>
     /// Enumeration of ports for SMTP connections.

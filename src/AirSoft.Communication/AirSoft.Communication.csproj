@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\abstractions\AirSoft.Communication.Abstractions\AirSoft.Communication.Abstractions.csproj" />
     <ProjectReference Include="..\..\shared\AirSoft.Exceptions\AirSoft.Exceptions.csproj" />
   </ItemGroup>
 
