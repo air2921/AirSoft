@@ -14,7 +14,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     /// Initializes a new instance of the <see cref="TransactionFactory{TDbContext}"/> class.
     /// </remarks>
     /// <param name="dbContext">The database context to be used for the transaction.</param>
-    public sealed class TransactionFactory<TDbContext>(TDbContext dbContext) : ITransactionFactory, ITransactionFactory<TDbContext>
+    public class TransactionFactory<TDbContext>(TDbContext dbContext) : ITransactionFactory, ITransactionFactory<TDbContext>
         where TDbContext : DbContext
     {
         /// <summary>

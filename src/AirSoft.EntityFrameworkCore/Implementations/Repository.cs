@@ -25,7 +25,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     /// This repository class provides methods for querying, adding, updating, and deleting entities in a database.
     /// It uses asynchronous operations to ensure non-blocking behavior and supports cancellation through <see cref="CancellationToken"/>.
     /// </remarks>
-    public sealed class Repository<TEntity, TDbContext> :
+    public class Repository<TEntity, TDbContext> :
         IRepository<TEntity>,
         IRepository<TEntity, TDbContext> where TEntity : EntityBase where TDbContext : DbContext
     {
