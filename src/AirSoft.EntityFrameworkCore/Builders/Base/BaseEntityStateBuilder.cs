@@ -20,7 +20,7 @@ namespace AirSoft.EntityFrameworkCore.Builders.Base
         /// This property is internal and intended for framework use only.
         /// </remarks>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal bool SaveChanges { get; private set; }
+        internal bool SaveChanges { get; private set; } = false;
 
         /// <summary>
         /// Configures whether the operation should persist changes to the database immediately.
@@ -30,7 +30,7 @@ namespace AirSoft.EntityFrameworkCore.Builders.Base
         /// If false, changes will be tracked but not persisted until an explicit save is performed.
         /// </param>
         /// <returns>The current builder instance for fluent chaining.</returns>
-        public TBuilder WithSaveChanges(bool save)
+        public TBuilder WithSaveChanges(bool save = true)
         {
             SaveChanges = save;
             return (TBuilder)this;
