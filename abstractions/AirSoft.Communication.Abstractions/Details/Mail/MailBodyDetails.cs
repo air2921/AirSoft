@@ -37,14 +37,5 @@ namespace AirSoft.Communication.Abstractions.Details.Mail
         /// Collection of embedded resources (e.g., images for HTML)
         /// </summary>
         public ICollection<MailResourceDetails> Resources { get; set; } = [];
-
-        /// <summary>
-        /// Content transfer encoding for the body
-        /// </summary>
-        /// <remarks>
-        /// Defaults to 7-bit for plain text, but will automatically
-        /// switch to quoted-printable if extended characters are present
-        /// </remarks>
-        public ContentTransferEncoding ContentTransferEncoding { get; set; } = ContentTransferEncoding.SevenBit;
     }
 }

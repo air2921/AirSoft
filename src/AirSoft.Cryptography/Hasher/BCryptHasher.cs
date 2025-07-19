@@ -1,4 +1,5 @@
 ﻿using AirSoft.Cryptography.Abstractions;
+using AirSoft.Cryptography.Abstractions.Enums;
 using AirSoft.Exceptions;
 using BCrypt.Net;
 using System;
@@ -17,17 +18,17 @@ namespace AirSoft.Cryptography.Hasher
     public class BCryptHasher : IHasher
     {
         /// <summary>
-        /// Hashes a password using the BCrypt algorithm.
+        /// Hashes a string using the specified hash algorithm.
         /// </summary>
-        /// <param name="password">The password to hash.</param>
-        /// <param name="hashType">The hash type to use for enhanced hashing. Defaults to <see cref="HashType.SHA512"/>.</param>
-        /// <returns>A hashed string representation of the password.</returns>
-        /// <exception cref="CryptographyException">Thrown if an error occurs during hashing.</exception>
-        public string Hash(string password, HashType hashType = HashType.SHA512)
+        /// <param name="src">The string to hash.</param>
+        /// <param name="hashAlgorithm">The hash algorithm to use for enhanced hashing. Defaults to <see cref="HashAlgorithm.SHA512"/>.</param>
+        /// <returns>A hashed string representation of the source string.</returns>
+        /// <exception cref="CryptographyException">Thrown when an error occurs during the hashing process (e.g., invalid algorithm or other cryptographic issues).</exception>
+        public string Hash(string src, HashAlgorithm hashAlgorithm = HashAlgorithm.SHA512)
         {
             try
             {
-                return EnhancedHashPassword(password, hashType);
+                return EnhancedHashPassword(src, ConvertToHashType(hashAlgorithm));
             }
             catch (Exception ex)
             {
@@ -40,19 +41,36 @@ namespace AirSoft.Cryptography.Hasher
         /// </summary>
         /// <param name="input">The input string to verify (e.g., a password).</param>
         /// <param name="src">The previously hashed string to compare against.</param>
-        /// <param name="hashType">The hash type used for enhanced verification. Defaults to <see cref="HashType.SHA512"/>.</param>
+        /// <param name="hashAlgorithm">The hash algorithm used for enhanced verification. Defaults to <see cref="HashAlgorithm.SHA512"/>.</param>
         /// <returns><c>true</c> if the input matches the hashed string; otherwise, <c>false</c>.</returns>
-        /// <exception cref="CryptographyException">Thrown if an error occurs during verification.</exception>
-        public bool Verify(string input, string src, HashType hashType = HashType.SHA512)
+        /// <exception cref="CryptographyException">Thrown when an error occurs during the verification process (e.g., invalid algorithm or cryptographic failure).</exception>
+        public bool Verify(string input, string src, HashAlgorithm hashAlgorithm = HashAlgorithm.SHA512)
         {
             try
             {
-                return EnhancedVerify(input, src, hashType);
+                return EnhancedVerify(input, src, ConvertToHashType(hashAlgorithm));
             }
             catch (Exception ex)
             {
                 throw new CryptographyException("An error occurred while checking the hash", ex);
             }
+        }
+
+        /// <summary>
+        /// Converts <see cref="HashAlgorithm"/> to the corresponding <see cref="HashType"/>
+        /// </summary>
+        /// <param name="hashAlgorithm">Source hash algorithm enum</param>
+        /// <returns>Matching <see cref="HashType"/> or <see cref="HashType.None"/> if no match</returns>
+        private static HashType ConvertToHashType(HashAlgorithm hashAlgorithm)
+        {
+            if (hashAlgorithm == HashAlgorithm.SHA256)
+                return HashType.SHA256;
+            if (hashAlgorithm == HashAlgorithm.SHA384)
+                return HashType.SHA384;
+            if (hashAlgorithm == HashAlgorithm.SHA512)
+                return HashType.SHA512;
+
+            return HashType.None;
         }
     }
 }

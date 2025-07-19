@@ -1,5 +1,5 @@
-﻿using AirSoft.Exceptions;
-using BCrypt.Net;
+﻿using AirSoft.Cryptography.Abstractions.Enums;
+using AirSoft.Exceptions;
 
 namespace AirSoft.Cryptography.Abstractions
 {
@@ -12,19 +12,19 @@ namespace AirSoft.Cryptography.Abstractions
         /// Hashes a string using the specified hash algorithm.
         /// </summary>
         /// <param name="src">The string to hash.</param>
-        /// <param name="hashType">The hash type to use for enhanced hashing. Defaults to <see cref="HashType.SHA512"/>.</param>
+        /// <param name="hashAlgorithm">The hash algorithm to use for enhanced hashing. Defaults to <see cref="HashAlgorithm.SHA512"/>.</param>
         /// <returns>A hashed string representation of the source string.</returns>
         /// <exception cref="CryptographyException">Thrown when an error occurs during the hashing process (e.g., invalid algorithm or other cryptographic issues).</exception>
-        public string Hash(string src, HashType hashType = HashType.SHA512);
+        public string Hash(string src, HashAlgorithm hashAlgorithm = HashAlgorithm.SHA512);
 
         /// <summary>
         /// Verifies if an input string matches a previously hashed string.
         /// </summary>
         /// <param name="input">The input string to verify (e.g., a password).</param>
         /// <param name="src">The previously hashed string to compare against.</param>
-        /// <param name="hashType">The hash type used for enhanced verification. Defaults to <see cref="HashType.SHA512"/>.</param>
+        /// <param name="hashAlgorithm">The hash algorithm used for enhanced verification. Defaults to <see cref="HashAlgorithm.SHA512"/>.</param>
         /// <returns><c>true</c> if the input matches the hashed string; otherwise, <c>false</c>.</returns>
         /// <exception cref="CryptographyException">Thrown when an error occurs during the verification process (e.g., invalid algorithm or cryptographic failure).</exception>
-        public bool Verify(string input, string src, HashType hashType = HashType.SHA512);
+        public bool Verify(string input, string src, HashAlgorithm hashAlgorithm = HashAlgorithm.SHA512);
     }
 }

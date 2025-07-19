@@ -50,14 +50,5 @@ namespace AirSoft.Communication.Abstractions.Details.Mail
         /// False for regular attachments (default)
         /// </remarks>
         public bool IsInline { get; set; } = false;
-
-        /// <summary>
-        /// Content transfer encoding method
-        /// </summary>
-        /// <remarks>
-        /// Defaults to Base64 for binary attachments.
-        /// Use QuotedPrintable for text attachments with special characters.
-        /// </remarks>
-        public ContentTransferEncoding ContentTransferEncoding { get; set; } = ContentTransferEncoding.Base64;
     }
 }

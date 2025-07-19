@@ -54,6 +54,24 @@ namespace AirSoft.Cryptography.Oqs
     /// </remarks>
     public class OqsAlgorithm : IDisposable, IAsyncDisposable
     {
+        #region Fields
+
+        /// <summary>
+        /// Gets the platform-specific filename for the OQS library
+        /// </summary>
+        /// <value>
+        /// Returns "oqs.dll" on Windows, "oqs.so" on Linux, or "oqs.dylib" on macOS
+        /// </value>
+        private static readonly string _fileName = DefineOqsFile();
+
+        /// <summary>
+        /// Gets the full resource path for the embedded OQS library
+        /// </summary>
+        /// <value>
+        /// Returns the resource path combining <see cref="ResourceNamespace"/> with the platform-specific filename
+        /// </value>
+        private static readonly string _resourceName = DefineOqsResource();
+
         /// <summary>
         /// The algorithm format specification containing parameters and metadata for the quantum-safe cryptographic algorithm.
         /// </summary>
@@ -85,6 +103,18 @@ namespace AirSoft.Cryptography.Oqs
         /// are performed on the instance after it has been disposed.
         /// </remarks>
         private volatile bool _disposed;
+
+        #endregion
+
+        #region Immutable
+
+        /// <summary>
+        /// The namespace where OQS library resources are embedded
+        /// </summary>
+        /// <value>Returns "AirSoft.Cryptography.Assembly" as the default resource namespace</value>
+        public const string ResourceNamespace = "AirSoft.Cryptography.Assembly";
+
+        #endregion
 
         #region Pointers
 
@@ -198,7 +228,7 @@ namespace AirSoft.Cryptography.Oqs
         /// <remarks>
         /// This object ensures that library loading and delegate resolution are thread-safe.
         /// </remarks>
-        private readonly object _libLock = new object();
+        private readonly object _libLock = new();
 
         /// <summary>
         /// Lock object to synchronize access to the signature object during cryptographic operations.
@@ -206,7 +236,7 @@ namespace AirSoft.Cryptography.Oqs
         /// <remarks>
         /// This object ensures thread safety when performing signature operations such as signing and verification.
         /// </remarks>
-        private readonly object _pointerLock = new object();
+        private readonly object _pointerLock = new();
 
         #endregion
 
@@ -356,7 +386,7 @@ namespace AirSoft.Cryptography.Oqs
         protected OqsAlgorithm(IOqsAlgorithmFormat algorithmFormat)
         {
             _algorithmFormat = algorithmFormat;
-            _oqsPath = Path.Join(Path.GetTempPath(), algorithmFormat.FileName);
+            _oqsPath = Path.Join(Path.GetTempPath(), _fileName);
 
             if (!IsValidFormat())
                 throw new CryptographyException("Invalid algorithm format");
@@ -495,7 +525,6 @@ namespace AirSoft.Cryptography.Oqs
         /// <para>This method performs the following operations:</para>
         /// <list type="number">
         /// <item><description>Checks if the OQS library file already exists at <see cref="_oqsPath"/></description></item>
-        /// <item><description>If not found, extracts the embedded resource <see cref="IOqsAlgorithmFormat.ResourceName"/> to the target path</description></item>
         /// <item><description>Loads the native library using <see cref="NativeLibrary.Load(string)"/></description></item>
         /// </list>
         /// <para>The DLL extraction is performed with exclusive file access to prevent race conditions.</para>
@@ -504,8 +533,8 @@ namespace AirSoft.Cryptography.Oqs
         {
             if (!File.Exists(_oqsPath))
             {
-                using var assemblyStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_algorithmFormat.ResourceName)
-                    ?? throw new CryptographyException($"Embedded resource '{_algorithmFormat.ResourceName}' not found");
+                using var assemblyStream = Assembly.GetExecutingAssembly().GetManifestResourceStream(_resourceName)
+                    ?? throw new CryptographyException($"Embedded resource '{_resourceName}' not found");
 
 #pragma warning disable IDE0063
                 using (var fileStream = new FileStream(_oqsPath, FileMode.OpenOrCreate, FileAccess.ReadWrite, FileShare.None, 4096))
@@ -626,6 +655,48 @@ namespace AirSoft.Cryptography.Oqs
                 return false;
 
             return true;
+        }
+
+        #endregion
+
+        #region Resource Finder
+
+        /// <summary>
+        /// Determines the appropriate OQS (Open Quantum Safe) library filename based on the current operating system.
+        /// </summary>
+        /// <returns>The platform-specific OQS library filename.</returns>
+        /// <exception cref="PlatformNotSupportedException">
+        /// Thrown when the current platform is unsupported.
+        /// </exception>
+        private static string DefineOqsFile()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return "oqs.dll";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return "oqs.so";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                return "oqs.dylib";
+
+            throw new PlatformNotSupportedException("Oqs is not supported on this platform");
+        }
+
+        /// <summary>
+        /// Determines the appropriate OQS (Open Quantum Safe) library resource path based on the current operating system.
+        /// </summary>
+        /// <returns>The platform-specific OQS library resource path.</returns>
+        /// <exception cref="PlatformNotSupportedException">
+        /// Thrown when the current platform is unsupported.
+        /// </exception>
+        private static string DefineOqsResource()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return $"{ResourceNamespace}.oqs.dll";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return $"{ResourceNamespace}.oqs.so";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                return $"{ResourceNamespace}.oqs.dylib";
+
+            throw new PlatformNotSupportedException("Oqs is not supported on this platform");
         }
 
         #endregion
@@ -800,8 +871,7 @@ namespace AirSoft.Cryptography.Oqs
         /// </remarks>
         protected virtual void CheckDisposed()
         {
-            if (_disposed)
-                throw new ObjectDisposedException(GetType().FullName);
+            ObjectDisposedException.ThrowIf(_disposed, this);
         }
 
         #endregion

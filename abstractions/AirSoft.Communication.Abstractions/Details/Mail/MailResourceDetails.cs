@@ -27,10 +27,5 @@ namespace AirSoft.Communication.Abstractions.Details.Mail
         /// MIME type (e.g., "image/png")
         /// </summary>
         public required string ContentType { get; set; }
-
-        /// <summary>
-        /// Encoding method (default: Base64)
-        /// </summary>
-        public ContentTransferEncoding ContentTransferEncoding { get; set; } = ContentTransferEncoding.Base64;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AirSoft.Communication.Abstractions.Details.Mail;
+using AirSoft.Communication.Abstractions.Enums;
 using MimeKit;
 
 namespace AirSoft.Communication.Extensions
