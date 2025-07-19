@@ -490,9 +490,15 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 cancellationToken = linkedToken.Token;
 
                 var entity = builder.Entity;
-                entity.UpdatedBy = builder.UpdatedByUser;
+                var entry = _dbSet.Entry(entity);
 
-                _dbSet.Update(entity);
+                if (entry.State != EntityState.Detached)
+                    entity.UpdatedBy = builder.UpdatedByUser;
+                else
+                {
+                    entity.UpdatedBy = builder.UpdatedByUser;
+                    _dbSet.Update(entity);
+                }
 
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
@@ -526,9 +532,17 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 cancellationToken = linkedToken.Token;
 
                 foreach (var entity in builder.Entities)
-                    entity.UpdatedBy = builder.UpdatedByUser;
+                {
+                    var entry = _dbSet.Entry(entity);
 
-                _dbSet.UpdateRange(builder.Entities);
+                    if (entry.State != EntityState.Detached)
+                        entity.UpdatedBy = builder.UpdatedByUser;
+                    else
+                    {
+                        entity.UpdatedBy = builder.UpdatedByUser;
+                        _dbSet.Update(entity);
+                    }
+                }
 
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
