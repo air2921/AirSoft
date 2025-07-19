@@ -12,7 +12,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Query
     /// <remarks>
     /// Enables building single entity queries through method chaining while maintaining separation between query construction and execution.
     /// </remarks>
-    public interface ISingleQueryBuilder<TEntity> where TEntity : IEntityBase
+    public interface ISingleQueryBuilder<TEntity> : IBaseEntityBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Indicates whether the query should ignore default query filters.

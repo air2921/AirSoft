@@ -10,7 +10,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.C
     /// Provides a fluent interface for configuring entity creation while maintaining
     /// separation between operation construction and execution.
     /// </remarks>
-    public interface ICreateSingleBuilder<TEntity> where TEntity : IEntityBase
+    public interface ICreateSingleBuilder<TEntity> : IBaseEntityBuilder, IBaseEntityStateBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Entity to be created

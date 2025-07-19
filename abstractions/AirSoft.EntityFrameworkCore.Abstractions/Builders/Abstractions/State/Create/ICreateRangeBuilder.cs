@@ -10,7 +10,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.C
     /// Provides a fluent interface for configuring batch creation of entities while maintaining
     /// separation between operation construction and execution.
     /// </remarks>
-    public interface ICreateRangeBuilder<TEntity> where TEntity : IEntityBase
+    public interface ICreateRangeBuilder<TEntity> : IBaseEntityBuilder, IBaseEntityStateBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Collection of entities to be created

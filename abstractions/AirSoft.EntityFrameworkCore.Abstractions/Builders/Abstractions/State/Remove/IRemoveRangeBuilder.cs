@@ -14,7 +14,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.R
     /// - Identifier-based removal
     /// - Filter-based removal
     /// </remarks>
-    public interface IRemoveRangeBuilder<TEntity> where TEntity : IEntityBase
+    public interface IRemoveRangeBuilder<TEntity> : IBaseEntityBuilder, IBaseEntityStateBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Collection of entities to be removed directly.

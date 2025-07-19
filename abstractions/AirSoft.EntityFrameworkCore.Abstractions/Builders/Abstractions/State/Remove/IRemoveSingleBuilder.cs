@@ -14,7 +14,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.R
     /// - Primary key identifier
     /// - Filter expression
     /// </remarks>
-    public interface IRemoveSingleBuilder<TEntity> where TEntity : IEntityBase
+    public interface IRemoveSingleBuilder<TEntity> : IBaseEntityBuilder, IBaseEntityStateBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Identifier of the entity to be removed.

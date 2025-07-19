@@ -6,7 +6,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions
     /// An interface for command builders that perform database operations without returning query results.
     /// Serves as the foundation for create, update, and delete operation builders.
     /// </summary>
-    public interface IBaseEntityStateBuilder
+    public interface IBaseEntityStateBuilder : IBaseEntityBuilder
     {
         /// <summary>
         /// Gets whether changes should be immediately persisted to the database.

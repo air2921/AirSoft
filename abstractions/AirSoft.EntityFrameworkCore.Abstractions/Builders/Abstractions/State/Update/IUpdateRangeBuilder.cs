@@ -10,7 +10,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.U
     /// Provides a fluent interface for configuring updates of multiple entities while maintaining
     /// separation between operation construction and execution.
     /// </remarks>
-    public interface IUpdateRangeBuilder<TEntity> where TEntity : IEntityBase
+    public interface IUpdateRangeBuilder<TEntity> : IBaseEntityBuilder, IBaseEntityStateBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Collection of entities to be updated

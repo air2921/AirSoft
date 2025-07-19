@@ -10,7 +10,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.R
     /// Provides a fluent interface for configuring restoration of multiple soft-deleted entities
     /// while maintaining separation between operation construction and execution.
     /// </remarks>
-    public interface IRestoreRangeBuilder<TEntity> where TEntity : IEntityBase
+    public interface IRestoreRangeBuilder<TEntity> : IBaseEntityBuilder, IBaseEntityStateBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Gets the collection of entities to be restored.

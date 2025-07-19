@@ -12,7 +12,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Query
     /// <remarks>
     /// Enables building complex queries through method chaining while maintaining separation between query construction and execution.
     /// </remarks>
-    public interface IRangeQueryBuilder<TEntity> where TEntity : IEntityBase
+    public interface IRangeQueryBuilder<TEntity> : IBaseEntityBuilder where TEntity : IEntityBase
     {
         /// <summary>
         /// Indicates whether the query should ignore default query filters.
