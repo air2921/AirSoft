@@ -3,6 +3,11 @@ using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {
+    /// <summary>
+    /// Provides repository pattern operations for removing entities from the data store.
+    /// Supports both single and batch removal operations through builder pattern configuration.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity to remove, must implement IEntityBase</typeparam>
     public interface IRemoveRepository<TEntity> where TEntity : IEntityBase
     {
         /// <summary>

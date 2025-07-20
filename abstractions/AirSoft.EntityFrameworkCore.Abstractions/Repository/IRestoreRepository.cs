@@ -3,6 +3,11 @@ using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {
+    /// <summary>
+    /// Provides repository pattern operations for restoring soft-deleted entities in the data store.
+    /// Supports both single and batch restoration operations through builder pattern configuration.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity to restore, must implement IEntityBase</typeparam>
     public interface IRestoreRepository<TEntity> where TEntity : IEntityBase
     {
         /// <summary>

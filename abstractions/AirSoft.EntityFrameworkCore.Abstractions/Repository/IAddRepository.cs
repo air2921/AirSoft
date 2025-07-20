@@ -3,6 +3,11 @@ using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {
+    /// <summary>
+    /// Provides repository pattern operations for adding entities to the data store.
+    /// Supports both single and batch operations through builder pattern configuration.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity to add, must implement IEntityBase</typeparam>
     public interface IAddRepository<TEntity> where TEntity : IEntityBase
     {
         /// <summary>

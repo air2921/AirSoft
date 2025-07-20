@@ -3,6 +3,11 @@ using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {
+    /// <summary>
+    /// Provides repository pattern operations for updating entities in the data store.
+    /// Supports both single and batch updates through builder pattern configuration.
+    /// </summary>
+    /// <typeparam name="TEntity">The type of entity to update, must implement IEntityBase</typeparam>
     public interface IUpdateRepository<TEntity> where TEntity : IEntityBase
     {
         /// <summary>
