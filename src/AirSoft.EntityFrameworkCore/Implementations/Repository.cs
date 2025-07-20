@@ -432,7 +432,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     public partial class Repository<TEntity, TDbContext>
     {
         /// <inheritdoc/>
-        public async Task<TEntity> AddAsync(AddSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> AddAsync(AddSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -447,7 +447,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
 
-                return builder.Entity;
+                return 1;
             }
             catch (OperationCanceledException ex)
             {
@@ -460,7 +460,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<TEntity> AddAsync(Action<AddSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> AddAsync(Action<AddSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new AddSingleBuilder<TEntity>();
             builderAction(builder);
@@ -468,7 +468,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity Add(AddSingleBuilder<TEntity> builder)
+        public int Add(AddSingleBuilder<TEntity> builder)
         {
             try
             {
@@ -478,7 +478,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     _context.SaveChanges();
 
-                return builder.Entity;
+                return 1;
             }
             catch (Exception ex)
             {
@@ -487,7 +487,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity Add(Action<AddSingleBuilder<TEntity>> builderAction)
+        public int Add(Action<AddSingleBuilder<TEntity>> builderAction)
         {
             var builder = new AddSingleBuilder<TEntity>();
             builderAction(builder);
@@ -495,7 +495,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> AddRangeAsync(AddRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> AddRangeAsync(AddRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -512,7 +512,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
 
-                return builder.Entities;
+                return builder.Entities.Count;
             }
             catch (OperationCanceledException ex)
             {
@@ -525,7 +525,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> AddRangeAsync(Action<AddRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> AddRangeAsync(Action<AddRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new AddRangeBuilder<TEntity>();
             builderAction(builder);
@@ -533,7 +533,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> AddRange(AddRangeBuilder<TEntity> builder)
+        public int AddRange(AddRangeBuilder<TEntity> builder)
         {
             try
             {
@@ -545,7 +545,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     _context.SaveChanges();
 
-                return builder.Entities;
+                return builder.Entities.Count;
             }
             catch (Exception ex)
             {
@@ -554,7 +554,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> AddRange(Action<AddRangeBuilder<TEntity>> builderAction)
+        public int AddRange(Action<AddRangeBuilder<TEntity>> builderAction)
         {
             var builder = new AddRangeBuilder<TEntity>();
             builderAction(builder);
@@ -565,7 +565,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     public partial class Repository<TEntity, TDbContext>
     {
         /// <inheritdoc/>
-        public async Task<TEntity?> RemoveAsync(RemoveSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> RemoveAsync(RemoveSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -574,17 +574,25 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 using var linkedToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cts.Token);
                 cancellationToken = linkedToken.Token;
 
-                var entity = await GetEntityToRemoveAsync(builder, cancellationToken);
+                if (builder.IsExeсutable)
+                {
+                    var query = SetQueryForRemoveExecution(builder);
+                    return await query.ExecuteDeleteAsync(cancellationToken);
+                }
+                else
+                {
+                    var entity = await GetEntityToRemoveAsync(builder, cancellationToken);
 
-                if (entity is null)
-                    return null;
+                    if (entity is null)
+                        return 0;
 
-                var deletedEntity = _dbSet.Remove(entity).Entity;
+                    var deletedEntity = _dbSet.Remove(entity).Entity;
 
-                if (builder.SaveChanges)
-                    await _context.SaveChangesAsync(cancellationToken);
+                    if (builder.SaveChanges)
+                        await _context.SaveChangesAsync(cancellationToken);
 
-                return deletedEntity;
+                    return 1;
+                }
             }
             catch (OperationCanceledException ex)
             {
@@ -597,7 +605,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<TEntity?> RemoveAsync(Action<RemoveSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> RemoveAsync(Action<RemoveSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RemoveSingleBuilder<TEntity>();
             builderAction(builder);
@@ -605,21 +613,29 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity? Remove(RemoveSingleBuilder<TEntity> builder)
+        public int Remove(RemoveSingleBuilder<TEntity> builder)
         {
             try
             {
-                var entity = GetEntityToRemove(builder);
+                if (builder.IsExeсutable)
+                {
+                    var query = SetQueryForRemoveExecution(builder);
+                    return query.ExecuteDelete();
+                }
+                else
+                {
+                    var entity = GetEntityToRemove(builder);
 
-                if (entity is null)
-                    return null;
+                    if (entity is null)
+                        return 0;
 
-                var deletedEntity = _dbSet.Remove(entity).Entity;
+                    var deletedEntity = _dbSet.Remove(entity).Entity;
 
-                if (builder.SaveChanges)
-                    _context.SaveChanges();
+                    if (builder.SaveChanges)
+                        _context.SaveChanges();
 
-                return deletedEntity;
+                    return 1;
+                }
             }
             catch (Exception ex)
             {
@@ -628,7 +644,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity? Remove(Action<RemoveSingleBuilder<TEntity>> builderAction)
+        public int Remove(Action<RemoveSingleBuilder<TEntity>> builderAction)
         {
             var builder = new RemoveSingleBuilder<TEntity>();
             builderAction(builder);
@@ -636,7 +652,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> RemoveRangeAsync(RemoveRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> RemoveRangeAsync(RemoveRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -645,14 +661,22 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 using var linkedToken = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, cts.Token);
                 cancellationToken = linkedToken.Token;
 
-                var entities = await GetEntitiesToRemoveAsync(builder, cancellationToken);
+                if (builder.IsExeсutable)
+                {
+                    var query = SetQueryForRemoveExecution(builder);
+                    return await query.ExecuteDeleteAsync(cancellationToken);
+                }
+                else
+                {
+                    var entities = await GetEntitiesToRemoveAsync(builder, cancellationToken);
 
-                _context.RemoveRange(entities);
+                    _context.RemoveRange(entities);
 
-                if (builder.SaveChanges)
-                    await _context.SaveChangesAsync(cancellationToken);
+                    if (builder.SaveChanges)
+                        await _context.SaveChangesAsync(cancellationToken);
 
-                return entities;
+                    return entities.Count();
+                }
             }
             catch (OperationCanceledException ex)
             {
@@ -665,7 +689,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> RemoveRangeAsync(Action<RemoveRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> RemoveRangeAsync(Action<RemoveRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RemoveRangeBuilder<TEntity>();
             builderAction(builder);
@@ -673,18 +697,26 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> RemoveRange(RemoveRangeBuilder<TEntity> builder)
+        public int RemoveRange(RemoveRangeBuilder<TEntity> builder)
         {
             try
             {
-                var entities = GetEntitiesToRemove(builder);
+                if (builder.IsExeсutable)
+                {
+                    var query = SetQueryForRemoveExecution(builder);
+                    return query.ExecuteDelete();
+                }
+                else
+                {
+                    var entities = GetEntitiesToRemove(builder);
 
-                _context.RemoveRange(entities);
+                    _context.RemoveRange(entities);
 
-                if (builder.SaveChanges)
-                    _context.SaveChanges();
+                    if (builder.SaveChanges)
+                        _context.SaveChanges();
 
-                return entities;
+                    return entities.Count();
+                }
             }
             catch (Exception ex)
             {
@@ -693,58 +725,76 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> RemoveRange(Action<RemoveRangeBuilder<TEntity>> builderAction)
+        public int RemoveRange(Action<RemoveRangeBuilder<TEntity>> builderAction)
         {
             var builder = new RemoveRangeBuilder<TEntity>();
             builderAction(builder);
             return RemoveRange(builder);
         }
 
-        /// <inheritdoc/>
         private TEntity? GetEntityToRemove(RemoveSingleBuilder<TEntity> builder)
         {
-            return builder.RemoveMode switch
+            return builder.RemoveStrategy switch
             {
-                EntityRemoveMode.Entity when builder.Entity is not null => builder.Entity,
-                EntityRemoveMode.Identifier when builder.Id is not null => _dbSet.Find(builder.Id),
-                EntityRemoveMode.Filter when builder.Filter is not null => _dbSet.FirstOrDefault(builder.Filter),
-                _ => null
+                EntityRemoveStrategy.Entity when builder.Entity is not null => builder.Entity,
+                EntityRemoveStrategy.Identifier when builder.Id is not null => _dbSet.Find(builder.Id),
+                EntityRemoveStrategy.Filter when builder.Filter is not null => _dbSet.FirstOrDefault(builder.Filter),
+                _ => throw new EntityException($"Invalid {nameof(builder.RemoveStrategy)}")
             };
         }
 
-        /// <inheritdoc/>
         private async Task<TEntity?> GetEntityToRemoveAsync(RemoveSingleBuilder<TEntity> builder, CancellationToken cancellationToken)
         {
-            return builder.RemoveMode switch
+            return builder.RemoveStrategy switch
             {
-                EntityRemoveMode.Entity when builder.Entity is not null => builder.Entity,
-                EntityRemoveMode.Identifier when builder.Id is not null => await _dbSet.FindAsync([builder.Id, cancellationToken], cancellationToken: cancellationToken),
-                EntityRemoveMode.Filter when builder.Filter is not null => await _dbSet.FirstOrDefaultAsync(builder.Filter, cancellationToken),
-                _ => null
+                EntityRemoveStrategy.Entity when builder.Entity is not null => builder.Entity,
+                EntityRemoveStrategy.Identifier when builder.Id is not null => await _dbSet.FindAsync([builder.Id, cancellationToken], cancellationToken: cancellationToken),
+                EntityRemoveStrategy.Filter when builder.Filter is not null => await _dbSet.FirstOrDefaultAsync(builder.Filter, cancellationToken),
+                _ => throw new EntityException($"Invalid {nameof(builder.RemoveStrategy)}")
             };
         }
 
-        /// <inheritdoc/>
         private IEnumerable<TEntity> GetEntitiesToRemove(RemoveRangeBuilder<TEntity> builder)
         {
-            return builder.RemoveMode switch
+            return builder.RemoveStrategy switch
             {
-                EntityRemoveMode.Entity => builder.Entities,
-                EntityRemoveMode.Identifier => _dbSet.Where(e => builder.Identifiers.Contains(e.Id)).ToArray(),
-                EntityRemoveMode.Filter when builder.Filter is not null => _dbSet.Where(builder.Filter).ToArray(),
-                _ => throw new EntityException($"Invalid {nameof(builder.RemoveMode)}")
+                EntityRemoveStrategy.Entity => builder.Entities,
+                EntityRemoveStrategy.Identifier => _dbSet.Where(e => builder.Identifiers.Contains(e.Id)).ToArray(),
+                EntityRemoveStrategy.Filter when builder.Filter is not null => _dbSet.Where(builder.Filter).ToArray(),
+                _ => throw new EntityException($"Invalid {nameof(builder.RemoveStrategy)}")
             };
         }
 
-        /// <inheritdoc/>
         private async Task<IEnumerable<TEntity>> GetEntitiesToRemoveAsync(RemoveRangeBuilder<TEntity> builder, CancellationToken cancellationToken)
         {
-            return builder.RemoveMode switch
+            return builder.RemoveStrategy switch
             {
-                EntityRemoveMode.Entity => builder.Entities,
-                EntityRemoveMode.Identifier => await _dbSet.Where(e => builder.Identifiers.Contains(e.Id)).ToArrayAsync(cancellationToken),
-                EntityRemoveMode.Filter when builder.Filter is not null => await _dbSet.Where(builder.Filter).ToArrayAsync(cancellationToken),
-                _ => throw new EntityException($"Invalid {nameof(builder.RemoveMode)}")
+                EntityRemoveStrategy.Entity => builder.Entities,
+                EntityRemoveStrategy.Identifier => await _dbSet.Where(e => builder.Identifiers.Contains(e.Id)).ToArrayAsync(cancellationToken),
+                EntityRemoveStrategy.Filter when builder.Filter is not null => await _dbSet.Where(builder.Filter).ToArrayAsync(cancellationToken),
+                _ => throw new EntityException($"Invalid {nameof(builder.RemoveStrategy)}")
+            };
+        }
+
+        private IQueryable<TEntity> SetQueryForRemoveExecution(RemoveSingleBuilder<TEntity> builder)
+        {
+            return builder.RemoveStrategy switch
+            {
+                EntityRemoveStrategy.Entity when builder.Entity is not null => _dbSet.Where(x => x.Id == builder.Entity.Id),
+                EntityRemoveStrategy.Identifier when builder.Id is not null => _dbSet.Where(x => x.Id == builder.Id),
+                EntityRemoveStrategy.Filter when builder.Filter is not null => _dbSet.Where(builder.Filter),
+                _ => throw new EntityException($"Invalid {nameof(builder.RemoveStrategy)}")
+            };
+        }
+
+        private IQueryable<TEntity> SetQueryForRemoveExecution(RemoveRangeBuilder<TEntity> builder)
+        {
+            return builder.RemoveStrategy switch
+            {
+                EntityRemoveStrategy.Entity => _dbSet.Where(x => builder.Entities.Select(x => x.Id).Contains(x.Id)),
+                EntityRemoveStrategy.Identifier => _dbSet.Where(x => builder.Identifiers.Contains(x.Id)),
+                EntityRemoveStrategy.Filter when builder.Filter is not null => _dbSet.Where(builder.Filter),
+                _ => throw new EntityException($"Invalid {nameof(builder.RemoveStrategy)}")
             };
         }
     }
@@ -752,7 +802,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     public partial class Repository<TEntity, TDbContext>
     {
         /// <inheritdoc/>
-        public async Task<TEntity> UpdateAsync(UpdateSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> UpdateAsync(UpdateSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -775,7 +825,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
 
-                return entity;
+                return 1;
             }
             catch (OperationCanceledException ex)
             {
@@ -788,7 +838,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<TEntity> UpdateAsync(Action<UpdateSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> UpdateAsync(Action<UpdateSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new UpdateSingleBuilder<TEntity>();
             builderAction(builder);
@@ -796,7 +846,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity Update(UpdateSingleBuilder<TEntity> builder)
+        public int Update(UpdateSingleBuilder<TEntity> builder)
         {
             try
             {
@@ -814,7 +864,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     _context.SaveChanges();
 
-                return entity;
+                return 1;
             }
             catch (Exception ex)
             {
@@ -823,7 +873,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity Update(Action<UpdateSingleBuilder<TEntity>> builderAction)
+        public int Update(Action<UpdateSingleBuilder<TEntity>> builderAction)
         {
             var builder = new UpdateSingleBuilder<TEntity>();
             builderAction(builder);
@@ -831,7 +881,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> UpdateRangeAsync(UpdateRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> UpdateRangeAsync(UpdateRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -856,7 +906,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
 
-                return builder.Entities;
+                return builder.Entities.Count;
             }
             catch (OperationCanceledException ex)
             {
@@ -869,7 +919,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> UpdateRangeAsync(Action<UpdateRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> UpdateRangeAsync(Action<UpdateRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new UpdateRangeBuilder<TEntity>();
             builderAction(builder);
@@ -877,7 +927,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> UpdateRange(UpdateRangeBuilder<TEntity> builder)
+        public int UpdateRange(UpdateRangeBuilder<TEntity> builder)
         {
             try
             {
@@ -897,7 +947,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     _context.SaveChanges();
 
-                return builder.Entities;
+                return builder.Entities.Count;
             }
             catch (Exception ex)
             {
@@ -906,7 +956,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> UpdateRange(Action<UpdateRangeBuilder<TEntity>> builderAction)
+        public int UpdateRange(Action<UpdateRangeBuilder<TEntity>> builderAction)
         {
             var builder = new UpdateRangeBuilder<TEntity>();
             builderAction(builder);
@@ -917,7 +967,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     public partial class Repository<TEntity, TDbContext>
     {
         /// <inheritdoc/>
-        public async Task<TEntity> RestoreAsync(RestoreSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> RestoreAsync(RestoreSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -940,7 +990,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
 
-                return builder.Entity;
+                return 1;
             }
             catch (OperationCanceledException ex)
             {
@@ -953,7 +1003,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<TEntity> RestoreAsync(Action<RestoreSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> RestoreAsync(Action<RestoreSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RestoreSingleBuilder<TEntity>();
             builderAction(builder);
@@ -961,7 +1011,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity Restore(RestoreSingleBuilder<TEntity> builder)
+        public int Restore(RestoreSingleBuilder<TEntity> builder)
         {
             try
             {
@@ -979,7 +1029,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     _context.SaveChanges();
 
-                return builder.Entity;
+                return 1;
             }
             catch (Exception ex)
             {
@@ -988,7 +1038,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public TEntity Restore(Action<RestoreSingleBuilder<TEntity>> builderAction)
+        public int Restore(Action<RestoreSingleBuilder<TEntity>> builderAction)
         {
             var builder = new RestoreSingleBuilder<TEntity>();
             builderAction(builder);
@@ -996,7 +1046,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> RestoreRangeAsync(RestoreRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<int> RestoreRangeAsync(RestoreRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -1021,7 +1071,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     await _context.SaveChangesAsync(cancellationToken);
 
-                return builder.Entities;
+                return builder.Entities.Count;
             }
             catch (OperationCanceledException ex)
             {
@@ -1034,7 +1084,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public async Task<IEnumerable<TEntity>> RestoreRangeAsync(Action<RestoreRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<int> RestoreRangeAsync(Action<RestoreRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RestoreRangeBuilder<TEntity>();
             builderAction(builder);
@@ -1042,7 +1092,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> RestoreRange(RestoreRangeBuilder<TEntity> builder)
+        public int RestoreRange(RestoreRangeBuilder<TEntity> builder)
         {
             try
             {
@@ -1062,7 +1112,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                 if (builder.SaveChanges)
                     _context.SaveChanges();
 
-                return builder.Entities;
+                return builder.Entities.Count;
             }
             catch (Exception ex)
             {
@@ -1071,7 +1121,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         }
 
         /// <inheritdoc/>
-        public IEnumerable<TEntity> RestoreRange(Action<RestoreRangeBuilder<TEntity>> builderAction)
+        public int RestoreRange(Action<RestoreRangeBuilder<TEntity>> builderAction)
         {
             var builder = new RestoreRangeBuilder<TEntity>();
             builderAction(builder);

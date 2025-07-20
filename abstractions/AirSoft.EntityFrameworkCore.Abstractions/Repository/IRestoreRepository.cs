@@ -10,83 +10,83 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builder">Configured restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A task that represents the asynchronous operation and returns the restored entity.</returns>
+        /// <returns>A task that represents the asynchronous operation and returns the number of restored entities (1 if successful, 0 otherwise).</returns>
         /// <exception cref="EntityException">
         /// Thrown when:
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<TEntity> RestoreAsync(RestoreSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default);
+        public Task<int> RestoreAsync(RestoreSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously restores an entity by configuring the restore builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A task that represents the asynchronous operation and returns the restored entity.</returns>
+        /// <returns>A task that represents the asynchronous operation and returns the number of restored entities (1 if successful, 0 otherwise).</returns>
         /// <exception cref="EntityException">
         /// Thrown when:
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<TEntity> RestoreAsync(Action<RestoreSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
+        public Task<int> RestoreAsync(Action<RestoreSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Restores an entity using a configured builder.
         /// </summary>
         /// <param name="builder">Configured restore builder</param>
-        /// <returns>The restored entity.</returns>
+        /// <returns>The number of restored entities (1 if successful, 0 otherwise).</returns>
         /// <exception cref="EntityException">Thrown when database operation fails</exception>
-        public TEntity Restore(RestoreSingleBuilder<TEntity> builder);
+        public int Restore(RestoreSingleBuilder<TEntity> builder);
 
         /// <summary>
         /// Restores an entity by configuring the restore builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the restore builder</param>
-        /// <returns>The restored entity.</returns>
+        /// <returns>The number of restored entities (1 if successful, 0 otherwise).</returns>
         /// <exception cref="EntityException">Thrown when database operation fails</exception>
-        public TEntity Restore(Action<RestoreSingleBuilder<TEntity>> builderAction);
+        public int Restore(Action<RestoreSingleBuilder<TEntity>> builderAction);
 
         /// <summary>
         /// Asynchronously restores multiple entities using a configured builder.
         /// </summary>
         /// <param name="builder">Configured restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A task that represents the asynchronous operation and returns a collection of restored entities.</returns>
+        /// <returns>A task that represents the asynchronous operation and returns the number of restored entities.</returns>
         /// <exception cref="EntityException">
         /// Thrown when:
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<IEnumerable<TEntity>> RestoreRangeAsync(RestoreRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default);
+        public Task<int> RestoreRangeAsync(RestoreRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously restores multiple entities by configuring the restore builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A task that represents the asynchronous operation and returns a collection of restored entities.</returns>
+        /// <returns>A task that represents the asynchronous operation and returns the number of restored entities.</returns>
         /// <exception cref="EntityException">
         /// Thrown when:
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<IEnumerable<TEntity>> RestoreRangeAsync(Action<RestoreRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
+        public Task<int> RestoreRangeAsync(Action<RestoreRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Restores multiple entities using a configured builder.
         /// </summary>
         /// <param name="builder">Configured restore builder</param>
-        /// <returns>A collection of restored entities.</returns>
+        /// <returns>The number of restored entities.</returns>
         /// <exception cref="EntityException">Thrown when database operation fails</exception>
-        public IEnumerable<TEntity> RestoreRange(RestoreRangeBuilder<TEntity> builder);
+        public int RestoreRange(RestoreRangeBuilder<TEntity> builder);
 
         /// <summary>
         /// Restores multiple entities by configuring the restore builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the restore builder</param>
-        /// <returns>A collection of restored entities.</returns>
+        /// <returns>The number of restored entities.</returns>
         /// <exception cref="EntityException">Thrown when database operation fails</exception>
-        public IEnumerable<TEntity> RestoreRange(Action<RestoreRangeBuilder<TEntity>> builderAction);
+        public int RestoreRange(Action<RestoreRangeBuilder<TEntity>> builderAction);
     }
 }

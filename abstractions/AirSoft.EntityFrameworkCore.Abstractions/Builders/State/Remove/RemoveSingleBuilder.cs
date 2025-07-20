@@ -18,7 +18,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         /// Identifier of the entity to be removed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public object? Id { get; private set; }
+        public string? Id { get; private set; }
 
         /// <summary>
         /// Entity instance to be removed.
@@ -33,10 +33,16 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         public Expression<Func<TEntity, bool>>? Filter { get; private set; }
 
         /// <summary>
-        /// Specifies the removal mode (by object, identifiers or filter).
+        /// Specifies the removal strategy (by object, identifiers or filter).
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public EntityRemoveMode RemoveMode { get; private set; }
+        public EntityRemoveStrategy RemoveStrategy { get; private set; }
+
+        /// <summary>
+        /// Specifies whether entities should be deleted without the change tracker.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public bool IsExeсutable { get; private set; } = false;
 
         /// <summary>
         /// Creates a new instance of RemoveSingleBuilder.
@@ -53,7 +59,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         public RemoveSingleBuilder<TEntity> WithEntity(TEntity entity)
         {
             Entity = entity ?? throw new InvalidArgumentException("Entity for remove cannot be null");
-            RemoveMode = EntityRemoveMode.Entity;
+            RemoveStrategy = EntityRemoveStrategy.Entity;
             return this;
         }
 
@@ -63,10 +69,10 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         /// <param name="id">Entity identifier.</param>
         /// <returns>The current builder instance.</returns>
         /// <exception cref="InvalidArgumentException">Thrown when identifier is null</exception>
-        public RemoveSingleBuilder<TEntity> WithIdentifier(object id)
+        public RemoveSingleBuilder<TEntity> WithIdentifier(string id)
         {
             Id = id ?? throw new InvalidArgumentException("Identifier of entity for remove cannot be null");
-            RemoveMode = EntityRemoveMode.Identifier;
+            RemoveStrategy = EntityRemoveStrategy.Identifier;
             return this;
         }
 
@@ -79,18 +85,29 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         public RemoveSingleBuilder<TEntity> WithFilter(Expression<Func<TEntity, bool>> filter)
         {
             Filter = filter ?? throw new InvalidArgumentException("Filter for filtering entity cannot be null");
-            RemoveMode = EntityRemoveMode.Filter;
+            RemoveStrategy = EntityRemoveStrategy.Filter;
             return this;
         }
 
         /// <summary>
-        /// Explicitly sets the removal mode.
+        /// Explicitly sets the removal strategy.
         /// </summary>
-        /// <param name="mode">The removal mode to use.</param>
+        /// <param name="strategy">The removal strategy to use.</param>
         /// <returns>The current builder instance.</returns>
-        public RemoveSingleBuilder<TEntity> WithRemoveMode(EntityRemoveMode mode)
+        public RemoveSingleBuilder<TEntity> WithRemoveStrategy(EntityRemoveStrategy strategy)
         {
-            RemoveMode = mode;
+            RemoveStrategy = strategy;
+            return this;
+        }
+
+        /// <summary>
+        /// Explicitly sets the whether entities should be deleted without the change tracker.
+        /// </summary>
+        /// <param name="executable">True to remove without the change tracker.</param>
+        /// <returns>The current builder instance.</returns>
+        public RemoveSingleBuilder<TEntity> WithExecution(bool executable = true)
+        {
+            IsExeсutable = executable;
             return this;
         }
     }

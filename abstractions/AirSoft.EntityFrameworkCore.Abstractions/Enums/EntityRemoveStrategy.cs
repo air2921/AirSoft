@@ -1,10 +1,10 @@
 ﻿namespace AirSoft.EntityFrameworkCore.Abstractions.Enums
 {
     /// <summary>
-    /// Specifies the mode for removing objects from a collection or repository.
+    /// Specifies the strategy for removing objects from a collection or repository.
     /// <b>Use carefully as different modes may have different performance implications.</b>
     /// </summary>
-    public enum EntityRemoveMode
+    public enum EntityRemoveStrategy
     {
         /// <summary>
         /// Remove object by unique identifier (ID = 101).
