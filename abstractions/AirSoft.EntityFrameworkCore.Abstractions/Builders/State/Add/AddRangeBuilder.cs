@@ -1,53 +1,52 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using System.ComponentModel;
 
-namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update
+namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add
 {
     /// <summary>
-    /// Fluent builder for configuring bulk entity updates with optional audit tracking
+    /// Fluent builder for configuring bulk entity creation with optional audit tracking
     /// </summary>
-    /// <typeparam name="TEntity">Type of entity to update, must inherit from IEntityBase</typeparam>
-    public sealed class UpdateRangeBuilder<TEntity> :
-        BaseEntityStateBuilder<UpdateRangeBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+    /// <typeparam name="TEntity">Type of entity to create, must inherit from IEntityBase</typeparam>
+    public sealed class AddRangeBuilder<TEntity> :
+        BaseEntityStateBuilder<AddRangeBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
-        /// Collection of entities to be updated
+        /// Collection of entities to be created
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public IReadOnlyCollection<TEntity> Entities { get; private set; } = [];
 
         /// <summary>
-        /// Identifier of the user who performed the update (for auditing)
+        /// Identifier of the user who performed the creation (for auditing)
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public string? UpdatedByUser { get; private set; }
+        public string? CreatedByUser { get; private set; }
 
         /// <summary>
         /// Creates a new builder instance
         /// </summary>
-        public static UpdateRangeBuilder<TEntity> Create() => new();
+        public static AddRangeBuilder<TEntity> Create() => new();
 
         /// <summary>
-        /// Sets the entities to be updated
+        /// Sets the entities to be created
         /// </summary>
         /// <param name="entities">Collection of entities</param>
         /// <returns>The current builder instance.</returns>
-        public UpdateRangeBuilder<TEntity> WithEntities(IEnumerable<TEntity> entities)
+        public AddRangeBuilder<TEntity> WithEntities(IEnumerable<TEntity> entities)
         {
             Entities = entities.ToArray();
             return this;
         }
 
         /// <summary>
-        /// Sets the user who performed the update
+        /// Sets the user who performed the creation
         /// </summary>
         /// <param name="user">User identifier/name</param>
         /// <returns>The current builder instance.</returns>
-        public UpdateRangeBuilder<TEntity> WithUpdatedBy(string? user)
+        public AddRangeBuilder<TEntity> WithCreatedBy(string? user)
         {
-            UpdatedByUser = user;
+            CreatedByUser = user;
             return this;
         }
     }
 }
-

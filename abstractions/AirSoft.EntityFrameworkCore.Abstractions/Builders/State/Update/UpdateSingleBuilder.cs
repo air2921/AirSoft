@@ -1,5 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Update;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using AirSoft.Exceptions;
 using System.ComponentModel;
 
@@ -11,7 +10,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity to update.</typeparam>
     public sealed class UpdateSingleBuilder<TEntity> :
-        BaseEntityStateBuilder<UpdateSingleBuilder<TEntity>, TEntity>, IUpdateSingleBuilder<TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<UpdateSingleBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
         /// The entity to be updated.

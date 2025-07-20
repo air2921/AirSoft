@@ -1,5 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Create;
-using AirSoft.Exceptions;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {
@@ -11,7 +10,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the added entity.</returns>
-        public Task<TEntity> AddAsync(ICreateSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default);
+        public Task<TEntity> AddAsync(AddSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously adds an entity by configuring the builder through an action.
@@ -19,21 +18,21 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the added entity.</returns>
-        public Task<TEntity> AddAsync(Action<ICreateSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
+        public Task<TEntity> AddAsync(Action<AddSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds an entity using a configured builder.
         /// </summary>
         /// <param name="builder">Configured create builder</param>
         /// <returns>The added entity.</returns>
-        public TEntity Add(ICreateSingleBuilder<TEntity> builder);
+        public TEntity Add(AddSingleBuilder<TEntity> builder);
 
         /// <summary>
         /// Adds an entity by configuring the builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <returns>The added entity.</returns>
-        public TEntity Add(Action<ICreateSingleBuilder<TEntity>> builderAction);
+        public TEntity Add(Action<AddSingleBuilder<TEntity>> builderAction);
 
         /// <summary>
         /// Asynchronously adds multiple entities using a configured builder.
@@ -41,7 +40,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of added entities.</returns>
-        public Task<IEnumerable<TEntity>> AddRangeAsync(ICreateRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default);
+        public Task<IEnumerable<TEntity>> AddRangeAsync(AddRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously adds multiple entities by configuring the builder through an action.
@@ -49,20 +48,20 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of added entities.</returns>
-        public Task<IEnumerable<TEntity>> AddRangeAsync(Action<ICreateRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
+        public Task<IEnumerable<TEntity>> AddRangeAsync(Action<AddRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Adds multiple entities using a configured builder.
         /// </summary>
         /// <param name="builder">Configured create builder</param>
         /// <returns>A collection of added entities.</returns>
-        public IEnumerable<TEntity> AddRange(ICreateRangeBuilder<TEntity> builder);
+        public IEnumerable<TEntity> AddRange(AddRangeBuilder<TEntity> builder);
 
         /// <summary>
         /// Adds multiple entities by configuring the builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <returns>A collection of added entities.</returns>
-        public IEnumerable<TEntity> AddRange(Action<ICreateRangeBuilder<TEntity>> builderAction);
+        public IEnumerable<TEntity> AddRange(Action<AddRangeBuilder<TEntity>> builderAction);
     }
 }

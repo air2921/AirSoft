@@ -1,5 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Remove;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using AirSoft.EntityFrameworkCore.Abstractions.Enums;
 using AirSoft.Exceptions;
 using System.ComponentModel;
@@ -13,7 +12,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
     /// </summary>
     /// <typeparam name="TEntity">The type of entities to remove, must inherit from IEntityBase.</typeparam>
     public sealed class RemoveRangeBuilder<TEntity> :
-        BaseEntityStateBuilder<RemoveRangeBuilder<TEntity>, TEntity>, IRemoveRangeBuilder<TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<RemoveRangeBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
         /// Collection of entities to be removed directly.

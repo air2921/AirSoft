@@ -1,6 +1,5 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Query;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Query;
 using AirSoft.EntityFrameworkCore.Abstractions.Details;
-using AirSoft.Exceptions;
 using System.Linq.Expressions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
@@ -43,7 +42,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured query builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the found entity or null.</returns>
-        public Task<TEntity?> GetSingleAsync(ISingleQueryBuilder<TEntity> builder, CancellationToken cancellationToken = default);
+        public Task<TEntity?> GetSingleAsync(SingleQueryBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously retrieves an entity by configuring the query builder through an action.
@@ -51,21 +50,21 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the found entity or null.</returns>
-        public Task<TEntity?> GetSingleAsync(Action<ISingleQueryBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
+        public Task<TEntity?> GetSingleAsync(Action<SingleQueryBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves an entity using a configured query builder.
         /// </summary>
         /// <param name="builder">Configured query builder</param>
         /// <returns>The found entity or null.</returns>
-        public TEntity? GetSingle(ISingleQueryBuilder<TEntity> builder);
+        public TEntity? GetSingle(SingleQueryBuilder<TEntity> builder);
 
         /// <summary>
         /// Retrieves an entity by configuring the query builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <returns>The found entity or null.</returns>
-        public TEntity? GetSingle(Action<ISingleQueryBuilder<TEntity>> builderAction);
+        public TEntity? GetSingle(Action<SingleQueryBuilder<TEntity>> builderAction);
 
         /// <summary>
         /// Asynchronously retrieves multiple entities using a configured query builder.
@@ -73,7 +72,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured query builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of entities.</returns>
-        public Task<IEnumerable<TEntity>> GetRangeAsync(IRangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default);
+        public Task<IEnumerable<TEntity>> GetRangeAsync(RangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously retrieves multiple entities by configuring the query builder through an action.
@@ -81,21 +80,21 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of entities.</returns>
-        public Task<IEnumerable<TEntity>> GetRangeAsync(Action<IRangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default);
+        public Task<IEnumerable<TEntity>> GetRangeAsync(Action<RangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves multiple entities using a configured query builder.
         /// </summary>
         /// <param name="builder">Configured query builder</param>
         /// <returns>A collection of entities.</returns>
-        public IEnumerable<TEntity> GetRange(IRangeQueryBuilder<TEntity>? builder);
+        public IEnumerable<TEntity> GetRange(RangeQueryBuilder<TEntity>? builder);
 
         /// <summary>
         /// Retrieves multiple entities by configuring the query builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <returns>A collection of entities.</returns>
-        public IEnumerable<TEntity> GetRange(Action<IRangeQueryBuilder<TEntity>>? builderAction);
+        public IEnumerable<TEntity> GetRange(Action<RangeQueryBuilder<TEntity>>? builderAction);
 
         /// <summary>
         /// Asynchronously retrieves a range of entities with total count.
@@ -103,7 +102,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured query builder</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
-        public Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(IRangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default);
+        public Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(RangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously retrieves a range of entities with total count by configuring the query builder through an action.
@@ -111,20 +110,20 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
-        public Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(Action<IRangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default);
+        public Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(Action<RangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a range of entities with total count.
         /// </summary>
         /// <param name="builder">Configured query builder</param>
         /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
-        public EntityChunkDetails<TEntity> GetRangeEntire(IRangeQueryBuilder<TEntity>? builder);
+        public EntityChunkDetails<TEntity> GetRangeEntire(RangeQueryBuilder<TEntity>? builder);
 
         /// <summary>
         /// Retrieves a range of entities with total count by configuring the query builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
-        public EntityChunkDetails<TEntity> GetRangeEntire(Action<IRangeQueryBuilder<TEntity>>? builderAction);
+        public EntityChunkDetails<TEntity> GetRangeEntire(Action<RangeQueryBuilder<TEntity>>? builderAction);
     }
 }

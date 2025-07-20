@@ -1,5 +1,5 @@
-﻿using System.Linq.Expressions;
-using AirSoft.Exceptions;
+﻿using AirSoft.Exceptions;
+using System.Linq.Expressions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {

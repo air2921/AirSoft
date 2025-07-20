@@ -1,11 +1,6 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Query;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Create;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Remove;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Restore;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Update;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.Query;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Create;
+using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Restore;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update;
@@ -252,11 +247,11 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>
         /// Asynchronously retrieves the first or last entity that matches the specified filter, including options for ordering and tracking.
         /// </summary>
-        /// <param name="builder">A <see cref="ISingleQueryBuilder{TEntity}"/> that defines the query criteria.</param>
+        /// <param name="builder">A <see cref="SingleQueryBuilder{TEntity}"/> that defines the query criteria.</param>
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
         /// <returns>The first or last entity that matches the filter, or <c>null</c> if not found.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation.</exception>
-        public async Task<TEntity?> GetSingleAsync(ISingleQueryBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<TEntity?> GetSingleAsync(SingleQueryBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -287,7 +282,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The found entity or null</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation</exception>
-        public async Task<TEntity?> GetSingleAsync(Action<ISingleQueryBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<TEntity?> GetSingleAsync(Action<SingleQueryBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new SingleQueryBuilder<TEntity>();
             builderAction(builder);
@@ -297,10 +292,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>
         /// Retrieves the first or last entity that matches the specified filter, including options for ordering and tracking.
         /// </summary>
-        /// <param name="builder">A <see cref="ISingleQueryBuilder{TEntity}"/> that defines the query criteria.</param>
+        /// <param name="builder">A <see cref="SingleQueryBuilder{TEntity}"/> that defines the query criteria.</param>
         /// <returns>The first or last entity that matches the filter, or <c>null</c> if not found.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation.</exception>
-        public TEntity? GetSingle(ISingleQueryBuilder<TEntity> builder)
+        public TEntity? GetSingle(SingleQueryBuilder<TEntity> builder)
         {
             try
             {
@@ -321,7 +316,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <returns>The found entity or null</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation</exception>
-        public TEntity? GetSingle(Action<ISingleQueryBuilder<TEntity>> builderAction)
+        public TEntity? GetSingle(Action<SingleQueryBuilder<TEntity>> builderAction)
         {
             var builder = new SingleQueryBuilder<TEntity>();
             builderAction(builder);
@@ -331,11 +326,11 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>
         /// Asynchronously retrieves a range of entities based on the specified query builder.
         /// </summary>
-        /// <param name="builder">A <see cref="IRangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
+        /// <param name="builder">A <see cref="RangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
         /// <returns>A list of entities matching the query criteria.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation.</exception>
-        public async Task<IEnumerable<TEntity>> GetRangeAsync(IRangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> GetRangeAsync(RangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -368,10 +363,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A collection of entities</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation</exception>
-        public async Task<IEnumerable<TEntity>> GetRangeAsync(Action<IRangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> GetRangeAsync(Action<RangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default)
         {
             if (builderAction == null)
-                return await GetRangeAsync((IRangeQueryBuilder<TEntity>?)null, cancellationToken);
+                return await GetRangeAsync((RangeQueryBuilder<TEntity>?)null, cancellationToken);
 
             var builder = new RangeQueryBuilder<TEntity>();
             builderAction(builder);
@@ -381,10 +376,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>
         /// Retrieves a range of entities based on the specified query builder.
         /// </summary>
-        /// <param name="builder">A <see cref="IRangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
+        /// <param name="builder">A <see cref="RangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
         /// <returns>A list of entities matching the query criteria.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation.</exception>
-        public IEnumerable<TEntity> GetRange(IRangeQueryBuilder<TEntity>? builder)
+        public IEnumerable<TEntity> GetRange(RangeQueryBuilder<TEntity>? builder)
         {
             try
             {
@@ -407,10 +402,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <returns>A collection of entities</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation</exception>
-        public IEnumerable<TEntity> GetRange(Action<IRangeQueryBuilder<TEntity>>? builderAction)
+        public IEnumerable<TEntity> GetRange(Action<RangeQueryBuilder<TEntity>>? builderAction)
         {
             if (builderAction == null)
-                return GetRange((IRangeQueryBuilder<TEntity>?)null);
+                return GetRange((RangeQueryBuilder<TEntity>?)null);
 
             var builder = new RangeQueryBuilder<TEntity>();
             builderAction(builder);
@@ -420,11 +415,11 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>
         /// Asynchronously retrieves a range of entities with total count.
         /// </summary>
-        /// <param name="builder">A <see cref="IRangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
+        /// <param name="builder">A <see cref="RangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation.</exception>
-        public async Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(IRangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default)
+        public async Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(RangeQueryBuilder<TEntity>? builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -470,10 +465,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A chunk of entities with total count</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation</exception>
-        public async Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(Action<IRangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default)
+        public async Task<EntityChunkDetails<TEntity>> GetRangeEntireAsync(Action<RangeQueryBuilder<TEntity>>? builderAction, CancellationToken cancellationToken = default)
         {
             if (builderAction == null)
-                return await GetRangeEntireAsync((IRangeQueryBuilder<TEntity>?)null, cancellationToken);
+                return await GetRangeEntireAsync((RangeQueryBuilder<TEntity>?)null, cancellationToken);
 
             var builder = new RangeQueryBuilder<TEntity>();
             builderAction(builder);
@@ -483,10 +478,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>
         /// Retrieves a range of entities with total count.
         /// </summary>
-        /// <param name="builder">A <see cref="IRangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
+        /// <param name="builder">A <see cref="RangeQueryBuilder{TEntity}"/> that defines the query criteria.</param>
         /// <returns>A <see cref="EntityChunkDetails{TEntity}"/> chunk of entities with total count.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation.</exception>
-        public EntityChunkDetails<TEntity> GetRangeEntire(IRangeQueryBuilder<TEntity>? builder)
+        public EntityChunkDetails<TEntity> GetRangeEntire(RangeQueryBuilder<TEntity>? builder)
         {
             try
             {
@@ -522,10 +517,10 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <returns>A chunk of entities with total count</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the retrieval operation</exception>
-        public EntityChunkDetails<TEntity> GetRangeEntire(Action<IRangeQueryBuilder<TEntity>>? builderAction)
+        public EntityChunkDetails<TEntity> GetRangeEntire(Action<RangeQueryBuilder<TEntity>>? builderAction)
         {
             if (builderAction == null)
-                return GetRangeEntire((IRangeQueryBuilder<TEntity>?)null);
+                return GetRangeEntire((RangeQueryBuilder<TEntity>?)null);
 
             var builder = new RangeQueryBuilder<TEntity>();
             builderAction(builder);
@@ -542,7 +537,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
         /// <returns>The added entity.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the add operation.</exception>
-        public async Task<TEntity> AddAsync(ICreateSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<TEntity> AddAsync(AddSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -576,9 +571,9 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The added entity.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the add operation.</exception>
-        public async Task<TEntity> AddAsync(Action<ICreateSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<TEntity> AddAsync(Action<AddSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
-            var builder = new CreateSingleBuilder<TEntity>();
+            var builder = new AddSingleBuilder<TEntity>();
             builderAction(builder);
             return await AddAsync(builder, cancellationToken);
         }
@@ -589,7 +584,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builder">Preconfigured builder containing the entity to add.</param>
         /// <returns>The added entity.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the add operation.</exception>
-        public TEntity Add(ICreateSingleBuilder<TEntity> builder)
+        public TEntity Add(AddSingleBuilder<TEntity> builder)
         {
             try
             {
@@ -613,9 +608,9 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <returns>The added entity.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the add operation.</exception>
-        public TEntity Add(Action<ICreateSingleBuilder<TEntity>> builderAction)
+        public TEntity Add(Action<AddSingleBuilder<TEntity>> builderAction)
         {
-            var builder = new CreateSingleBuilder<TEntity>();
+            var builder = new AddSingleBuilder<TEntity>();
             builderAction(builder);
             return Add(builder);
         }
@@ -629,7 +624,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <exception cref="EntityException">
         /// Thrown when an error occurs during the add operation or when operation is canceled.
         /// </exception>
-        public async Task<IEnumerable<TEntity>> AddRangeAsync(ICreateRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> AddRangeAsync(AddRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -667,9 +662,9 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <exception cref="EntityException">
         /// Thrown when an error occurs during the add operation or when operation is canceled.
         /// </exception>
-        public async Task<IEnumerable<TEntity>> AddRangeAsync(Action<ICreateRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> AddRangeAsync(Action<AddRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
-            var builder = new CreateRangeBuilder<TEntity>();
+            var builder = new AddRangeBuilder<TEntity>();
             builderAction(builder);
             return await AddRangeAsync(builder, cancellationToken);
         }
@@ -682,7 +677,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <exception cref="EntityException">
         /// Thrown when an error occurs during the add operation.
         /// </exception>
-        public IEnumerable<TEntity> AddRange(ICreateRangeBuilder<TEntity> builder)
+        public IEnumerable<TEntity> AddRange(AddRangeBuilder<TEntity> builder)
         {
             try
             {
@@ -708,9 +703,9 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <returns>A collection of added entities.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during the add operation.</exception>
-        public IEnumerable<TEntity> AddRange(Action<ICreateRangeBuilder<TEntity>> builderAction)
+        public IEnumerable<TEntity> AddRange(Action<AddRangeBuilder<TEntity>> builderAction)
         {
-            var builder = new CreateRangeBuilder<TEntity>();
+            var builder = new AddRangeBuilder<TEntity>();
             builderAction(builder);
             return AddRange(builder);
         }
@@ -725,7 +720,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">A token to cancel the operation if needed</param>
         /// <returns>The removed entity, or null if not found</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public async Task<TEntity?> RemoveAsync(IRemoveSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<TEntity?> RemoveAsync(RemoveSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -763,7 +758,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The removed entity or null.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public async Task<TEntity?> RemoveAsync(Action<IRemoveSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<TEntity?> RemoveAsync(Action<RemoveSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RemoveSingleBuilder<TEntity>();
             builderAction(builder);
@@ -776,7 +771,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builder">Builder with entity remove parameters</param>
         /// <returns>The removed entity, or null if not found</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public TEntity? Remove(IRemoveSingleBuilder<TEntity> builder)
+        public TEntity? Remove(RemoveSingleBuilder<TEntity> builder)
         {
             try
             {
@@ -804,7 +799,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the remove builder</param>
         /// <returns>The removed entity or null.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public TEntity? Remove(Action<IRemoveSingleBuilder<TEntity>> builderAction)
+        public TEntity? Remove(Action<RemoveSingleBuilder<TEntity>> builderAction)
         {
             var builder = new RemoveSingleBuilder<TEntity>();
             builderAction(builder);
@@ -818,7 +813,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Removed entities</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public async Task<IEnumerable<TEntity>> RemoveRangeAsync(IRemoveRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> RemoveRangeAsync(RemoveRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -853,7 +848,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A collection of removed entities.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public async Task<IEnumerable<TEntity>> RemoveRangeAsync(Action<IRemoveRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> RemoveRangeAsync(Action<RemoveRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RemoveRangeBuilder<TEntity>();
             builderAction(builder);
@@ -866,7 +861,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builder">Configured builder with remove parameters</param>
         /// <returns>Removed entities</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public IEnumerable<TEntity> RemoveRange(IRemoveRangeBuilder<TEntity> builder)
+        public IEnumerable<TEntity> RemoveRange(RemoveRangeBuilder<TEntity> builder)
         {
             try
             {
@@ -891,14 +886,25 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the remove builder</param>
         /// <returns>A collection of removed entities.</returns>
         /// <exception cref="EntityException">Thrown when an error occurs during removal</exception>
-        public IEnumerable<TEntity> RemoveRange(Action<IRemoveRangeBuilder<TEntity>> builderAction)
+        public IEnumerable<TEntity> RemoveRange(Action<RemoveRangeBuilder<TEntity>> builderAction)
         {
             var builder = new RemoveRangeBuilder<TEntity>();
             builderAction(builder);
             return RemoveRange(builder);
         }
 
-        private TEntity? GetEntityToRemove(IRemoveSingleBuilder<TEntity> builder)
+        /// <summary>
+        /// Retrieves an entity to be removed based on the specified remove mode in the builder.
+        /// </summary>
+        /// <param name="builder">The remove builder containing the removal configuration.</param>
+        /// <returns>
+        /// The entity to be removed:
+        /// - For <see cref="EntityRemoveMode.Entity"/>: returns the entity directly from the builder
+        /// - For <see cref="EntityRemoveMode.Identifier"/>: finds the entity by ID in the database
+        /// - For <see cref="EntityRemoveMode.Filter"/>: finds the first entity matching the filter
+        /// Returns null if no matching entity is found or if the configuration is invalid.
+        /// </returns>
+        private TEntity? GetEntityToRemove(RemoveSingleBuilder<TEntity> builder)
         {
             return builder.RemoveMode switch
             {
@@ -909,7 +915,19 @@ namespace AirSoft.EntityFrameworkCore.Implementations
             };
         }
 
-        private async Task<TEntity?> GetEntityToRemoveAsync(IRemoveSingleBuilder<TEntity> builder, CancellationToken cancellationToken)
+        /// <summary>
+        /// Asynchronously retrieves an entity to be removed based on the specified remove mode in the builder.
+        /// </summary>
+        /// <param name="builder">The remove builder containing the removal configuration.</param>
+        /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. The task result contains:
+        /// - For <see cref="EntityRemoveMode.Entity"/>: the entity directly from the builder
+        /// - For <see cref="EntityRemoveMode.Identifier"/>: the entity found by ID in the database
+        /// - For <see cref="EntityRemoveMode.Filter"/>: the first entity matching the filter
+        /// The result is null if no matching entity is found or if the configuration is invalid.
+        /// </returns>
+        private async Task<TEntity?> GetEntityToRemoveAsync(RemoveSingleBuilder<TEntity> builder, CancellationToken cancellationToken)
         {
             return builder.RemoveMode switch
             {
@@ -920,7 +938,17 @@ namespace AirSoft.EntityFrameworkCore.Implementations
             };
         }
 
-        private IEnumerable<TEntity> GetEntitiesToRemove(IRemoveRangeBuilder<TEntity> builder)
+        /// <summary>
+        /// Retrieves a collection of entities to be removed based on the specified remove mode in the builder.
+        /// </summary>
+        /// <param name="builder">The remove builder containing the removal configuration.</param>
+        /// <returns>
+        /// The collection of entities to be removed:
+        /// - For <see cref="EntityRemoveMode.Entity"/>: returns the entities directly from the builder
+        /// - For <see cref="EntityRemoveMode.Identifier"/>: finds entities matching any of the specified IDs
+        /// - For <see cref="EntityRemoveMode.Filter"/>: finds all entities matching the filter
+        /// </returns>
+        private IEnumerable<TEntity> GetEntitiesToRemove(RemoveRangeBuilder<TEntity> builder)
         {
             return builder.RemoveMode switch
             {
@@ -931,7 +959,18 @@ namespace AirSoft.EntityFrameworkCore.Implementations
             };
         }
 
-        private async Task<IEnumerable<TEntity>> GetEntitiesToRemoveAsync(IRemoveRangeBuilder<TEntity> builder, CancellationToken cancellationToken)
+        /// <summary>
+        /// Asynchronously retrieves a collection of entities to be removed based on the specified remove mode in the builder.
+        /// </summary>
+        /// <param name="builder">The remove builder containing the removal configuration.</param>
+        /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
+        /// <returns>
+        /// A task that represents the asynchronous operation. The task result contains:
+        /// - For <see cref="EntityRemoveMode.Entity"/>: the entities directly from the builder
+        /// - For <see cref="EntityRemoveMode.Identifier"/>: entities matching any of the specified IDs
+        /// - For <see cref="EntityRemoveMode.Filter"/>: all entities matching the filter
+        /// </returns>
+        private async Task<IEnumerable<TEntity>> GetEntitiesToRemoveAsync(RemoveRangeBuilder<TEntity> builder, CancellationToken cancellationToken)
         {
             return builder.RemoveMode switch
             {
@@ -952,7 +991,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The updated entity</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public async Task<TEntity> UpdateAsync(IUpdateSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<TEntity> UpdateAsync(UpdateSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -994,7 +1033,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The updated entity</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public async Task<TEntity> UpdateAsync(Action<IUpdateSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<TEntity> UpdateAsync(Action<UpdateSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new UpdateSingleBuilder<TEntity>();
             builderAction(builder);
@@ -1007,7 +1046,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builder">Builder with entity update parameters</param>
         /// <returns>The updated entity</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public TEntity Update(IUpdateSingleBuilder<TEntity> builder)
+        public TEntity Update(UpdateSingleBuilder<TEntity> builder)
         {
             try
             {
@@ -1039,7 +1078,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the update builder</param>
         /// <returns>The updated entity</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public TEntity Update(Action<IUpdateSingleBuilder<TEntity>> builderAction)
+        public TEntity Update(Action<UpdateSingleBuilder<TEntity>> builderAction)
         {
             var builder = new UpdateSingleBuilder<TEntity>();
             builderAction(builder);
@@ -1053,7 +1092,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Updated entities</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public async Task<IEnumerable<TEntity>> UpdateRangeAsync(IUpdateRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> UpdateRangeAsync(UpdateRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -1097,7 +1136,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Updated entities</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public async Task<IEnumerable<TEntity>> UpdateRangeAsync(Action<IUpdateRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> UpdateRangeAsync(Action<UpdateRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new UpdateRangeBuilder<TEntity>();
             builderAction(builder);
@@ -1110,7 +1149,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builder">Configured builder with update parameters</param>
         /// <returns>Updated entities</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public IEnumerable<TEntity> UpdateRange(IUpdateRangeBuilder<TEntity> builder)
+        public IEnumerable<TEntity> UpdateRange(UpdateRangeBuilder<TEntity> builder)
         {
             try
             {
@@ -1144,7 +1183,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the update builder</param>
         /// <returns>Updated entities</returns>
         /// <exception cref="EntityException">On update error</exception>
-        public IEnumerable<TEntity> UpdateRange(Action<IUpdateRangeBuilder<TEntity>> builderAction)
+        public IEnumerable<TEntity> UpdateRange(Action<UpdateRangeBuilder<TEntity>> builderAction)
         {
             var builder = new UpdateRangeBuilder<TEntity>();
             builderAction(builder);
@@ -1161,7 +1200,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The restored entity</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public async Task<TEntity> RestoreAsync(IRestoreSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<TEntity> RestoreAsync(RestoreSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -1203,7 +1242,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>The restored entity</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public async Task<TEntity> RestoreAsync(Action<IRestoreSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<TEntity> RestoreAsync(Action<RestoreSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RestoreSingleBuilder<TEntity>();
             builderAction(builder);
@@ -1216,7 +1255,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builder">Builder with entity restore parameters</param>
         /// <returns>The restored entity</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public TEntity Restore(IRestoreSingleBuilder<TEntity> builder)
+        public TEntity Restore(RestoreSingleBuilder<TEntity> builder)
         {
             try
             {
@@ -1248,7 +1287,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <returns>The restored entity</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public TEntity Restore(Action<IRestoreSingleBuilder<TEntity>> builderAction)
+        public TEntity Restore(Action<RestoreSingleBuilder<TEntity>> builderAction)
         {
             var builder = new RestoreSingleBuilder<TEntity>();
             builderAction(builder);
@@ -1262,7 +1301,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Restored entities</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public async Task<IEnumerable<TEntity>> RestoreRangeAsync(IRestoreRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> RestoreRangeAsync(RestoreRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -1306,7 +1345,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>Restored entities</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public async Task<IEnumerable<TEntity>> RestoreRangeAsync(Action<IRestoreRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
+        public async Task<IEnumerable<TEntity>> RestoreRangeAsync(Action<RestoreRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default)
         {
             var builder = new RestoreRangeBuilder<TEntity>();
             builderAction(builder);
@@ -1319,7 +1358,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builder">Builder with entities to restore</param>
         /// <returns>Restored entities</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public IEnumerable<TEntity> RestoreRange(IRestoreRangeBuilder<TEntity> builder)
+        public IEnumerable<TEntity> RestoreRange(RestoreRangeBuilder<TEntity> builder)
         {
             try
             {
@@ -1353,7 +1392,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <returns>Restored entities</returns>
         /// <exception cref="EntityException">On restore error</exception>
-        public IEnumerable<TEntity> RestoreRange(Action<IRestoreRangeBuilder<TEntity>> builderAction)
+        public IEnumerable<TEntity> RestoreRange(Action<RestoreRangeBuilder<TEntity>> builderAction)
         {
             var builder = new RestoreRangeBuilder<TEntity>();
             builderAction(builder);

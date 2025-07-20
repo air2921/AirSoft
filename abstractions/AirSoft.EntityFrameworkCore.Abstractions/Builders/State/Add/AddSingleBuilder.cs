@@ -1,21 +1,21 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Create;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+using AirSoft.Exceptions;
 using System.ComponentModel;
 
-namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Create
+namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add
 {
     /// <summary>
-    /// Fluent builder for configuring bulk entity creation with optional audit tracking
+    /// Fluent builder for configuring single entity creation with optional audit tracking
     /// </summary>
     /// <typeparam name="TEntity">Type of entity to create, must inherit from IEntityBase</typeparam>
-    public sealed class CreateRangeBuilder<TEntity> :
-        BaseEntityStateBuilder<CreateRangeBuilder<TEntity>, TEntity>, ICreateRangeBuilder<TEntity> where TEntity : IEntityBase
+    public sealed class AddSingleBuilder<TEntity> :
+        BaseEntityStateBuilder<AddSingleBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
-        /// Collection of entities to be created
+        /// Entity to be created
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public IReadOnlyCollection<TEntity> Entities { get; private set; } = [];
+        public TEntity Entity { get; private set; } = default!;
 
         /// <summary>
         /// Identifier of the user who performed the creation (for auditing)
@@ -26,16 +26,17 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Create
         /// <summary>
         /// Creates a new builder instance
         /// </summary>
-        public static CreateRangeBuilder<TEntity> Create() => new();
+        /// <returns>New instance of CreateSingleBuilder</returns>
+        public static AddSingleBuilder<TEntity> Create() => new();
 
         /// <summary>
-        /// Sets the entities to be created
+        /// Sets the entity to be created
         /// </summary>
-        /// <param name="entities">Collection of entities</param>
+        /// <param name="entity">Entity instance</param>
         /// <returns>The current builder instance.</returns>
-        public CreateRangeBuilder<TEntity> WithEntities(IEnumerable<TEntity> entities)
+        public AddSingleBuilder<TEntity> WithEntity(TEntity entity)
         {
-            Entities = entities.ToArray();
+            Entity = entity ?? throw new InvalidArgumentException("Entity for creation cannot be null");
             return this;
         }
 
@@ -44,7 +45,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Create
         /// </summary>
         /// <param name="user">User identifier/name</param>
         /// <returns>The current builder instance.</returns>
-        public CreateRangeBuilder<TEntity> WithCreatedBy(string? user)
+        public AddSingleBuilder<TEntity> WithCreatedBy(string? user)
         {
             CreatedByUser = user;
             return this;

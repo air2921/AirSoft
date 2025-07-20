@@ -1,5 +1,4 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Includer;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Query;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer;
 using AirSoft.Exceptions;
@@ -13,7 +12,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
     /// </summary>
     /// <typeparam name="TEntity">The type of entity to query, must inherit from IEntityBase.</typeparam>
     public sealed class SingleQueryBuilder<TEntity> :
-        BaseEntityBuilder<SingleQueryBuilder<TEntity>, TEntity>, ISingleQueryBuilder<TEntity> where TEntity : IEntityBase
+        BaseEntityBuilder<SingleQueryBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
         /// Indicates whether the query should ignore default query filters.

@@ -1,5 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Restore;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using AirSoft.Exceptions;
 using System.ComponentModel;
 
@@ -13,7 +12,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Restore
     /// The type of entity to restore, must inherit from IEntityBase and implement soft delete.
     /// </typeparam>
     public sealed class RestoreSingleBuilder<TEntity> :
-        BaseEntityStateBuilder<RestoreSingleBuilder<TEntity>, TEntity>, IRestoreSingleBuilder<TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<RestoreSingleBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
         /// Gets the entity to be restored from soft-deleted state.

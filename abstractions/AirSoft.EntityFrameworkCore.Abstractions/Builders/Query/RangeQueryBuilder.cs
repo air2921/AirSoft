@@ -1,5 +1,4 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Includer;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Query;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer;
 using AirSoft.Exceptions;
@@ -14,7 +13,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity to query.</typeparam>
     public sealed class RangeQueryBuilder<TEntity> :
-        BaseEntityBuilder<RangeQueryBuilder<TEntity>, TEntity>, IRangeQueryBuilder<TEntity> where TEntity : IEntityBase
+        BaseEntityBuilder<RangeQueryBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
         /// Indicates whether the query should ignore default query filters.

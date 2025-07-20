@@ -1,5 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions;
-using AirSoft.Exceptions;
+﻿using AirSoft.Exceptions;
 using System.ComponentModel;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
@@ -10,7 +9,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
     /// </summary>
     /// <typeparam name="TBuilder">The type of the derived builder (for fluent chaining).</typeparam>
     /// <typeparam name="TEntity">The type of the entity being built for.</typeparam>
-    public abstract class BaseEntityBuilder<TBuilder, TEntity> : IBaseEntityBuilder
+    public abstract class BaseEntityBuilder<TBuilder, TEntity>
         where TBuilder : BaseEntityBuilder<TBuilder, TEntity>
         where TEntity : IEntityBase
     {

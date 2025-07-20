@@ -1,5 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
 {
@@ -8,7 +7,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
     /// Serves as the foundation for create, update, and delete operation builders.
     /// </summary>
     public abstract class BaseEntityStateBuilder<TBuilder, TEntity> :
-        BaseEntityBuilder<TBuilder, TEntity>, IBaseEntityStateBuilder
+        BaseEntityBuilder<TBuilder, TEntity>
         where TBuilder : BaseEntityStateBuilder<TBuilder, TEntity>
         where TEntity : IEntityBase
     {

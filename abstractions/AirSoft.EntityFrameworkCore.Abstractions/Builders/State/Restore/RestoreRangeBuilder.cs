@@ -1,5 +1,4 @@
-﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.State.Restore;
-using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using System.ComponentModel;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Restore
@@ -10,7 +9,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Restore
     /// </summary>
     /// <typeparam name="TEntity">The type of entity to restore, must inherit from IEntityBase and implement soft delete.</typeparam>
     public sealed class RestoreRangeBuilder<TEntity> :
-        BaseEntityStateBuilder<RestoreRangeBuilder<TEntity>, TEntity>, IRestoreRangeBuilder<TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<RestoreRangeBuilder<TEntity>, TEntity> where TEntity : IEntityBase
     {
         /// <summary>
         /// Gets the collection of entities to be restored.
