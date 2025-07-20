@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add;
+using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {
