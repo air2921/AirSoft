@@ -3,7 +3,7 @@
     /// <summary>
     /// Defines a contract for managing database transactions with both synchronous and asynchronous operations
     /// </summary>
-    public interface IDatabaseTransaction
+    public interface IDatabaseTransaction : IDisposable, IAsyncDisposable
     {
         /// <summary>
         /// Commits the current transaction synchronously

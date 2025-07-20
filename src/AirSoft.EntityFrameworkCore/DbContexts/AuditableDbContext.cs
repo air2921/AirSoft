@@ -1,4 +1,5 @@
-﻿using AirSoft.EntityFrameworkCore.Entities;
+﻿using AirSoft.EntityFrameworkCore.Abstractions;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
@@ -27,7 +28,7 @@ namespace AirSoft.EntityFrameworkCore.DbContexts
         /// 3. Mark entity as Modified
         /// Note: Changes are not saved until SaveChanges is called
         /// </remarks>
-        public virtual TEntity Restore<TEntity>(TEntity entity) where TEntity : EntityBase
+        public virtual TEntity Restore<TEntity>(TEntity entity) where TEntity : IEntityBase
         {
             ArgumentNullException.ThrowIfNull(entity);
 
@@ -49,7 +50,7 @@ namespace AirSoft.EntityFrameworkCore.DbContexts
         /// Applies the same restoration logic as Restore&lt;TEntity&gt; to each entity in the collection.
         /// Changes are not saved until SaveChanges is called.
         /// </remarks>
-        public virtual IEnumerable<TEntity> RestoreRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : EntityBase
+        public virtual IEnumerable<TEntity> RestoreRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : IEntityBase
         {
             foreach (var entity in entities)
                 Restore(entity);

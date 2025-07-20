@@ -19,9 +19,9 @@ namespace AirSoft.EntityFrameworkCore
         /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
         /// <remarks>
         /// Automatically registers the following services:
-        /// - Unit of Work implementations (<see cref="IUnitOfWork"/> and <see cref="IUnitOfWork{TDbContext}"/>)
-        /// - Transaction factories (<see cref="ITransactionFactory"/> and <see cref="ITransactionFactory{TDbContext}"/>)
-        /// - Repository implementations for all entity types (<see cref="IRepository{TEntity}"/> and <see cref="IRepository{TEntity, TDbContext}"/>)
+        /// - Unit of Work implementations <see cref="IUnitOfWork"/>
+        /// - Transaction factories <see cref="ITransactionFactory"/>
+        /// - Repository implementations for all entity types <see cref="IRepository{TEntity}"/>)
         /// 
         /// Scans the <typeparamref name="TDbContext"/> for all <see cref="DbSet{TEntity}"/> properties
         /// and registers corresponding repositories with scoped lifetime.
@@ -29,10 +29,7 @@ namespace AirSoft.EntityFrameworkCore
         public static IServiceCollection AddEntityFrameworkCoreRepository<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
         {
             services.AddScoped<IUnitOfWork, UnitOfWork<TDbContext>>();
-            services.AddScoped<IUnitOfWork<TDbContext>, UnitOfWork<TDbContext>>();
-
             services.AddScoped<ITransactionFactory, TransactionFactory<TDbContext>>();
-            services.AddScoped<ITransactionFactory<TDbContext>, TransactionFactory<TDbContext>>();
 
             var dbContextType = typeof(TDbContext);
             var entityTypes = dbContextType.GetProperties()
@@ -45,8 +42,6 @@ namespace AirSoft.EntityFrameworkCore
                 var repositoryType = typeof(Repository<,>).MakeGenericType(entityType, dbContextType);
 
                 var interfaceType = typeof(IRepository<>).MakeGenericType(entityType);
-                var repositoryWithContextInterfaceType = typeof(IRepository<,>).MakeGenericType(entityType, dbContextType);
-                services.AddScoped(repositoryWithContextInterfaceType, repositoryType);
                 services.AddScoped(interfaceType, repositoryType);
             }
 

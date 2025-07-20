@@ -1,11 +1,12 @@
-﻿using AirSoft.EntityFrameworkCore.Builders.Query;
-using AirSoft.EntityFrameworkCore.Entities;
+﻿using AirSoft.EntityFrameworkCore.Abstractions;
+using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Query;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace AirSoft.EntityFrameworkCore.Extensions
 {
     /// <summary>
-    /// Provides extension methods for applying query configurations from a <see cref="RangeQueryBuilder{TEntity}"/>
+    /// Provides extension methods for applying query configurations from a <see cref="IRangeQueryBuilder{TEntity}"/>
     /// to an <see cref="IQueryable{TEntity}"/>.
     /// </summary>
     /// <remarks>
@@ -15,7 +16,7 @@ namespace AirSoft.EntityFrameworkCore.Extensions
     internal static class RangeQueryBuilderExtension
     {
         /// <summary>
-        /// Applies all configured query modifications from the <see cref="RangeQueryBuilder{TEntity}"/>
+        /// Applies all configured query modifications from the <see cref="IRangeQueryBuilder{TEntity}"/>
         /// to the provided <see cref="IQueryable{TEntity}"/>.
         /// </summary>
         /// <typeparam name="TEntity">The entity type, must inherit from <see cref="EntityBase"/></typeparam>
@@ -36,7 +37,7 @@ namespace AirSoft.EntityFrameworkCore.Extensions
         /// <item><description>Pagination (Skip/Take) if Skip and Take has value</description></item>
         /// </list>
         /// </remarks>
-        internal static IQueryable<TEntity> ApplyBuilder<TEntity>(this IQueryable<TEntity> query, RangeQueryBuilder<TEntity> builder) where TEntity : EntityBase
+        internal static IQueryable<TEntity> ApplyBuilder<TEntity>(this IQueryable<TEntity> query, IRangeQueryBuilder<TEntity> builder) where TEntity : EntityBase
         {
             if (builder.Joiner is not null && builder.Joiner.Paths.Count > 0)
             {
