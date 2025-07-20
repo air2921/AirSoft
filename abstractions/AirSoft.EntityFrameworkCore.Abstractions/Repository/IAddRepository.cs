@@ -10,6 +10,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the added entity.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<TEntity> AddAsync(AddSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -18,6 +23,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the added entity.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<TEntity> AddAsync(Action<AddSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -25,6 +35,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builder">Configured create builder</param>
         /// <returns>The added entity.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public TEntity Add(AddSingleBuilder<TEntity> builder);
 
         /// <summary>
@@ -32,6 +43,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <returns>The added entity.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public TEntity Add(Action<AddSingleBuilder<TEntity>> builderAction);
 
         /// <summary>
@@ -40,6 +52,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of added entities.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<IEnumerable<TEntity>> AddRangeAsync(AddRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -48,6 +65,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of added entities.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<IEnumerable<TEntity>> AddRangeAsync(Action<AddRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -55,6 +77,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builder">Configured create builder</param>
         /// <returns>A collection of added entities.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public IEnumerable<TEntity> AddRange(AddRangeBuilder<TEntity> builder);
 
         /// <summary>
@@ -62,6 +85,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builderAction">Action to configure the create builder</param>
         /// <returns>A collection of added entities.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public IEnumerable<TEntity> AddRange(Action<AddRangeBuilder<TEntity>> builderAction);
     }
 }

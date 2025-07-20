@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions
 {
@@ -28,6 +29,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions
         /// </summary>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="IDatabaseTransaction"/>.</returns>
+        /// <exception cref="EntityException">Thrown when operation is cancelled</exception>
         /// <remarks>
         /// The default isolation level depends on the database provider. For most SQL databases, it's Read Committed.
         /// </remarks>
@@ -39,6 +41,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions
         /// <param name="isolation">The isolation level to use for the transaction.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> to observe while waiting for the task to complete.</param>
         /// <returns>A task that represents the asynchronous operation. The task result contains the <see cref="IDatabaseTransaction"/>.</returns>
+        /// <exception cref="EntityException">Thrown when operation is cancelled</exception>
         public Task<IDatabaseTransaction> BeginAsync(IsolationLevel isolation, CancellationToken cancellationToken = default);
     }
 }

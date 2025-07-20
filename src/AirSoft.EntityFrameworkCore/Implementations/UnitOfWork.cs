@@ -11,13 +11,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     /// <param name="context">The database context instance that this unit of work will operate on.</param>
     public class UnitOfWork<TDbContext>(TDbContext context) : IUnitOfWork where TDbContext : DbContext
     {
-        /// <summary>
-        /// Saves all changes made in this context to the underlying database.
-        /// </summary>
-        /// <returns>
-        /// The number of state entries written to the database.
-        /// </returns>
-        /// <exception cref="EntityException">Thrown when an error occurs while saving changes to the database.</exception>
+        /// <inheritdoc/>
         public int SaveChanges()
         {
             try
@@ -30,15 +24,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously saves all changes made in this context to the underlying database.
-        /// </summary>
-        /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
-        /// <returns>
-        /// A <see cref="Task"/> that represents the asynchronous save operation. 
-        /// The task result contains the number of state entries written to the database.
-        /// </returns>
-        /// <exception cref="EntityException">Thrown when an error occurs while saving changes to the database.</exception>
+        /// <inheritdoc/>
         public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             try

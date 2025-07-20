@@ -17,35 +17,19 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     public class TransactionFactory<TDbContext>(TDbContext dbContext) : ITransactionFactory
         where TDbContext : DbContext
     {
-        /// <summary>
-        /// Begins a new database transaction synchronously with the default isolation level.
-        /// </summary>
-        /// <returns>A new <see cref="IDatabaseTransaction"/> representing the transaction.</returns>
+        /// <inheritdoc/>
         public IDatabaseTransaction Begin()
             => new DatabaseTransaction(dbContext.Database.BeginTransaction());
 
-        /// <summary>
-        /// Begins a new database transaction synchronously with the specified isolation level.
-        /// </summary>
-        /// <param name="isolation">The isolation level to use for the transaction.</param>
-        /// <returns>A new <see cref="IDatabaseTransaction"/> representing the transaction.</returns>
+        /// <inheritdoc/>
         public IDatabaseTransaction Begin(IsolationLevel isolation)
             => new DatabaseTransaction(dbContext.Database.BeginTransaction(isolation));
 
-        /// <summary>
-        /// Begins a new database transaction asynchronously with the default isolation level.
-        /// </summary>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result is a new <see cref="IDatabaseTransaction"/>.</returns>
+        /// <inheritdoc/>
         public async Task<IDatabaseTransaction> BeginAsync(CancellationToken cancellationToken = default)
             => new DatabaseTransaction(await dbContext.Database.BeginTransactionAsync(cancellationToken));
 
-        /// <summary>
-        /// Begins a new database transaction asynchronously with the specified isolation level.
-        /// </summary>
-        /// <param name="isolation">The isolation level to use for the transaction.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>A task that represents the asynchronous operation. The task result is a new <see cref="IDatabaseTransaction"/>.</returns>
+        /// <inheritdoc/>
         public async Task<IDatabaseTransaction> BeginAsync(IsolationLevel isolation, CancellationToken cancellationToken = default)
             => new DatabaseTransaction(await dbContext.Database.BeginTransactionAsync(isolation, cancellationToken));
     }

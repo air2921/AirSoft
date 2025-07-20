@@ -13,6 +13,11 @@
         /// A <see cref="Task"/> that represents the asynchronous save operation. 
         /// The task result contains the number of state entries written to the database.
         /// </returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -21,6 +26,7 @@
         /// <returns>
         /// The number of state entries written to the database.
         /// </returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public int SaveChanges();
     }
 }

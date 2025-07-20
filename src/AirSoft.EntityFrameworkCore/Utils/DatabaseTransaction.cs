@@ -18,31 +18,19 @@ namespace AirSoft.EntityFrameworkCore.Utils
     /// <param name="transaction">The underlying Entity Framework Core transaction to wrap</param>
     public class DatabaseTransaction(IDbContextTransaction transaction) : IDatabaseTransaction
     {
-        /// <summary>
-        /// Commits all changes made in the transaction synchronously.
-        /// </summary>
+        /// <inheritdoc/>
         public void Commit()
             => transaction.Commit();
 
-        /// <summary>
-        /// Asynchronously commits all changes made in the transaction.
-        /// </summary>
-        /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
-        /// <returns>A task that represents the asynchronous commit operation.</returns>
+        /// <inheritdoc/>
         public Task CommitAsync(CancellationToken cancellationToken = default)
             => transaction.CommitAsync(cancellationToken);
 
-        /// <summary>
-        /// Rolls back all changes made in the transaction synchronously.
-        /// </summary>
+        /// <inheritdoc/>
         public void Rollback()
             => transaction.Rollback();
 
-        /// <summary>
-        /// Asynchronously rolls back all changes made in the transaction.
-        /// </summary>
-        /// <param name="cancellationToken">A token to observe while waiting for the task to complete.</param>
-        /// <returns>A task that represents the asynchronous rollback operation.</returns>
+        /// <inheritdoc/>
         public Task RollbackAsync(CancellationToken cancellationToken = default)
             => transaction.RollbackAsync(cancellationToken);
 

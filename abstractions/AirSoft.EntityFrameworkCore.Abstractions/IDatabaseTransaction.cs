@@ -1,4 +1,6 @@
-﻿namespace AirSoft.EntityFrameworkCore.Abstractions
+﻿using AirSoft.Exceptions;
+
+namespace AirSoft.EntityFrameworkCore.Abstractions
 {
     /// <summary>
     /// Defines a contract for managing database transactions with both synchronous and asynchronous operations
@@ -20,6 +22,7 @@
         /// </summary>
         /// <param name="cancellationToken">Optional cancellation token</param>
         /// <returns>Task representing the asynchronous operation</returns>
+        /// <exception cref="EntityException">Thrown when operation is cancelled</exception>
         public Task CommitAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -27,6 +30,7 @@
         /// </summary>
         /// <param name="cancellationToken">Optional cancellation token</param>
         /// <returns>Task representing the asynchronous operation</returns>
+        /// <exception cref="EntityException">Thrown when operation is cancelled</exception>
         public Task RollbackAsync(CancellationToken cancellationToken = default);
     }
 }

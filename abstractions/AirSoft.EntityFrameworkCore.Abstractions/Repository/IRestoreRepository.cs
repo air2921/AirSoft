@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Restore;
+using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
 {
@@ -10,6 +11,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the restored entity.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<TEntity> RestoreAsync(RestoreSingleBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -18,6 +24,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the restored entity.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<TEntity> RestoreAsync(Action<RestoreSingleBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -25,6 +36,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builder">Configured restore builder</param>
         /// <returns>The restored entity.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public TEntity Restore(RestoreSingleBuilder<TEntity> builder);
 
         /// <summary>
@@ -32,6 +44,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <returns>The restored entity.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public TEntity Restore(Action<RestoreSingleBuilder<TEntity>> builderAction);
 
         /// <summary>
@@ -40,6 +53,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builder">Configured restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of restored entities.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<IEnumerable<TEntity>> RestoreRangeAsync(RestoreRangeBuilder<TEntity> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -48,6 +66,11 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns a collection of restored entities.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
         public Task<IEnumerable<TEntity>> RestoreRangeAsync(Action<RestoreRangeBuilder<TEntity>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
@@ -55,6 +78,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builder">Configured restore builder</param>
         /// <returns>A collection of restored entities.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public IEnumerable<TEntity> RestoreRange(RestoreRangeBuilder<TEntity> builder);
 
         /// <summary>
@@ -62,6 +86,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
         /// </summary>
         /// <param name="builderAction">Action to configure the restore builder</param>
         /// <returns>A collection of restored entities.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
         public IEnumerable<TEntity> RestoreRange(Action<RestoreRangeBuilder<TEntity>> builderAction);
     }
 }
