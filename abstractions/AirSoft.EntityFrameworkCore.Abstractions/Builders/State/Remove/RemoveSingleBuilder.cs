@@ -101,10 +101,17 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         }
 
         /// <summary>
-        /// Explicitly sets the whether entities should be deleted without the change tracker.
+        /// Configures whether to perform direct database deletion (bypassing change tracking and soft delete).
         /// </summary>
-        /// <param name="executable">True to remove without the change tracker.</param>
-        /// <returns>The current builder instance.</returns>
+        /// <remarks>
+        /// WARNING: When enabled, deletes records directly in database, ignoring:
+        /// - Change tracking
+        /// - Soft delete markers
+        /// - Delete interceptors
+        /// This operation is irreversible.
+        /// </remarks>
+        /// <param name="executable">True for direct DB deletion, false for normal EF deletion</param>
+        /// <returns>The current builder instance</returns>
         public RemoveSingleBuilder<TEntity> WithExecution(bool executable = true)
         {
             IsExeсutable = executable;
