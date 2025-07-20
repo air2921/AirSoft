@@ -918,7 +918,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
             return builder.RemoveMode switch
             {
                 EntityRemoveMode.Entity when builder.Entity is not null => builder.Entity,
-                EntityRemoveMode.Identifier when builder.Id is not null => await _dbSet.FindAsync(builder.Id, cancellationToken),
+                EntityRemoveMode.Identifier when builder.Id is not null => await _dbSet.FindAsync([builder.Id, cancellationToken], cancellationToken: cancellationToken),
                 EntityRemoveMode.Filter when builder.Filter is not null => await _dbSet.FirstOrDefaultAsync(builder.Filter, cancellationToken),
                 _ => null
             };
