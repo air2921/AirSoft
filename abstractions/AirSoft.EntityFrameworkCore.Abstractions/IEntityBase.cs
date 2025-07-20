@@ -1,5 +1,9 @@
 ﻿namespace AirSoft.EntityFrameworkCore.Abstractions
 {
+    /// <summary>
+    /// Defines the base interface for all entities in the system, providing common audit properties
+    /// and soft-delete functionality. All domain entities should implement this interface.
+    /// </summary>
     public interface IEntityBase
     {
         /// <summary>

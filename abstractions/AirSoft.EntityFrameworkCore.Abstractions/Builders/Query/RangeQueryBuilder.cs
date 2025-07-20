@@ -166,7 +166,12 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
         /// <param name="take">Number of entities to take.</param>
         /// <returns>The current builder instance.</returns>
         /// <exception cref="InvalidArgumentException">
-        /// Thrown when: skip < 0, take ≤ 0, or take > 1000 (unless constraints ignored)
+        /// Thrown when:
+        /// <list type="bullet">
+        /// <item><description>skip is less than 0</description></item>
+        /// <item><description>take is less than or equal to 0</description></item>
+        /// <item><description>take is greater than 1000 (unless constraints are ignored)</description></item>
+        /// </list>
         /// </exception>
         public RangeQueryBuilder<TEntity> WithPagination(int skip, int take)
         {

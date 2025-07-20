@@ -1,4 +1,6 @@
-﻿namespace AirSoft.EntityFrameworkCore.Abstractions
+﻿using AirSoft.Exceptions;
+
+namespace AirSoft.EntityFrameworkCore.Abstractions
 {
     /// <summary>
     /// Defines the contract for a unit of work pattern that coordinates the writing of changes to one or more databases.
