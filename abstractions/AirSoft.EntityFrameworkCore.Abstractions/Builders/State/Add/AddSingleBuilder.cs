@@ -34,6 +34,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add
         /// </summary>
         /// <param name="entity">Entity instance</param>
         /// <returns>The current builder instance.</returns>
+        /// exception cref="InvalidArgumentException">Thrown when entity is null</exception>
         public AddSingleBuilder<TEntity> WithEntity(TEntity entity)
         {
             Entity = entity ?? throw new InvalidArgumentException("Entity for creation cannot be null");

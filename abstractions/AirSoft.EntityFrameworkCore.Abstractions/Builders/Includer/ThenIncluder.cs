@@ -37,6 +37,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// </summary>
         /// <typeparam name="TProperty">The type of the related entity to include.</typeparam>
         /// <param name="expression">A lambda expression representing the navigation property.</param>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         public IThenIncluder<TEntity, TProperty> WithThenInclude<TProperty>(Expression<Func<TPreviousProperty, TProperty>> expression) where TProperty : IEntityBase
         {
             _ = expression ?? throw new InvalidArgumentException($"Using {nameof(WithThenInclude)} without expression is not allowed");
@@ -53,6 +54,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// </summary>
         /// <typeparam name="TProperty">The type of the related entities in the collection.</typeparam>
         /// <param name="expression">A lambda expression representing the collection navigation property.</param>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         public IThenIncluder<TEntity, TProperty> WithThenInclude<TProperty>(Expression<Func<TPreviousProperty, IEnumerable<TProperty>>> expression) where TProperty : IEntityBase
         {
             _ = expression ?? throw new InvalidArgumentException($"Using {nameof(WithThenInclude)} without expression is not allowed");

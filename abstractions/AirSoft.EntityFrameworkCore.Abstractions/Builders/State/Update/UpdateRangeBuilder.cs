@@ -34,7 +34,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update
         /// <returns>The current builder instance.</returns>
         public UpdateRangeBuilder<TEntity> WithEntities(IEnumerable<TEntity> entities)
         {
-            Entities = entities.ToArray();
+            Entities = [.. entities];
             return this;
         }
 

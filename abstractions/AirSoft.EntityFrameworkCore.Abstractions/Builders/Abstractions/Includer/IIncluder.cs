@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq.Expressions;
+using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Includer
 {
@@ -20,6 +21,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Include
         /// </summary>
         /// <typeparam name="TProperty">The type of the related entity to include.</typeparam>
         /// <param name="expression">A lambda expression representing the navigation property.</param>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, TProperty>> expression)
             where TProperty : IEntityBase;
 
@@ -28,6 +30,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Include
         /// </summary>
         /// <typeparam name="TProperty">The type of the related entities in the collection.</typeparam>
         /// <param name="expression">A lambda expression representing the collection navigation property.</param>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, IEnumerable<TProperty>>> expression)
             where TProperty : IEntityBase;
     }

@@ -10,7 +10,7 @@ namespace AirSoft.Exceptions
     /// This exception is used to handle errors specific to SMTP client, such as connection failures,
     /// message sending issues, or authentication problems. It provides utility methods for conditional exception throwing.
     /// </remarks>
-    public class SmtpClientException : AirSoftException
+    public class SmtpClientException : SenderException
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="SmtpClientException"/> class.

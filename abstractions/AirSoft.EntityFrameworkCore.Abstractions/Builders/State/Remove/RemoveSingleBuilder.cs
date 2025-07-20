@@ -49,6 +49,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         /// </summary>
         /// <param name="entity">Entity instance to remove.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when entity is null</exception>
         public RemoveSingleBuilder<TEntity> WithEntity(TEntity entity)
         {
             Entity = entity ?? throw new InvalidArgumentException("Entity for remove cannot be null");
@@ -61,6 +62,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         /// </summary>
         /// <param name="id">Entity identifier.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when identifier is null</exception>
         public RemoveSingleBuilder<TEntity> WithIdentifier(object id)
         {
             Id = id ?? throw new InvalidArgumentException("Identifier of entity for remove cannot be null");
@@ -73,6 +75,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         /// </summary>
         /// <param name="filter">Filter expression to select entity.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when filter is null</exception>
         public RemoveSingleBuilder<TEntity> WithFilter(Expression<Func<TEntity, bool>> filter)
         {
             Filter = filter ?? throw new InvalidArgumentException("Filter for filtering entity cannot be null");

@@ -73,6 +73,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         /// </summary>
         /// <param name="filter">Filter expression to select entities.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when filter is null</exception>
         public RemoveRangeBuilder<TEntity> WithFilter(Expression<Func<TEntity, bool>> filter)
         {
             Filter = filter ?? throw new InvalidArgumentException("Filter for filtering entities cannot be null");

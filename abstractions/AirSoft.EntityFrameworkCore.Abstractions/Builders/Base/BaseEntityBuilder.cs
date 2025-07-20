@@ -70,6 +70,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
         /// The default constraints require timeouts between 5 seconds and 3 minutes.
         /// Use <see cref="WithIgnoreBuilderConstraints"/> to bypass these constraints when necessary.
         /// </remarks>
+        /// <exception cref="InvalidArgumentException">Thrown when timeout is zero, less than 5s or more than 3min (unless constraints ignored)</exception>
         public TBuilder WithTimeout(TimeSpan timeout)
         {
             if (timeout == TimeSpan.Zero)

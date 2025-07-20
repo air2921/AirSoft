@@ -34,7 +34,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add
         /// <returns>The current builder instance.</returns>
         public AddRangeBuilder<TEntity> WithEntities(IEnumerable<TEntity> entities)
         {
-            Entities = entities.ToArray();
+            Entities = [.. entities];
             return this;
         }
 

@@ -36,6 +36,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update
         /// </summary>
         /// <param name="entity">The entity to update</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when entity is null</exception>
         public UpdateSingleBuilder<TEntity> WithEntity(TEntity entity)
         {
             Entity = entity ?? throw new InvalidArgumentException("Entity for updating cannot be null");

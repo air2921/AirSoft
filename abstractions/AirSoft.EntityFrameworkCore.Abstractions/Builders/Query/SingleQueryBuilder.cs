@@ -143,6 +143,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
         /// </summary>
         /// <param name="filter">The filter expression.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when filter is null</exception>
         public SingleQueryBuilder<TEntity> WithFilter(Expression<Func<TEntity, bool>> filter)
         {
             _ = filter ?? throw new InvalidArgumentException($"Using a {nameof(WithFilter)} without filter expression is not allowed");
@@ -155,6 +156,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
         /// </summary>
         /// <param name="selector">The projection expression that transforms the query results.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when selector is null</exception>
         public SingleQueryBuilder<TEntity> WithProjection(Expression<Func<TEntity, TEntity>> selector)
         {
             Selector = selector ?? throw new InvalidArgumentException($"Using a {nameof(WithProjection)} without projection expression is not allowed");
@@ -167,6 +169,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
         /// <param name="expression">The ordering expression.</param>
         /// <param name="descending">True for descending order.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is null</exception>
         public SingleQueryBuilder<TEntity> WithOrdering(
             Expression<Func<TEntity, object?>> expression,
             bool descending = true)

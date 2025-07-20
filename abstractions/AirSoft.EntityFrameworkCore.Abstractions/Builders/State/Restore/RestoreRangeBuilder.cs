@@ -30,7 +30,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Restore
         /// <returns>The current builder instance.</returns>
         public RestoreRangeBuilder<TEntity> WithEntities(IEnumerable<TEntity> entities)
         {
-            Entities = entities.ToArray();
+            Entities = [.. entities];
             return this;
         }
     }

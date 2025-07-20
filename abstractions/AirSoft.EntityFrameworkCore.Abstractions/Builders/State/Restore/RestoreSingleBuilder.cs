@@ -31,6 +31,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Restore
         /// </summary>
         /// <param name="entity">The entity instance to restore.</param>
         /// <returns>The current builder instance.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when entity is null</exception>
         public RestoreSingleBuilder<TEntity> WithEntity(TEntity entity)
         {
             Entity = entity ?? throw new InvalidArgumentException("Entity for restore cannot be null");

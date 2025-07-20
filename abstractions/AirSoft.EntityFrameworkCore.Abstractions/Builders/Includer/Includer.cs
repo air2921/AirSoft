@@ -29,6 +29,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// </summary>
         /// <typeparam name="TProperty">The type of the related entity to include.</typeparam>
         /// <param name="expression">A lambda expression representing the navigation property.</param>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         public IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, TProperty>> expression) where TProperty : IEntityBase
         {
             _ = expression ?? throw new InvalidArgumentException($"Using {nameof(WithInclude)} without expression is not allowed");
@@ -43,6 +44,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// </summary>
         /// <typeparam name="TProperty">The type of the related entities in the collection.</typeparam>
         /// <param name="expression">A lambda expression representing the collection navigation property.</param>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         public IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, IEnumerable<TProperty>>> expression) where TProperty : IEntityBase
         {
             _ = expression ?? throw new InvalidArgumentException($"Using {nameof(WithInclude)} without expression is not allowed");
@@ -58,6 +60,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// <typeparam name="TProperty">The type of the property being accessed.</typeparam>
         /// <param name="expression">The property access expression to analyze.</param>
         /// <returns>The member name as string.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is invalid</exception>
         protected static string GetPathFromExpression<TProperty>(Expression<Func<TEntity, TProperty>> expression)
             => GetMemberName(expression?.Body) ?? throw new InvalidArgumentException("Invalid property accessor");
 
@@ -68,6 +71,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// <typeparam name="TNewProperty">The type of the property being accessed.</typeparam>
         /// <param name="expression">The nested property access expression to analyze.</param>
         /// <returns>The member name as string.</returns>
+        /// <exception cref="InvalidArgumentException">Thrown when expression is invalid</exception>
         protected static string GetNestedPathFromExpression<TPreviousProperty, TNewProperty>(Expression<Func<TPreviousProperty, TNewProperty>> expression)
             => GetMemberName(expression?.Body) ?? throw new InvalidArgumentException("Invalid property accessor");
 
