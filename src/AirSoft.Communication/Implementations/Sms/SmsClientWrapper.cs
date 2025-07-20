@@ -31,6 +31,13 @@ namespace AirSoft.Communication.Implementations.Sms
         /// <remarks>
         /// This method sends the provided SMS message asynchronously. It uses the Twilio API to send the message to the specified phone number.
         /// </remarks>
+        /// <exception cref="TelecomClientException">
+        /// Thrown when: 
+        /// - PhoneMode is CallOnly
+        /// - Specified 'from' number isn't registered
+        /// - Operation is cancelled
+        /// - Twilio API fails
+        /// </exception>
         public Task SendAsync(string phone, string message, string? from)
         {
             if (options.PhoneMode == PhoneNumberMode.CallOnly)
@@ -75,6 +82,12 @@ namespace AirSoft.Communication.Implementations.Sms
         /// This method sends the provided SMS message synchronously using the Twilio API.
         /// While this method is blocking, it will wait until the message is sent before returning.
         /// </remarks>
+        /// <exception cref="TelecomClientException">
+        /// Thrown when:
+        /// - PhoneMode is CallOnly
+        /// - Specified 'from' number isn't registered
+        /// - Twilio API fails
+        /// </exception>
         public void Send(string phone, string message, string? from)
         {
             if (options.PhoneMode == PhoneNumberMode.CallOnly)

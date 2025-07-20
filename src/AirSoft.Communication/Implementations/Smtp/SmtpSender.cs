@@ -22,7 +22,7 @@ namespace AirSoft.Communication.Implementations.Smtp
         /// </summary>
         /// <param name="mail">An object containing the details of the email to send, including recipient, subject, and body.</param>
         /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
-        /// <exception cref="SmtpClientException">Thrown if an error occurs while sending the email.</exception>
+        /// <exception cref="SmtpClientException">Thrown if an error occurs while sending the email or client was disposed.</exception>
         public async Task SendAsync(MailDetails mail, CancellationToken cancellationToken = default)
         {
             try
@@ -40,7 +40,7 @@ namespace AirSoft.Communication.Implementations.Smtp
         /// Sends an email synchronously using the provided <see cref="MailDetails"/> object.
         /// </summary>
         /// <param name="mail">An object containing the details of the email to send, including recipient, subject, and body.</param>
-        /// <exception cref="SmtpClientException">Thrown if an error occurs while sending the email.</exception>
+        /// <exception cref="SmtpClientException">Thrown if an error occurs while sending the email or client was disposed.</exception>
         public void Send(MailDetails mail)
         {
             try

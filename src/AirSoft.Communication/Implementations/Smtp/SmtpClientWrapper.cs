@@ -52,6 +52,7 @@ namespace AirSoft.Communication.Implementations.Smtp
         /// </summary>
         /// <param name="message">The email message to send.</param>
         /// <param name="cancellationToken">A token to monitor for cancellation requests.</param>
+        /// <exception cref="ObjectDisposedException">Thrown if the client has been disposed</exception>
         /// <exception cref="SmtpClientException">Thrown if there is an error during the email sending process.</exception>
         public async Task SendAsync(MimeMessage message, CancellationToken cancellationToken = default)
         {
@@ -75,6 +76,7 @@ namespace AirSoft.Communication.Implementations.Smtp
         /// Synchronously sends an email message.
         /// </summary>
         /// <param name="message">The email message to send.</param>
+        /// <exception cref="ObjectDisposedException">Thrown if the client has been disposed</exception>
         /// <exception cref="SmtpClientException">Thrown if there is an error during the email sending process.</exception>
         public void Send(MimeMessage message)
         {
