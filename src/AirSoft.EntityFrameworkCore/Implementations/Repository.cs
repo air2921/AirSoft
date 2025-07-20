@@ -510,10 +510,6 @@ namespace AirSoft.EntityFrameworkCore.Implementations
                     Total = count,
                 };
             }
-            catch (OperationCanceledException ex)
-            {
-                throw new EntityException("The operation was cancelled due to waiting too long for completion or due to manual cancellation", ex);
-            }
             catch (Exception ex)
             {
                 throw new EntityException("An error occurred while attempting to retrieve a range of entities", ex);
