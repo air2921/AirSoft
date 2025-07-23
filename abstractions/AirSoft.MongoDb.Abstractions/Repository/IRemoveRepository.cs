@@ -17,7 +17,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured remove builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns>A task that represents the asynchronous operation and returns the number of removed documents (1 if successful, 0 otherwise).</returns>
-        /// <exception cref="documentsException">
+        /// <exception cref="DocumentException">
         /// Thrown when:
         /// - Database operation fails
         /// - Operation is cancelled

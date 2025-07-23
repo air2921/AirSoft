@@ -63,7 +63,7 @@ namespace AirSoft.MongoDb.Abstractions.Builders.Base
         /// <exception cref="InvalidArgumentException">Thrown when the timeout more than 3 min and constraints are enabled.</exception>
         /// <remarks>
         /// The default constraints require timeouts between 5 seconds and 3 minutes.
-        /// Use <see cref="WithIgnoreBuilderConstraints"/> to bypass these constraints when necessary.
+        /// Use <see cref="WithDisableConstraints"/> to bypass these constraints when necessary.
         /// </remarks>
         public TBuilder WithTimeout(TimeSpan timeout)
         {
