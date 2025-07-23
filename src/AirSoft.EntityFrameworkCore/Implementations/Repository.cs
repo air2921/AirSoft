@@ -49,26 +49,26 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>Timeout for IsExists operations (10 seconds).</summary>
         private const int CheckExistTimeout = 10;
 
-        /// <summary>Timeout for GetCount operations (20 seconds).</summary>
-        private const int GetCountTimeout = 20;
+        /// <summary>Timeout for GetCount operations (10 seconds).</summary>
+        private const int GetCountTimeout = 10;
 
         /// <summary>Timeout for GetRange operations (20 seconds).</summary>
         private const int GetRangeTimeout = 20;
 
-        /// <summary>Timeout for GetSingle operations (20 seconds).</summary>
-        private const int GetSingleTimeout = 20;
+        /// <summary>Timeout for GetSingle operations (15 seconds).</summary>
+        private const int GetSingleTimeout = 15;
 
-        /// <summary>Timeout for GetById operations (20 seconds).</summary>
-        private const int GetByIdTimeout = 20;
+        /// <summary>Timeout for GetById operations (10 seconds).</summary>
+        private const int GetByIdTimeout = 10;
 
         /// <summary>Timeout for Add operations (20 seconds).</summary>
         private const int AddTimeout = 20;
 
-        /// <summary>Timeout for AddRange operations (20 seconds).</summary>
-        private const int AddRangeTimeout = 20;
+        /// <summary>Timeout for AddRange operations (30 seconds).</summary>
+        private const int AddRangeTimeout = 30;
 
-        /// <summary>Timeout for RemoveRange operations (40 seconds).</summary>
-        private const int RemoveRangeTimeout = 40;
+        /// <summary>Timeout for RemoveRange operations (30 seconds).</summary>
+        private const int RemoveRangeTimeout = 30;
 
         /// <summary>Timeout for Remove operations (20 seconds).</summary>
         private const int RemoveTimeout = 20;
@@ -76,14 +76,14 @@ namespace AirSoft.EntityFrameworkCore.Implementations
         /// <summary>Timeout for Update operations (20 seconds).</summary>
         private const int UpdateTimeout = 20;
 
-        /// <summary>Timeout for UpdateRange operations (40 seconds).</summary>
-        private const int UpdateRangeTimeout = 40;
+        /// <summary>Timeout for UpdateRange operations (30 seconds).</summary>
+        private const int UpdateRangeTimeout = 30;
 
         /// <summary>Timeout for Restore operations (20 seconds).</summary>
         private const int RestoreTimeout = 20;
 
-        /// <summary>Timeout for RestoreRange operations (40 seconds).</summary>
-        private const int RestoreRangeTimeout = 40;
+        /// <summary>Timeout for RestoreRange operations (20 seconds).</summary>
+        private const int RestoreRangeTimeout = 20;
 
         #endregion
     }

@@ -14,18 +14,18 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
         where TEntity : IEntityBase
     {
         /// <summary>
-        /// A flag indicating whether to ignore builder constraints.
+        /// A flag indicating whether to enable builder constraints.
         /// This should be used with caution as it bypasses safety checks.
         /// </summary>
-        private bool _ignoreBuilderConstraints = false;
+        private bool _enabledConstraints = true;
 
         /// <summary>
-        /// Gets a value indicating whether builder constraints are currently being ignored.
+        /// Gets a value indicating whether builder constraints are currently enabled.
         /// </summary>
         /// <value>
-        /// <c>true</c> if builder constraints are ignored; otherwise, <c>false</c>.
+        /// <c>true</c> if builder constraints are enabled; otherwise, <c>false</c>.
         /// </value>
-        protected bool IsIgnoredBuilderConstraints => _ignoreBuilderConstraints;
+        protected bool IsEnabledConstraints => _enabledConstraints;
 
         /// <summary>
         /// Gets or sets the timeout duration for the operation execution.
@@ -47,9 +47,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
         /// </remarks>
         [Obsolete("Do not use disabling builder restrictions unless it is done intentionally")]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public TBuilder WithIgnoreBuilderConstraints()
+        public TBuilder WithDisableConstraints()
         {
-            _ignoreBuilderConstraints = true;
+            _enabledConstraints = false;
             return (TBuilder)this;
         }
 
@@ -63,24 +63,26 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
         /// <list type="bullet">
         /// <item><description>Timeout is <see cref="TimeSpan.Zero"/></description></item>
         /// <item><description>Timeout is less than 5 seconds (unless constraints are ignored)</description></item>
-        /// <item><description>Timeout is more than 3 minutes (unless constraints are ignored)</description></item>
+        /// <item><description>Timeout is more than 30 seconds (unless constraints are ignored)</description></item>
         /// </list>
         /// </exception>
         /// <remarks>
-        /// The default constraints require timeouts between 5 seconds and 3 minutes.
-        /// Use <see cref="WithIgnoreBuilderConstraints"/> to bypass these constraints when necessary.
+        /// The default constraints require timeouts between 5 seconds and 30 seconds.
+        /// Use <see cref="WithDisableConstraints"/> to bypass these constraints when necessary.
+        /// WARNING: This timeout ONLY affects async operations.
+        /// Synchronous methods will ignore this setting.
         /// </remarks>
-        /// <exception cref="InvalidArgumentException">Thrown when timeout is zero, less than 5s or more than 3min (unless constraints ignored)</exception>
+        /// <exception cref="InvalidArgumentException">Thrown when timeout is zero, less than 5s or more than 30s (unless constraints ignored)</exception>
         public TBuilder WithTimeout(TimeSpan timeout)
         {
             if (timeout == TimeSpan.Zero)
                 throw new InvalidArgumentException($"Using a {nameof(WithTimeout)} with {nameof(TimeSpan.Zero)} is not allowed");
 
-            if (timeout < TimeSpan.FromSeconds(5) && !IsIgnoredBuilderConstraints)
+            if (timeout < TimeSpan.FromSeconds(5) && IsEnabledConstraints)
                 throw new InvalidArgumentException($"Using a {nameof(WithTimeout)} using timeout less than 5 seconds is not allowed");
 
-            if (timeout >= TimeSpan.FromMinutes(3) && !IsIgnoredBuilderConstraints)
-                throw new InvalidArgumentException($"Using a {nameof(WithTimeout)} using timeout more than 3 minutes is not allowed");
+            if (timeout >= TimeSpan.FromSeconds(30) && IsEnabledConstraints)
+                throw new InvalidArgumentException($"Using a {nameof(WithTimeout)} using timeout more than 30 seconds is not allowed");
 
             Timeout = timeout;
             return (TBuilder)this;

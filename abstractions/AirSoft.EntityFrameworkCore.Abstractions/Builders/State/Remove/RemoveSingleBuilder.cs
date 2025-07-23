@@ -108,6 +108,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
         /// - Change tracking
         /// - Soft delete markers
         /// - Delete interceptors
+        /// - Calling <see cref="BaseEntityStateBuilder{TRestoreRangeBuilder, TEntity}.WithSaveChanges(bool)"/> is not required (changes are applied immediately)
         /// This operation is irreversible.
         /// </remarks>
         /// <param name="executable">True for direct DB deletion, false for normal EF deletion</param>

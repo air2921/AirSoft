@@ -181,7 +181,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
             if (take <= 0)
                 throw new InvalidArgumentException($"Using a {nameof(WithPagination)} with {nameof(take)} param less or zero is not allowed");
 
-            if (take > 1000 && !IsIgnoredBuilderConstraints)
+            if (take > 1000 && IsEnabledConstraints)
                 throw new InvalidArgumentException($"Using a {nameof(WithPagination)} with {nameof(take)} param more than 1000 with enabled builder contraints is not allowed");
 
             Skip = skip;
@@ -216,7 +216,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
         [EditorBrowsable(EditorBrowsableState.Never)]
         public RangeQueryBuilder<TEntity> WithNoQuantityLimit()
         {
-            if (IsIgnoredBuilderConstraints)
+            if (IsEnabledConstraints)
                 throw new InvalidArgumentException($"Using a {nameof(WithNoQuantityLimit)} with enabled builder contraints is not allowed");
 
             Skip = null;
