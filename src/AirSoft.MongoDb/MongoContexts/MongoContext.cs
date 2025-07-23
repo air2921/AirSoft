@@ -1,4 +1,4 @@
-﻿using AirSoft.MongoDb.Documents;
+﻿using AirSoft.MongoDb.Abstractions.Documents;
 using MongoDB.Driver;
 
 namespace AirSoft.MongoDb.MongoContexts

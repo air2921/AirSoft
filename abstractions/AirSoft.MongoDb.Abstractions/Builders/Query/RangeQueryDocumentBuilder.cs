@@ -17,31 +17,31 @@ namespace AirSoft.MongoDb.Abstractions.Builders.Query
         /// An expressions for filtering documents based on a condition.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IList<Expression<Func<TDocument, bool>>> Filters { get; private set; } = [];
+        public IList<Expression<Func<TDocument, bool>>> Filters { get; private set; } = [];
 
         /// <summary>
         /// Gets the projection selector expression that transforms the query results.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal Expression<Func<TDocument, TDocument>>? Selector { get; private set; }
+        public Expression<Func<TDocument, TDocument>>? Selector { get; private set; }
 
         /// <summary>
         /// A list of sorting expressions and their directions.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IList<(Expression<Func<TDocument, object?>> Expression, bool Descending)> SortOptions { get; } = [];
+        public IList<(Expression<Func<TDocument, object?>> Expression, bool Descending)> SortOptions { get; } = [];
 
         /// <summary>
         /// The number of documents to skip (for pagination).
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal int? Skip { get; private set; } = 0;
+        public int? Skip { get; private set; } = 0;
 
         /// <summary>
         /// The number of documents to take (for pagination).
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal int? Take { get; private set; } = 100;
+        public int? Take { get; private set; } = 100;
 
         /// <summary>
         /// Creates a new instance of RangeQueryDocumentBuilder with default settings.

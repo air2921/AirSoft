@@ -15,8 +15,7 @@ namespace AirSoft.MongoDb.Implementations
     /// be properly disposed when no longer needed.
     /// </remarks>
     public sealed class MongoSessionFactory<TMongoContext>(TMongoContext context) :
-        IMongoSessionFactory, IMongoSessionFactory<TMongoContext>
-        where TMongoContext : MongoContext
+        IMongoSessionFactory where TMongoContext : MongoContext
     {
         /// <summary>
         /// Begins a new synchronous MongoDB session.

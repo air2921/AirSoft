@@ -17,19 +17,19 @@ namespace AirSoft.MongoDb.Abstractions.Builders.Query
         /// An expressions for filtering documents based on a condition.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IList<Expression<Func<TDocument, bool>>> Filters { get; private set; } = [];
+        public IList<Expression<Func<TDocument, bool>>> Filters { get; private set; } = [];
 
         /// <summary>
         /// Gets the projection selector expression that transforms the query results.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal Expression<Func<TDocument, TDocument>>? Selector { get; private set; }
+        public Expression<Func<TDocument, TDocument>>? Selector { get; private set; }
 
         /// <summary>
         /// A list of sorting expressions and their directions.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IList<(Expression<Func<TDocument, object?>> Expression, bool Descending)> SortOptions { get; } = [];
+        public IList<(Expression<Func<TDocument, object?>> Expression, bool Descending)> SortOptions { get; } = [];
 
         /// <summary>
         /// Creates a new instance of SingleQueryDocumentBuilder with default settings.

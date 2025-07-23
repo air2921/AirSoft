@@ -18,13 +18,13 @@ namespace AirSoft.MongoDb.Abstractions.Builders.State.Insert
         /// Gets the document to be inserted
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal TDocument Document { get; private set; } = default!;
+        public TDocument Document { get; private set; } = default!;
 
         /// <summary>
         /// Gets the MongoDB insert options
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal InsertOneOptions Options { get; private set; } = new();
+        public InsertOneOptions Options { get; private set; } = new();
 
         /// <summary>
         /// Creates a new instance of the builder

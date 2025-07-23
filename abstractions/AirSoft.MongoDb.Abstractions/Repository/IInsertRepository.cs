@@ -22,7 +22,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> AddAsync(InsertSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
+        public Task<long> InsertAsync(InsertSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously inserts an document by configuring the builder through an action.
@@ -35,7 +35,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> AddAsync(Action<InsertSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
+        public Task<long> InsertAsync(Action<InsertSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Inserts an document using a configured builder.
@@ -43,7 +43,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured insert builder</param>
         /// <returns>The number of added documents (1 if successful, 0 otherwise).</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int Add(InsertSingleDocumentBuilder<TDocument> builder);
+        public long Insert(InsertSingleDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Inserts an document by configuring the builder through an action.
@@ -51,7 +51,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builderAction">Action to configure the insert builder</param>
         /// <returns>The number of added documents (1 if successful, 0 otherwise).</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int Add(Action<InsertSingleDocumentBuilder<TDocument>> builderAction);
+        public long Insert(Action<InsertSingleDocumentBuilder<TDocument>> builderAction);
 
         /// <summary>
         /// Asynchronously inserts multiple documents using a configured builder.
@@ -64,7 +64,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> AddRangeAsync(InsertRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
+        public Task<long> InsertRangeAsync(InsertRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously inserts multiple documents  by configuring the builder through an action.
@@ -77,7 +77,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> AddRangeAsync(Action<InsertRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
+        public Task<long> InsertRangeAsync(Action<InsertRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Inserts multiple documents using a configured builder.
@@ -85,7 +85,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured insert builder</param>
         /// <returns>The number of added documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int AddRange(InsertRangeDocumentBuilder<TDocument> builder);
+        public long InsertRange(InsertRangeDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Inserts multiple documents by configuring the builder through an action.
@@ -93,6 +93,6 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builderAction">Action to configure the insert builder</param>
         /// <returns>The number of added documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int AddRange(Action<InsertRangeDocumentBuilder<TDocument>> builderAction);
+        public long InsertRange(Action<InsertRangeDocumentBuilder<TDocument>> builderAction);
     }
 }

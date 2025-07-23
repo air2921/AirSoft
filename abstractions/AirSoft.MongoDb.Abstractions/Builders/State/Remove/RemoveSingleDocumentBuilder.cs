@@ -19,31 +19,31 @@ namespace AirSoft.MongoDb.Abstractions.Builders.State.Remove
         /// Identifier of the document to be removed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal ObjectId? Id { get; private set; }
+        public ObjectId? Id { get; private set; }
 
         /// <summary>
         /// The document to be removed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal TDocument? Document { get; private set; }
+        public TDocument? Document { get; private set; }
 
         /// <summary>
         /// Filter expression to select documents for removal.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal Expression<Func<TDocument, bool>>? Filter { get; private set; }
+        public Expression<Func<TDocument, bool>>? Filter { get; private set; }
 
         /// <summary>
         /// Specifies the removal mode (by object, identifiers or filter).
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal DocumentRemoveMode RemoveMode { get; private set; }
+        public DocumentRemoveMode RemoveMode { get; private set; }
 
         /// <summary>
         /// Gets the MongoDB remove options
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal DeleteOptions Options { get; private set; } = new();
+        public DeleteOptions Options { get; private set; } = new();
 
         /// <summary>
         /// Creates a new builder instance

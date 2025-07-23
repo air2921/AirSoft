@@ -4,6 +4,11 @@ using AirSoft.MongoDb.Abstractions.Documents;
 
 namespace AirSoft.MongoDb.Abstractions.Repository
 {
+    /// <summary>
+    /// Provides repository pattern operations for replace documents from the data store.
+    /// Supports both single and batch replace operations through builder pattern configuration.
+    /// </summary>
+    /// <typeparam name="TDocument">The type of document the repository will handle, which must inherit from <see cref="DocumentBase"/>.</typeparam>
     public interface IReplaceRepository<TDocument> where TDocument : DocumentBase
     {
         /// <summary>
@@ -17,7 +22,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> ReplaceAsync(ReplaceSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
+        public Task<long> ReplaceAsync(ReplaceSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously replace an document by configuring the replace builder through an action.
@@ -30,7 +35,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> ReplaceAsync(Action<ReplaceSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
+        public Task<long> ReplaceAsync(Action<ReplaceSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Replace an document using a configured builder.
@@ -38,7 +43,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured replace builder</param>
         /// <returns>The number of replaced documents (1 if successful, 0 otherwise).</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int Replace(ReplaceSingleDocumentBuilder<TDocument> builder);
+        public long Replace(ReplaceSingleDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Replace an document by configuring the replace builder through an action.
@@ -46,7 +51,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builderAction">Action to configure the replace builder</param>
         /// <returns>The number of replaced documents (1 if successful, 0 otherwise).</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int Replace(Action<ReplaceSingleDocumentBuilder<TDocument>> builderAction);
+        public long Replace(Action<ReplaceSingleDocumentBuilder<TDocument>> builderAction);
 
         /// <summary>
         /// Asynchronously replace multiple documents using a configured builder.
@@ -59,7 +64,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> ReplaceRangeAsync(ReplaceRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
+        public Task<long> ReplaceRangeAsync(ReplaceRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously replace multiple documents by configuring the replace builder through an action.
@@ -72,7 +77,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> ReplaceRangeAsync(Action<ReplaceRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
+        public Task<long> ReplaceRangeAsync(Action<ReplaceRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Replace multiple documents using a configured builder.
@@ -80,7 +85,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured replace builder</param>
         /// <returns>The number of replaced documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int ReplaceRange(ReplaceRangeDocumentBuilder<TDocument> builder);
+        public long ReplaceRange(ReplaceRangeDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Replace multiple documents by configuring the replace builder through an action.
@@ -88,6 +93,6 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builderAction">Action to configure the replace builder</param>
         /// <returns>The number of replaced documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int ReplaceRange(Action<ReplaceRangeDocumentBuilder<TDocument>> builderAction);
+        public long ReplaceRange(Action<ReplaceRangeDocumentBuilder<TDocument>> builderAction);
     }
 }

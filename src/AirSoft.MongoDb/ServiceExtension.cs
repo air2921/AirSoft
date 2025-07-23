@@ -23,8 +23,8 @@ namespace AirSoft.MongoDb
         /// Configures and registers the following services:
         /// - <see cref="MongoConfigureOptions"/> as singleton
         /// - <typeparamref name="TMongoContext"/> as scoped
-        /// - Session factories (<see cref="IMongoSessionFactory"/> and <see cref="IMongoSessionFactory{TMongoContext}"/>)
-        /// - Repository implementations for all document types (<see cref="IMongoRepository{TDocument}"/> and <see cref="IMongoRepository{TDocument, TMongoContext}"/>)
+        /// - Session factories (<see cref="IMongoSessionFactory"/>)
+        /// - Repository implementations for all document types (<see cref="IMongoRepository{TDocument}"/>)
         /// 
         /// Scans the <typeparamref name="TMongoContext"/> for all <see cref="IMongoCollection{TDocument}"/> properties
         /// and registers corresponding repositories with scoped lifetime.
@@ -38,7 +38,6 @@ namespace AirSoft.MongoDb
             services.AddScoped<TMongoContext>();
 
             services.AddScoped<IMongoSessionFactory, MongoSessionFactory<TMongoContext>>();
-            services.AddScoped<IMongoSessionFactory<TMongoContext>, MongoSessionFactory<TMongoContext>>();
 
             var mongoContextType = typeof(TMongoContext);
             var documentTypes = mongoContextType.GetProperties()
@@ -51,8 +50,6 @@ namespace AirSoft.MongoDb
                 var repositoryType = typeof(MongoRepository<,>).MakeGenericType(documentType, mongoContextType);
 
                 var interfaceType = typeof(IMongoRepository<>).MakeGenericType(documentType);
-                var repositoryWithContextInterfaceType = typeof(IMongoRepository<,>).MakeGenericType(documentType, mongoContextType);
-                services.AddScoped(repositoryWithContextInterfaceType, repositoryType);
                 services.AddScoped(interfaceType, repositoryType);
                 services.AddScoped(documentType);
             }

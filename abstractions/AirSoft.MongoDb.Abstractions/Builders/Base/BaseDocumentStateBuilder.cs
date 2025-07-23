@@ -19,7 +19,7 @@ namespace AirSoft.MongoDb.Abstractions.Builders.Base
         /// Gets the MongoDB session handle for transaction support
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IClientSessionHandle? Session { get; private set; }
+        public IClientSessionHandle? Session { get; private set; }
 
         /// <summary>
         /// Attaches a MongoDB session handle for transactional operations

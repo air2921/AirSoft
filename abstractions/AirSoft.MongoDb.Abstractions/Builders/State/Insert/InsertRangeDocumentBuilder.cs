@@ -16,13 +16,13 @@ namespace AirSoft.MongoDb.Abstractions.Builders.State.Insert
         /// Documents to be inserted
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IReadOnlyCollection<TDocument> Documents { get; private set; } = [];
+        public IReadOnlyCollection<TDocument> Documents { get; private set; } = [];
 
         /// <summary>
         /// Options to insert documents
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal InsertManyOptions Options { get; private set; } = new();
+        public InsertManyOptions Options { get; private set; } = new();
 
         /// <summary>
         /// Creates a new builder instance

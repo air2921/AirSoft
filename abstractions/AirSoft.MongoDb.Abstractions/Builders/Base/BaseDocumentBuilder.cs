@@ -30,13 +30,12 @@ namespace AirSoft.MongoDb.Abstractions.Builders.Base
 
         /// <summary>
         /// Gets or sets the timeout duration for the operation execution.
-        /// This property is internal and not intended for direct use outside the builder.
         /// </summary>
         /// <value>
         /// The timeout duration for the operation. Default is <see cref="TimeSpan.Zero"/> (no timeout).
         /// </value>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal TimeSpan Timeout { get; private set; } = TimeSpan.Zero;
+        public TimeSpan Timeout { get; private set; } = TimeSpan.Zero;
 
         /// <summary>
         /// Disables builder constraints.

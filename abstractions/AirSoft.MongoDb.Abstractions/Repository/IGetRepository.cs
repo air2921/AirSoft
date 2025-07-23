@@ -2,6 +2,7 @@
 using AirSoft.MongoDb.Abstractions.Builders.Query;
 using AirSoft.MongoDb.Abstractions.Details;
 using AirSoft.MongoDb.Abstractions.Documents;
+using MongoDB.Bson;
 using System.Linq.Expressions;
 
 namespace AirSoft.MongoDb.Abstractions.Repository
@@ -24,7 +25,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> GetCountAsync(Expression<Func<TDocument, bool>>? filter, CancellationToken cancellationToken = default);
+        public Task<long> GetCountAsync(Expression<Func<TDocument, bool>>? filter, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the count of documents that match the specified filter.
@@ -32,7 +33,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="filter">Optional filter expression</param>
         /// <returns>The count of matching documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int GetCount(Expression<Func<TDocument, bool>>? filter);
+        public long GetCount(Expression<Func<TDocument, bool>>? filter);
 
         /// <summary>
         /// Asynchronously retrieves an document by its identifier.
@@ -45,7 +46,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<TDocument?> GetByIdAsync(object id, CancellationToken cancellationToken = default);
+        public Task<TDocument?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves an document by its identifier.
@@ -53,7 +54,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="id">document identifier</param>
         /// <returns>The found document or null.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public TDocument? GetById(object id);
+        public TDocument? GetById(ObjectId id);
 
         /// <summary>
         /// Asynchronously retrieves an document using a configured query builder.
@@ -108,7 +109,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<IEnumerable<TDocument>> GetRangeAsync(RangeQueryDocumentBuilder<TDocument>? builder, CancellationToken cancellationToken = default);
+        public Task<IEnumerable<TDocument>> GetRangeAsync(RangeQueryDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously retrieves multiple documents by configuring the query builder through an action.
@@ -121,7 +122,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<IEnumerable<TDocument>> GetRangeAsync(Action<RangeQueryDocumentBuilder<TDocument>>? builderAction, CancellationToken cancellationToken = default);
+        public Task<IEnumerable<TDocument>> GetRangeAsync(Action<RangeQueryDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves multiple documents using a configured query builder.
@@ -129,7 +130,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured query builder</param>
         /// <returns>A collection of documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public IEnumerable<TDocument> GetRange(RangeQueryDocumentBuilder<TDocument>? builder);
+        public IEnumerable<TDocument> GetRange(RangeQueryDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Retrieves multiple documents by configuring the query builder through an action.
@@ -137,48 +138,48 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <returns>A collection of documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public IEnumerable<TDocument> GetRange(Action<RangeQueryDocumentBuilder<TDocument>>? builderAction);
+        public IEnumerable<TDocument> GetRange(Action<RangeQueryDocumentBuilder<TDocument>> builderAction);
 
         /// <summary>
         /// Asynchronously retrieves a range of documents with total count.
         /// </summary>
         /// <param name="builder">Configured query builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A <see cref="documentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
+        /// <returns>A <see cref="DocumentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
         /// <exception cref="DocumentException">
         /// Thrown when:
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(RangeQueryDocumentBuilder<TDocument>? builder, CancellationToken cancellationToken = default);
+        public Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(RangeQueryDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously retrieves a range of documents with total count by configuring the query builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the query builder</param>
         /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>A <see cref="documentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
+        /// <returns>A <see cref="DocumentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
         /// <exception cref="DocumentException">
         /// Thrown when:
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(Action<RangeQueryDocumentBuilder<TDocument>>? builderAction, CancellationToken cancellationToken = default);
+        public Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(Action<RangeQueryDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves a range of documents with total count.
         /// </summary>
         /// <param name="builder">Configured query builder</param>
-        /// <returns>A <see cref="documentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
+        /// <returns>A <see cref="DocumentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public DocumentChunkDetails<TDocument> GetRangeEntire(RangeQueryDocumentBuilder<TDocument>? builder);
+        public DocumentChunkDetails<TDocument> GetRangeEntire(RangeQueryDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Retrieves a range of documents with total count by configuring the query builder through an action.
         /// </summary>
         /// <param name="builderAction">Action to configure the query builder</param>
-        /// <returns>A <see cref="documentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
+        /// <returns>A <see cref="DocumentChunkDetails{TDocument}"/> chunk of documents with total count.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public DocumentChunkDetails<TDocument> GetRangeEntire(Action<RangeQueryDocumentBuilder<TDocument>>? builderAction);
+        public DocumentChunkDetails<TDocument> GetRangeEntire(Action<RangeQueryDocumentBuilder<TDocument>> builderAction);
     }
 }

@@ -17,13 +17,13 @@ namespace AirSoft.MongoDb.Abstractions.Builders.State.Replace
         /// Gets the document to be replaced
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal TDocument Document { get; private set; } = default!;
+        public TDocument Document { get; private set; } = default!;
 
         /// <summary>
         /// Gets the MongoDB replace options
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal ReplaceOptions Options { get; private set; } = new();
+        public ReplaceOptions Options { get; private set; } = new();
 
         /// <summary>
         /// Creates a new builder instance

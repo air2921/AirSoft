@@ -1,5 +1,5 @@
-﻿using AirSoft.MongoDb.Builders.Query;
-using AirSoft.MongoDb.Documents;
+﻿using AirSoft.MongoDb.Abstractions.Builders.Query;
+using AirSoft.MongoDb.Abstractions.Documents;
 using MongoDB.Driver;
 
 namespace AirSoft.MongoDb.Extensions

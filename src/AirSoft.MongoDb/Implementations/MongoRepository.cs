@@ -1,12 +1,12 @@
 ﻿using AirSoft.Exceptions;
 using AirSoft.MongoDb.Abstractions;
-using AirSoft.MongoDb.Builders.Query;
-using AirSoft.MongoDb.Builders.State.Insert;
-using AirSoft.MongoDb.Builders.State.Remove;
-using AirSoft.MongoDb.Builders.State.Replace;
-using AirSoft.MongoDb.Details;
-using AirSoft.MongoDb.Documents;
-using AirSoft.MongoDb.Enums;
+using AirSoft.MongoDb.Abstractions.Builders.Query;
+using AirSoft.MongoDb.Abstractions.Builders.State.Insert;
+using AirSoft.MongoDb.Abstractions.Builders.State.Remove;
+using AirSoft.MongoDb.Abstractions.Builders.State.Replace;
+using AirSoft.MongoDb.Abstractions.Details;
+using AirSoft.MongoDb.Abstractions.Documents;
+using AirSoft.MongoDb.Abstractions.Enums;
 using AirSoft.MongoDb.Extensions;
 using AirSoft.MongoDb.MongoContexts;
 using MongoDB.Bson;
@@ -25,8 +25,8 @@ namespace AirSoft.MongoDb.Implementations
     /// This class provides methods for querying, inserting, updating, and deleting documents in a MongoDB collection.
     /// It uses the provided <typeparamref name="TMongoContext"/> to access the database and ensures thread-safe operations.
     /// </remarks>
-    public sealed class MongoRepository<TDocument, TMongoContext>(TMongoContext context, TDocument currentDocument)
-        : IMongoRepository<TDocument>, IMongoRepository<TDocument, TMongoContext>
+    public partial class MongoRepository<TDocument, TMongoContext>(TMongoContext context, TDocument currentDocument)
+        : IMongoRepository<TDocument>
         where TDocument : DocumentBase, new()
         where TMongoContext : MongoContext
     {
@@ -70,12 +70,45 @@ namespace AirSoft.MongoDb.Implementations
         #endregion
 
         /// <summary>
-        /// Asynchronously checks existing record that match the specified filter.
+        /// Defines a filter for removing a single document based on the provided builder and remove mode.
         /// </summary>
-        /// <param name="filter">The filter expression to apply to set find filter.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>The true if record is exits otherwise false.</returns>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the count operation.</exception>
+        /// <param name="builder">The <see cref="RemoveSingleDocumentBuilder{TDocument}"/> containing removal criteria.</param>
+        /// <returns>A <see cref="FilterDefinition{TDocument}"/> configured for the removal operation.</returns>
+        /// <exception cref="DocumentException">Throws when invalid RemoveMode</exception>
+        private static FilterDefinition<TDocument> DefineSingleRemoveFilter(RemoveSingleDocumentBuilder<TDocument> builder)
+        {
+            if (builder.RemoveMode == DocumentRemoveMode.Filter && builder.Filter is not null)
+                return Builders<TDocument>.Filter.Where(builder.Filter);
+            if (builder.RemoveMode == DocumentRemoveMode.Identifier && builder.Id is not null)
+                return Builders<TDocument>.Filter.Eq(x => x.Id, builder.Id);
+            if (builder.RemoveMode == DocumentRemoveMode.Document && builder.Document is not null)
+                return Builders<TDocument>.Filter.Eq(x => x.Id, builder.Document.Id);
+
+            throw new DocumentException($"Invalid {nameof(builder.RemoveMode)}");
+        }
+
+        /// <summary>
+        /// Defines a filter for removing multiple documents based on the provided builder and remove mode.
+        /// </summary>
+        /// <param name="builder">The <see cref="RemoveRangeDocumentBuilder{TDocument}"/> containing removal criteria.</param>
+        /// <returns>A <see cref="FilterDefinition{TDocument}"/> configured for the bulk removal operation.</returns>
+        /// <exception cref="DocumentException">Throws when invalid RemoveMode</exception>
+        private static FilterDefinition<TDocument> DefineRangeRemoveFilter(RemoveRangeDocumentBuilder<TDocument> builder)
+        {
+            if (builder.RemoveMode == DocumentRemoveMode.Filter && builder.Filter is not null)
+                return Builders<TDocument>.Filter.Where(builder.Filter);
+            if (builder.RemoveMode == DocumentRemoveMode.Identifier)
+                return Builders<TDocument>.Filter.In(x => x.Id, builder.Identifiers);
+            if (builder.RemoveMode == DocumentRemoveMode.Document)
+                return Builders<TDocument>.Filter.In(x => x.Id, builder.Documents.Select(doc => doc.Id));
+
+            throw new DocumentException($"Invalid {nameof(builder.RemoveMode)}");
+        }
+    }
+
+    public partial class MongoRepository<TDocument, TMongoContext>
+    {
+        /// <inheritdoc/>
         public async Task<bool> IsExistsAsync(Expression<Func<TDocument, bool>> filter, CancellationToken cancellationToken = default)
         {
             try
@@ -96,13 +129,20 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously retrieves the count of documents matching the specified query.
-        /// </summary>
-        /// <param name="filter">An optional filter expression to count matching documents.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>The number of documents matching the query.</returns>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the count operation.</exception>
+        /// <inheritdoc/>
+        public bool IsExists(Expression<Func<TDocument, bool>> filter)
+        {
+            try
+            {
+                return _collection.Value.Find(filter).Any();
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to retrieve count of documents", ex);
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<long> GetCountAsync(Expression<Func<TDocument, bool>>? filter, CancellationToken cancellationToken = default)
         {
             try
@@ -123,13 +163,23 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously retrieves a document by its identifier.
-        /// </summary>
-        /// <param name="id">The identifier of the document to retrieve.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>The document if found, otherwise null.</returns>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the retrieval operation.</exception>
+        /// <inheritdoc/>
+        public long GetCount(Expression<Func<TDocument, bool>>? filter)
+        {
+            try
+            {
+                return _collection.Value.Find(filter ?? Builders<TDocument>.Filter.Empty).CountDocuments();
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to retrieve count of documents", ex);
+            }
+        }
+    }
+
+    public partial class MongoRepository<TDocument, TMongoContext>
+    {
+        /// <inheritdoc/>
         public async Task<TDocument?> GetByIdAsync(ObjectId id, CancellationToken cancellationToken = default)
         {
             try
@@ -151,13 +201,21 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously retrieves a single document based on the specified query builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="SingleQueryDocumentBuilder{TDocument}"/> that defines the query criteria.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>The document if found matching the criteria, otherwise null.</returns>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the retrieval operation.</exception>
+        /// <inheritdoc/>
+        public TDocument? GetById(ObjectId id)
+        {
+            try
+            {
+                var filter = Builders<TDocument>.Filter.Eq(x => x.Id, id);
+                return _collection.Value.Find(filter).FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to retrieve document", ex);
+            }
+        }
+
+        /// <inheritdoc/>
         public async Task<TDocument?> GetSingleAsync(SingleQueryDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
@@ -180,13 +238,37 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously retrieves multiple documents based on the specified query builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="RangeQueryDocumentBuilder{TDocument}"/> that defines the query criteria.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>A collection of documents matching the query criteria.</returns>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the retrieval operation.</exception>
+        /// <inheritdoc/>
+        public async Task<TDocument?> GetSingleAsync(Action<SingleQueryDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new SingleQueryDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await GetSingleAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public TDocument? GetSingle(SingleQueryDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                var query = _collection.Value.ApplyBuilder(builder);
+                return query.FirstOrDefault();
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to retrieve document", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public TDocument? GetSingle(Action<SingleQueryDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new SingleQueryDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return GetSingle(builder);
+        }
+
+        /// <inheritdoc/>
         public async Task<IEnumerable<TDocument>> GetRangeAsync(RangeQueryDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
@@ -209,13 +291,37 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously retrieves a paginated set of documents along with the total count of matching documents.
-        /// </summary>
-        /// <param name="builder">A <see cref="RangeQueryDocumentBuilder{TDocument}"/> that defines the query criteria.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <returns>A <see cref="DocumentChunkDetails{TDocument}"/> containing the paginated results and total count.</returns>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the retrieval operation.</exception>
+        /// <inheritdoc/>
+        public async Task<IEnumerable<TDocument>> GetRangeAsync(Action<RangeQueryDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new RangeQueryDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await GetRangeAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<TDocument> GetRange(RangeQueryDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                var query = _collection.Value.ApplyBuilder(builder);
+                return query.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to retrieve a range of documents", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public IEnumerable<TDocument> GetRange(Action<RangeQueryDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new RangeQueryDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return GetRange(builder);
+        }
+
+        /// <inheritdoc/>
         public async Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(RangeQueryDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
@@ -251,13 +357,54 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously inserts a single document using the specified builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="InsertSingleDocumentBuilder{TDocument}"/> containing the document to insert and options.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the insert operation.</exception>
-        public async Task InsertAsync(InsertSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<DocumentChunkDetails<TDocument>> GetRangeEntireAsync(Action<RangeQueryDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new RangeQueryDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await GetRangeEntireAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public DocumentChunkDetails<TDocument> GetRangeEntire(RangeQueryDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                var collectionQuery = _collection.Value.ApplyBuilder(builder);
+
+                var filters = builder.Filters.Select(expr => Builders<TDocument>.Filter.Where(expr)).ToArray();
+                var filter = filters.Length != 0 ? Builders<TDocument>.Filter.And(filters) : Builders<TDocument>.Filter.Empty;
+
+                var countQuery = _collection.Value.Find(filter);
+
+                var chunk = collectionQuery.ToList();
+                var count = countQuery.CountDocuments();
+
+                return new DocumentChunkDetails<TDocument>
+                {
+                    Chunk = chunk,
+                    Total = count,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to retrieve a range of documents", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public DocumentChunkDetails<TDocument> GetRangeEntire(Action<RangeQueryDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new RangeQueryDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return GetRangeEntire(builder);
+        }
+    }
+
+    public partial class MongoRepository<TDocument, TMongoContext>
+    {
+        /// <inheritdoc/>
+        public async Task<long> InsertAsync(InsertSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -270,6 +417,8 @@ namespace AirSoft.MongoDb.Implementations
                     await _collection.Value.InsertOneAsync(builder.Document, builder.Options, cancellationToken);
                 else
                     await _collection.Value.InsertOneAsync(builder.Session, builder.Document, builder.Options, cancellationToken);
+
+                return 1;
             }
             catch (OperationCanceledException ex)
             {
@@ -281,13 +430,42 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously inserts multiple documents using the specified builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="InsertRangeDocumentBuilder{TDocument}"/> containing the documents to insert and options.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the insert operation.</exception>
-        public async Task InsertRangeAsync(InsertRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<long> InsertAsync(Action<InsertSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new InsertSingleDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await InsertAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public long Insert(InsertSingleDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                if (builder.Session is null)
+                    _collection.Value.InsertOne(builder.Document, builder.Options);
+                else
+                    _collection.Value.InsertOne(builder.Session, builder.Document, builder.Options);
+
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to insert document", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public long Insert(Action<InsertSingleDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new InsertSingleDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return Insert(builder);
+        }
+
+        /// <inheritdoc/>
+        public async Task<long> InsertRangeAsync(InsertRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -300,6 +478,8 @@ namespace AirSoft.MongoDb.Implementations
                     await _collection.Value.InsertManyAsync(builder.Documents, builder.Options, cancellationToken);
                 else
                     await _collection.Value.InsertManyAsync(builder.Session, builder.Documents, builder.Options, cancellationToken);
+
+                return builder.Documents.Count;
             }
             catch (OperationCanceledException ex)
             {
@@ -311,13 +491,45 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously removes a single document using the specified builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="RemoveSingleDocumentBuilder{TDocument}"/> containing the document identifier and options.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the remove operation.</exception>
-        public async Task RemoveAsync(RemoveSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<long> InsertRangeAsync(Action<InsertRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new InsertRangeDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await InsertRangeAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public long InsertRange(InsertRangeDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                if (builder.Session is null)
+                    _collection.Value.InsertMany(builder.Documents, builder.Options);
+                else
+                    _collection.Value.InsertMany(builder.Session, builder.Documents, builder.Options);
+
+                return builder.Documents.Count;
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to insert documents", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public long InsertRange(Action<InsertRangeDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new InsertRangeDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return InsertRange(builder);
+        }
+    }
+
+    public partial class MongoRepository<TDocument, TMongoContext>
+    {
+        /// <inheritdoc/>
+        public async Task<long> RemoveAsync(RemoveSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -327,11 +539,14 @@ namespace AirSoft.MongoDb.Implementations
                 cancellationToken = linkedToken.Token;
 
                 var filter = DefineSingleRemoveFilter(builder);
+                DeleteResult result = null!;
 
                 if (builder.Session is null)
-                    await _collection.Value.DeleteOneAsync(filter, builder.Options, cancellationToken);
+                    result = await _collection.Value.DeleteOneAsync(filter, builder.Options, cancellationToken);
                 else
-                    await _collection.Value.DeleteOneAsync(builder.Session, filter, builder.Options, cancellationToken);
+                    result = await _collection.Value.DeleteOneAsync(builder.Session, filter, builder.Options, cancellationToken);
+
+                return result.DeletedCount;
             }
             catch (OperationCanceledException ex)
             {
@@ -343,13 +558,45 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously removes multiple documents using the specified builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="RemoveRangeDocumentBuilder{TDocument}"/> containing the document identifiers and options.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the remove operation.</exception>
-        public async Task RemoveRangeAsync(RemoveRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<long> RemoveAsync(Action<RemoveSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new RemoveSingleDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await RemoveAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public long Remove(RemoveSingleDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                var filter = DefineSingleRemoveFilter(builder);
+                DeleteResult result = null!;
+
+                if (builder.Session is null)
+                    result = _collection.Value.DeleteOne(filter, builder.Options);
+                else
+                    result = _collection.Value.DeleteOne(builder.Session, filter, builder.Options);
+
+                return result.DeletedCount;
+            }
+            catch (Exception ex) when (ex is not DocumentException)
+            {
+                throw new DocumentException("An error occurred while attempting to remove document", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public long Remove(Action<RemoveSingleDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new RemoveSingleDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return Remove(builder);
+        }
+
+        /// <inheritdoc/>
+        public async Task<long> RemoveRangeAsync(RemoveRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -359,11 +606,14 @@ namespace AirSoft.MongoDb.Implementations
                 cancellationToken = linkedToken.Token;
 
                 var filter = DefineRangeRemoveFilter(builder);
+                DeleteResult result = null!;
 
                 if (builder.Session is null)
-                    await _collection.Value.DeleteManyAsync(filter, builder.Options, cancellationToken);
+                    result = await _collection.Value.DeleteManyAsync(filter, builder.Options, cancellationToken);
                 else
-                    await _collection.Value.DeleteManyAsync(builder.Session, filter, builder.Options, cancellationToken);
+                    result = await _collection.Value.DeleteManyAsync(builder.Session, filter, builder.Options, cancellationToken);
+
+                return result.DeletedCount;
             }
             catch (OperationCanceledException ex)
             {
@@ -375,13 +625,48 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously replaces a single document using the specified builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="ReplaceSingleDocumentBuilder{TDocument}"/> containing the document to replace and options.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the replace operation.</exception>
-        public async Task ReplaceAsync(ReplaceSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<long> RemoveRangeAsync(Action<RemoveRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new RemoveRangeDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await RemoveRangeAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public long RemoveRange(RemoveRangeDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                var filter = DefineRangeRemoveFilter(builder);
+                DeleteResult result = null!;
+
+                if (builder.Session is null)
+                    result = _collection.Value.DeleteMany(filter, builder.Options);
+                else
+                    result = _collection.Value.DeleteMany(builder.Session, filter, builder.Options);
+
+                return result.DeletedCount;
+            }
+            catch (Exception ex) when (ex is not DocumentException)
+            {
+                throw new DocumentException("An error occurred while attempting to remove range of documents", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public long RemoveRange(Action<RemoveRangeDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new RemoveRangeDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return RemoveRange(builder);
+        }
+    }
+
+    public partial class MongoRepository<TDocument, TMongoContext>
+    {
+        /// <inheritdoc/>
+        public async Task<long> ReplaceAsync(ReplaceSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -393,11 +678,14 @@ namespace AirSoft.MongoDb.Implementations
                 var filter = Builders<TDocument>.Filter.Eq(x => x.Id, builder.Document.Id);
 
                 builder.Document.UpdatedAt = DateTimeOffset.UtcNow;
+                ReplaceOneResult result = null!;
 
                 if (builder.Session is null)
-                    await _collection.Value.ReplaceOneAsync(filter, builder.Document, builder.Options, cancellationToken);
+                    result = await _collection.Value.ReplaceOneAsync(filter, builder.Document, builder.Options, cancellationToken);
                 else
-                    await _collection.Value.ReplaceOneAsync(builder.Session, filter, builder.Document, builder.Options, cancellationToken);
+                    result = await _collection.Value.ReplaceOneAsync(builder.Session, filter, builder.Document, builder.Options, cancellationToken);
+
+                return result.ModifiedCount;
             }
             catch (OperationCanceledException ex)
             {
@@ -409,13 +697,47 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Asynchronously replaces multiple documents using the specified builder.
-        /// </summary>
-        /// <param name="builder">A <see cref="ReplaceRangeDocumentBuilder{TDocument}"/> containing the documents to replace and options.</param>
-        /// <param name="cancellationToken">A token to cancel the operation if needed.</param>
-        /// <exception cref="DocumentException">Thrown when an error occurs during the replace operation.</exception>
-        public async Task ReplaceRangeAsync(ReplaceRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
+        /// <inheritdoc/>
+        public async Task<long> ReplaceAsync(Action<ReplaceSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
+        {
+            var builder = new ReplaceSingleDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await ReplaceAsync(builder, cancellationToken);
+        }
+
+        /// <inheritdoc/>
+        public long Replace(ReplaceSingleDocumentBuilder<TDocument> builder)
+        {
+            try
+            {
+                var filter = Builders<TDocument>.Filter.Eq(x => x.Id, builder.Document.Id);
+
+                builder.Document.UpdatedAt = DateTimeOffset.UtcNow;
+                ReplaceOneResult result = null!;
+
+                if (builder.Session is null)
+                    result = _collection.Value.ReplaceOne(filter, builder.Document, builder.Options);
+                else
+                    result = _collection.Value.ReplaceOne(builder.Session, filter, builder.Document, builder.Options);
+
+                return result.ModifiedCount;
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to replace document", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public long Replace(Action<ReplaceSingleDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new ReplaceSingleDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return Replace(builder);
+        }
+
+        /// <inheritdoc/>
+        public async Task<long> ReplaceRangeAsync(ReplaceRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -440,6 +762,8 @@ namespace AirSoft.MongoDb.Implementations
                     else
                         await _collection.Value.BulkWriteAsync(builder.Session, bulk, options, cancellationToken);
                 }
+
+                return builder.Documents.Count;
             }
             catch (OperationCanceledException ex)
             {
@@ -451,40 +775,50 @@ namespace AirSoft.MongoDb.Implementations
             }
         }
 
-        /// <summary>
-        /// Defines a filter for removing a single document based on the provided builder and remove mode.
-        /// </summary>
-        /// <param name="builder">The <see cref="RemoveSingleDocumentBuilder{TDocument}"/> containing removal criteria.</param>
-        /// <returns>A <see cref="FilterDefinition{TDocument}"/> configured for the removal operation.</returns>
-        /// <exception cref="DocumentException">Throws when invalid RemoveMode</exception>
-        private static FilterDefinition<TDocument> DefineSingleRemoveFilter(RemoveSingleDocumentBuilder<TDocument> builder)
+        /// <inheritdoc/>
+        public async Task<long> ReplaceRangeAsync(Action<ReplaceRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default)
         {
-            if (builder.RemoveMode == DocumentRemoveMode.Filter && builder.Filter is not null)
-                return Builders<TDocument>.Filter.Where(builder.Filter);
-            if (builder.RemoveMode == DocumentRemoveMode.Identifier && builder.Id is not null)
-                return Builders<TDocument>.Filter.Eq(x => x.Id, builder.Id);
-            if (builder.RemoveMode == DocumentRemoveMode.Document && builder.Document is not null)
-                return Builders<TDocument>.Filter.Eq(x => x.Id, builder.Document.Id);
-
-            throw new DocumentException($"Invalid {nameof(builder.RemoveMode)}");
+            var builder = new ReplaceRangeDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return await ReplaceRangeAsync(builder, cancellationToken);
         }
 
-        /// <summary>
-        /// Defines a filter for removing multiple documents based on the provided builder and remove mode.
-        /// </summary>
-        /// <param name="builder">The <see cref="RemoveRangeDocumentBuilder{TDocument}"/> containing removal criteria.</param>
-        /// <returns>A <see cref="FilterDefinition{TDocument}"/> configured for the bulk removal operation.</returns>
-        /// <exception cref="DocumentException">Throws when invalid RemoveMode</exception>
-        private static FilterDefinition<TDocument> DefineRangeRemoveFilter(RemoveRangeDocumentBuilder<TDocument> builder)
+        /// <inheritdoc/>
+        public long ReplaceRange(ReplaceRangeDocumentBuilder<TDocument> builder)
         {
-            if (builder.RemoveMode == DocumentRemoveMode.Filter && builder.Filter is not null)
-                return Builders<TDocument>.Filter.Where(builder.Filter);
-            if (builder.RemoveMode == DocumentRemoveMode.Identifier)
-                return Builders<TDocument>.Filter.In(x => x.Id, builder.Identifiers);
-            if (builder.RemoveMode == DocumentRemoveMode.Document)
-                return Builders<TDocument>.Filter.In(x => x.Id, builder.Documents.Select(doc => doc.Id));
+            try
+            {
+                var bulk = builder.Documents.Select(doc =>
+                {
+                    doc.UpdatedAt = DateTimeOffset.UtcNow;
+                    var filter = Builders<TDocument>.Filter.Eq(x => x.Id, doc.Id);
+                    return new ReplaceOneModel<TDocument>(filter, doc);
+                });
 
-            throw new DocumentException($"Invalid {nameof(builder.RemoveMode)}");
+                if (bulk.Any())
+                {
+                    var options = new BulkWriteOptions { IsOrdered = false };
+
+                    if (builder.Session is null)
+                        _collection.Value.BulkWrite(bulk, options);
+                    else
+                        _collection.Value.BulkWrite(builder.Session, bulk, options);
+                }
+
+                return builder.Documents.Count;
+            }
+            catch (Exception ex)
+            {
+                throw new DocumentException("An error occurred while attempting to replace range of documents", ex);
+            }
+        }
+
+        /// <inheritdoc/>
+        public long ReplaceRange(Action<ReplaceRangeDocumentBuilder<TDocument>> builderAction)
+        {
+            var builder = new ReplaceRangeDocumentBuilder<TDocument>();
+            builderAction(builder);
+            return ReplaceRange(builder);
         }
     }
 }

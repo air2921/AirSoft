@@ -22,7 +22,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> RemoveAsync(RemoveSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
+        public Task<long> RemoveAsync(RemoveSingleDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously removes an document by configuring the remove builder through an action.
@@ -35,7 +35,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> RemoveAsync(Action<RemoveSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
+        public Task<long> RemoveAsync(Action<RemoveSingleDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes an document using a configured builder.
@@ -43,7 +43,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured remove builder</param>
         /// <returns>The number of removed documents (1 if successful, 0 otherwise).</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int Remove(RemoveSingleDocumentBuilder<TDocument> builder);
+        public long Remove(RemoveSingleDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Removes an document by configuring the remove builder through an action.
@@ -51,7 +51,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builderAction">Action to configure the remove builder</param>
         /// <returns>The number of removed documents (1 if successful, 0 otherwise).</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int Remove(Action<RemoveSingleDocumentBuilder<TDocument>> builderAction);
+        public long Remove(Action<RemoveSingleDocumentBuilder<TDocument>> builderAction);
 
         /// <summary>
         /// Asynchronously removes multiple documents using a configured builder.
@@ -64,7 +64,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> RemoveRangeAsync(RemoveRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
+        public Task<long> RemoveRangeAsync(RemoveRangeDocumentBuilder<TDocument> builder, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Asynchronously removes multiple documents by configuring the remove builder through an action.
@@ -77,7 +77,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// - Database operation fails
         /// - Operation is cancelled
         /// </exception>
-        public Task<int> RemoveRangeAsync(Action<RemoveRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
+        public Task<long> RemoveRangeAsync(Action<RemoveRangeDocumentBuilder<TDocument>> builderAction, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Removes multiple documents using a configured builder.
@@ -85,7 +85,7 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builder">Configured remove builder</param>
         /// <returns>The number of removed documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int RemoveRange(RemoveRangeDocumentBuilder<TDocument> builder);
+        public long RemoveRange(RemoveRangeDocumentBuilder<TDocument> builder);
 
         /// <summary>
         /// Removes multiple documents by configuring the remove builder through an action.
@@ -93,6 +93,6 @@ namespace AirSoft.MongoDb.Abstractions.Repository
         /// <param name="builderAction">Action to configure the remove builder</param>
         /// <returns>The number of removed documents.</returns>
         /// <exception cref="DocumentException">Thrown when database operation fails</exception>
-        public int RemoveRange(Action<RemoveRangeDocumentBuilder<TDocument>> builderAction);
+        public long RemoveRange(Action<RemoveRangeDocumentBuilder<TDocument>> builderAction);
     }
 }

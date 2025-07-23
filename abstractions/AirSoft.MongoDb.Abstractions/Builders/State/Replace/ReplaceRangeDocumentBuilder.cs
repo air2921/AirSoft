@@ -15,7 +15,7 @@ namespace AirSoft.MongoDb.Abstractions.Builders.State.Replace
         /// Gets the documents to be replaced
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal IReadOnlyCollection<TDocument> Documents { get; private set; } = [];
+        public IReadOnlyCollection<TDocument> Documents { get; private set; } = [];
 
         /// <summary>
         /// Creates a new builder instance
