@@ -37,35 +37,35 @@ namespace AirSoft.MongoDb.Implementations
         /// <summary>Timeout for IsExists operations (10 seconds).</summary>
         private const int CheckExistTimeout = 10;
 
-        /// <summary>Timeout for GetCount operations (20 seconds).</summary>
-        private const int GetCountTimeout = 20;
+        /// <summary>Timeout for GetCount operations (10 seconds).</summary>
+        private const int GetCountTimeout = 10;
 
-        /// <summary>Timeout for GetRange operations (20 seconds).</summary>
-        private const int GetRangeTimeout = 20;
+        /// <summary>Timeout for GetRange operations (10 seconds).</summary>
+        private const int GetRangeTimeout = 10;
 
-        /// <summary>Timeout for GetSingle operations (20 seconds).</summary>
-        private const int GetSingleTimeout = 20;
+        /// <summary>Timeout for GetSingle operations (10 seconds).</summary>
+        private const int GetSingleTimeout = 10;
 
-        /// <summary>Timeout for GetById operations (20 seconds).</summary>
-        private const int GetByIdTimeout = 20;
+        /// <summary>Timeout for GetById operations (10 seconds).</summary>
+        private const int GetByIdTimeout = 10;
 
-        /// <summary>Timeout for Insert operations (20 seconds).</summary>
-        private const int InsertTimeout = 20;
+        /// <summary>Timeout for Insert operations (10 seconds).</summary>
+        private const int InsertTimeout = 10;
 
         /// <summary>Timeout for InsertRange operations (20 seconds).</summary>
         private const int InsertRangeTimeout = 20;
 
-        /// <summary>Timeout for RemoveRange operations (40 seconds).</summary>
-        private const int RemoveRangeTimeout = 40;
+        /// <summary>Timeout for RemoveRange operations (20 seconds).</summary>
+        private const int RemoveRangeTimeout = 20;
 
-        /// <summary>Timeout for Remove operations (20 seconds).</summary>
-        private const int RemoveTimeout = 20;
+        /// <summary>Timeout for Remove operations (10 seconds).</summary>
+        private const int RemoveTimeout = 10;
 
-        /// <summary>Timeout for Replace operations (20 seconds).</summary>
-        private const int ReplaceTimeout = 20;
+        /// <summary>Timeout for Replace operations (10 seconds).</summary>
+        private const int ReplaceTimeout = 10;
 
-        /// <summary>Timeout for ReplaceRange operations (40 seconds).</summary>
-        private const int ReplaceRangeTimeout = 40;
+        /// <summary>Timeout for ReplaceRange operations (20 seconds).</summary>
+        private const int ReplaceRangeTimeout = 20;
 
         #endregion
 
