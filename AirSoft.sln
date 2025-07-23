@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirSoft.Cryptography.Abstra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirSoft.EntityFrameworkCore.Abstractions", "abstractions\AirSoft.EntityFrameworkCore.Abstractions\AirSoft.EntityFrameworkCore.Abstractions.csproj", "{8E88B2F7-DEFC-45B2-A01F-2247300F2AEA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirSoft.MongoDb.Abstractions", "abstractions\AirSoft.MongoDb.Abstractions\AirSoft.MongoDb.Abstractions.csproj", "{54143C1C-E10F-4069-B892-8E2161D20FF6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,10 @@ Global
 		{8E88B2F7-DEFC-45B2-A01F-2247300F2AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E88B2F7-DEFC-45B2-A01F-2247300F2AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E88B2F7-DEFC-45B2-A01F-2247300F2AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54143C1C-E10F-4069-B892-8E2161D20FF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54143C1C-E10F-4069-B892-8E2161D20FF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54143C1C-E10F-4069-B892-8E2161D20FF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54143C1C-E10F-4069-B892-8E2161D20FF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -83,6 +89,7 @@ Global
 		{CA3AB2C7-F37A-4E36-B3EF-E52E63001853} = {84161691-E82E-488F-8EFB-068DDDEB438D}
 		{76087C45-B9B6-4654-830E-C6C17988CAF7} = {84161691-E82E-488F-8EFB-068DDDEB438D}
 		{8E88B2F7-DEFC-45B2-A01F-2247300F2AEA} = {84161691-E82E-488F-8EFB-068DDDEB438D}
+		{54143C1C-E10F-4069-B892-8E2161D20FF6} = {84161691-E82E-488F-8EFB-068DDDEB438D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D4C23948-8694-4FBD-808B-373390D3F43A}
