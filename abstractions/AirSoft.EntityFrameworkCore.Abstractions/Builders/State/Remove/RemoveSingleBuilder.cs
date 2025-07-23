@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.EntityFrameworkCore.Abstractions.Enums;
 using AirSoft.Exceptions;
 using System.ComponentModel;
@@ -10,9 +11,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
     /// A builder class for configuring parameters to remove a single entity.
     /// Provides multiple ways to specify entity for removal: by instance, identifier, or filter expression.
     /// </summary>
-    /// <typeparam name="TEntity">The type of entity to remove, must inherit from IEntityBase.</typeparam>
+    /// <typeparam name="TEntity">The type of entity to remove, must inherit from <see cref="EntityBase"/>.</typeparam>
     public sealed class RemoveSingleBuilder<TEntity> :
-        BaseEntityStateBuilder<RemoveSingleBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<RemoveSingleBuilder<TEntity>, TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Identifier of the entity to be removed.

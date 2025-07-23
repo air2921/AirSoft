@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.Exceptions;
 using System.ComponentModel;
 
@@ -8,9 +9,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update
     /// A class that helps build parameters for updating a single entity.
     /// <para>This class provides a way to specify an entity to be updated and optionally track who performed the update.</para>
     /// </summary>
-    /// <typeparam name="TEntity">The type of the entity to update.</typeparam>
+    /// <typeparam name="TEntity">Type of entity to update, must inherit from <see cref="EntityBase"/></typeparam>
     public sealed class UpdateSingleBuilder<TEntity> :
-        BaseEntityStateBuilder<UpdateSingleBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<UpdateSingleBuilder<TEntity>, TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// The entity to be updated.

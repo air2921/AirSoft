@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Entities;
+using System.ComponentModel;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
 {
@@ -6,10 +7,12 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
     /// Abstract base class for command builders that perform database operations without returning query results.
     /// Serves as the foundation for create, update, and delete operation builders.
     /// </summary>
+    /// <typeparam name="TBuilder">The type of the derived builder (for fluent chaining).</typeparam>
+    /// <typeparam name="TEntity">The type of the entity being built for.</typeparam>
     public abstract class BaseEntityStateBuilder<TBuilder, TEntity> :
         BaseEntityBuilder<TBuilder, TEntity>
         where TBuilder : BaseEntityStateBuilder<TBuilder, TEntity>
-        where TEntity : IEntityBase
+        where TEntity : EntityBase
     {
         /// <summary>
         /// Gets whether changes should be immediately persisted to the database.

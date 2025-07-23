@@ -1,5 +1,6 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Query;
 using AirSoft.EntityFrameworkCore.Abstractions.Details;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.Exceptions;
 using System.Linq.Expressions;
 
@@ -9,8 +10,8 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
     /// Provides repository pattern operations for retrieving entities from the data store.
     /// Supports various query operations including single/multiple entity retrieval, counting, and paginated results.
     /// </summary>
-    /// <typeparam name="TEntity">The type of entity to retrieve, must implement IEntityBase</typeparam>
-    public interface IGetRepository<TEntity> where TEntity : IEntityBase
+    /// <typeparam name="TEntity">The type of the entity. It must inherit from <see cref="EntityBase"/>.</typeparam>
+    public interface IGetRepository<TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Asynchronously retrieves the count of entities that match the specified filter.

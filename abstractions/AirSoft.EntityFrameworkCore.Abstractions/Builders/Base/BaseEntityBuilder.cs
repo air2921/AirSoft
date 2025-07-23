@@ -1,4 +1,5 @@
-﻿using AirSoft.Exceptions;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Entities;
+using AirSoft.Exceptions;
 using System.ComponentModel;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
@@ -11,7 +12,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Base
     /// <typeparam name="TEntity">The type of the entity being built for.</typeparam>
     public abstract class BaseEntityBuilder<TBuilder, TEntity>
         where TBuilder : BaseEntityBuilder<TBuilder, TEntity>
-        where TEntity : IEntityBase
+        where TEntity : EntityBase
     {
         /// <summary>
         /// A flag indicating whether to enable builder constraints.

@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.EntityFrameworkCore.Abstractions.Enums;
 using AirSoft.Exceptions;
 using System.ComponentModel;
@@ -10,9 +11,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Remove
     /// A builder class for configuring parameters to remove a range of entities.
     /// Provides flexible ways to specify entities for removal either by entity instances or their identifiers.
     /// </summary>
-    /// <typeparam name="TEntity">The type of entities to remove, must inherit from IEntityBase.</typeparam>
+    /// <typeparam name="TEntity">The type of entities to remove, must inherit from <see cref="EntityBase"/>.</typeparam>
     public sealed class RemoveRangeBuilder<TEntity> :
-        BaseEntityStateBuilder<RemoveRangeBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<RemoveRangeBuilder<TEntity>, TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Collection of entities to be removed directly.

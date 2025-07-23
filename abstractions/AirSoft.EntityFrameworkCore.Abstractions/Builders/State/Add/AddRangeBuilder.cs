@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using System.ComponentModel;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add
@@ -6,9 +7,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add
     /// <summary>
     /// Fluent builder for configuring bulk entity creation with optional audit tracking
     /// </summary>
-    /// <typeparam name="TEntity">Type of entity to create, must inherit from IEntityBase</typeparam>
+    /// <typeparam name="TEntity">Type of entity to create, must inherit from <see cref="EntityBase"/></typeparam>
     public sealed class AddRangeBuilder<TEntity> :
-        BaseEntityStateBuilder<AddRangeBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<AddRangeBuilder<TEntity>, TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Collection of entities to be created

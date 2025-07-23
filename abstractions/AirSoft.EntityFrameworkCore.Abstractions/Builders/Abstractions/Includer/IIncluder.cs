@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Linq.Expressions;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Includer
@@ -7,8 +8,8 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Include
     /// <summary>
     /// Provides a fluent interface for specifying entity include paths for eager loading related data.
     /// </summary>
-    /// <typeparam name="TEntity">The root entity type to include relations for, must inherit from IEntityBase.</typeparam>
-    public interface IIncluder<TEntity> where TEntity : IEntityBase
+    /// <typeparam name="TEntity">The root entity type to include relations for, must inherit from <see cref="EntityBase"/>.</typeparam>
+    public interface IIncluder<TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Gets the collection of include paths that have been specified.
@@ -23,7 +24,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Include
         /// <param name="expression">A lambda expression representing the navigation property.</param>
         /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, TProperty>> expression)
-            where TProperty : IEntityBase;
+            where TProperty : EntityBase;
 
         /// <summary>
         /// Specifies a collection of related entities to include in the query results.
@@ -32,6 +33,6 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Include
         /// <param name="expression">A lambda expression representing the collection navigation property.</param>
         /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
         IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, IEnumerable<TProperty>>> expression)
-            where TProperty : IEntityBase;
+            where TProperty : EntityBase;
     }
 }

@@ -1,4 +1,5 @@
-﻿using AirSoft.Exceptions;
+﻿using AirSoft.EntityFrameworkCore.Abstractions.Entities;
+using AirSoft.Exceptions;
 using System.Linq.Expressions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
@@ -7,8 +8,8 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
     /// Provides repository operations for checking entity existence in the data store.
     /// Supports both synchronous and asynchronous operations with cancellation support.
     /// </summary>
-    /// <typeparam name="TEntity">The type of entity to check, must implement IEntityBase</typeparam>
-    public interface ICheckRepository<TEntity> where TEntity : IEntityBase
+    /// <typeparam name="TEntity">The type of the entity. It must inherit from <see cref="EntityBase"/>.</typeparam>
+    public interface ICheckRepository<TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Asynchronously checks if any records match the specified filter.

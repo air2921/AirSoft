@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using System.ComponentModel;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update
@@ -6,9 +7,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Update
     /// <summary>
     /// Fluent builder for configuring bulk entity updates with optional audit tracking
     /// </summary>
-    /// <typeparam name="TEntity">Type of entity to update, must inherit from IEntityBase</typeparam>
+    /// <typeparam name="TEntity">Type of entity to update, must inherit from <see cref="EntityBase"/></typeparam>
     public sealed class UpdateRangeBuilder<TEntity> :
-        BaseEntityStateBuilder<UpdateRangeBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<UpdateRangeBuilder<TEntity>, TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Collection of entities to be updated

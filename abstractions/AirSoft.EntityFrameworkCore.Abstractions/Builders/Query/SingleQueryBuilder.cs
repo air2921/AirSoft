@@ -1,6 +1,7 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Abstractions.Includer;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
 using AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.Exceptions;
 using System.ComponentModel;
 using System.Linq.Expressions;
@@ -10,9 +11,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
     /// <summary>
     /// A builder class for constructing queries to retrieve a single entity with various options.
     /// </summary>
-    /// <typeparam name="TEntity">The type of entity to query, must inherit from IEntityBase.</typeparam>
+    /// <typeparam name="TEntity">The type of entity to query, must inherit from <see cref="EntityBase"/>.</typeparam>
     public sealed class SingleQueryBuilder<TEntity> :
-        BaseEntityBuilder<SingleQueryBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+        BaseEntityBuilder<SingleQueryBuilder<TEntity>, TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Indicates whether the query should ignore default query filters.

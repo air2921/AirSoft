@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.Exceptions;
 
 namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
@@ -7,8 +8,8 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
     /// Provides repository pattern operations for adding entities to the data store.
     /// Supports both single and batch operations through builder pattern configuration.
     /// </summary>
-    /// <typeparam name="TEntity">The type of entity to add, must implement IEntityBase</typeparam>
-    public interface IAddRepository<TEntity> where TEntity : IEntityBase
+    /// <typeparam name="TEntity">The type of the entity. It must inherit from <see cref="EntityBase"/>.</typeparam>
+    public interface IAddRepository<TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Asynchronously adds an entity using a configured builder.

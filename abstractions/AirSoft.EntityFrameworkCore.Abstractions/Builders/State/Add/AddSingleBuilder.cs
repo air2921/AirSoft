@@ -1,4 +1,5 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions.Builders.Base;
+using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.Exceptions;
 using System.ComponentModel;
 
@@ -7,9 +8,9 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.State.Add
     /// <summary>
     /// Fluent builder for configuring single entity creation with optional audit tracking
     /// </summary>
-    /// <typeparam name="TEntity">Type of entity to create, must inherit from IEntityBase</typeparam>
+    /// <typeparam name="TEntity">Type of entity to create, must inherit from <see cref="EntityBase"/></typeparam>
     public sealed class AddSingleBuilder<TEntity> :
-        BaseEntityStateBuilder<AddSingleBuilder<TEntity>, TEntity> where TEntity : IEntityBase
+        BaseEntityStateBuilder<AddSingleBuilder<TEntity>, TEntity> where TEntity : EntityBase
     {
         /// <summary>
         /// Entity to be created
