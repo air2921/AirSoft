@@ -16,7 +16,7 @@ namespace AirSoft.MongoDb.Abstractions.Documents
     {
         /// <summary>
         /// Unique document identifier (Primary Key)
-        /// Automatically initialized with new ObjectId converted to string
+        /// Automatically initialized with new ObjectId
         /// </summary>
         [BsonId]
         [BsonElement("_id")]
