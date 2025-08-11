@@ -4,15 +4,39 @@ using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using AirSoft.Exceptions;
 using System.Linq.Expressions;
 
-namespace AirSoft.EntityFrameworkCore.Abstractions.Repository
+namespace AirSoft.EntityFrameworkCore.Abstractions
 {
     /// <summary>
-    /// Provides repository pattern operations for retrieving entities from the data store.
-    /// Supports various query operations including single/multiple entity retrieval, counting, and paginated results.
+    /// Generic repository interface providing read-only operations for entities.
+    /// Supports both synchronous and asynchronous methods for entity retrieval,
+    /// existence checks and counting with optional filtering capabilities.
+    /// Includes query building functionality for complex data retrieval scenarios.
+    /// All operations throw <see cref="EntityException"/> on failures.
     /// </summary>
-    /// <typeparam name="TEntity">The type of the entity. It must inherit from <see cref="EntityBase"/>.</typeparam>
-    public interface IGetRepository<TEntity> where TEntity : EntityBase
+    /// <typeparam name="TEntity">Entity type, must inherit from <see cref="EntityBase"/></typeparam>
+    public interface IReadonlyEntityRepository<TEntity> where TEntity : EntityBase
     {
+        /// <summary>
+        /// Asynchronously checks if any records match the specified filter.
+        /// </summary>
+        /// <param name="filter">The filter expression to apply to the entity set.</param>
+        /// <param name="cancellationToken">A token to cancel the operation.</param>
+        /// <returns>True if matching record exists; otherwise false.</returns>
+        /// <exception cref="EntityException">
+        /// Thrown when:
+        /// - Database operation fails
+        /// - Operation is cancelled
+        /// </exception>
+        public Task<bool> IsExistsAsync(Expression<Func<TEntity, bool>> filter, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Checks if any records match the specified filter.
+        /// </summary>
+        /// <param name="filter">The filter expression to apply to the entity set.</param>
+        /// <returns>True if matching record exists; otherwise false.</returns>
+        /// <exception cref="EntityException">Thrown when database operation fails</exception>
+        public bool IsExists(Expression<Func<TEntity, bool>> filter);
+
         /// <summary>
         /// Asynchronously retrieves the count of entities that match the specified filter.
         /// </summary>

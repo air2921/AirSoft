@@ -16,7 +16,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
 {
     /// <summary>
     /// A generic repository class responsible for performing CRUD operations on entities in a database context.
-    /// This class implements the <see cref="IRepository{TEntity}"/> interface.
+    /// This class implements the <see cref="IEntityRepository{TEntity}"/> interface.
     /// It utilizes Entity Framework Core to interact with a database and supports various query and manipulation methods.
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity being managed by the repository. It must inherit from <see cref="EntityBase"/>.</typeparam>
@@ -25,7 +25,7 @@ namespace AirSoft.EntityFrameworkCore.Implementations
     /// This repository class provides methods for querying, adding, updating, and deleting entities in a database.
     /// </remarks>
     public partial class Repository<TEntity, TDbContext> :
-        IRepository<TEntity> where TEntity : EntityBase where TDbContext : DbContext
+        IEntityRepository<TEntity> where TEntity : EntityBase where TDbContext : DbContext
     {
         #region Fields and constructor
 

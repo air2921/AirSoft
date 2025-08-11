@@ -12,25 +12,14 @@ namespace AirSoft.EntityFrameworkCore
     public static class ServiceExtension
     {
         /// <summary>
-        /// Registers Entity Framework Core repository pattern services for the specified DbContext.
+        /// Registers default entity repositories (both read and write operations) for all DbSet&lt;T&gt; entities
+        /// in the specified DbContext as scoped services implementing IEntityRepository&lt;T&gt;
         /// </summary>
-        /// <typeparam name="TDbContext">The DbContext type to register repositories for.</typeparam>
-        /// <param name="services">The service collection to add the services to.</param>
-        /// <returns>The <see cref="IServiceCollection"/> for chaining.</returns>
-        /// <remarks>
-        /// Automatically registers the following services:
-        /// - Unit of Work implementations <see cref="IUnitOfWork"/>
-        /// - Transaction factories <see cref="ITransactionFactory"/>
-        /// - Repository implementations for all entity types <see cref="IRepository{TEntity}"/>)
-        /// 
-        /// Scans the <typeparamref name="TDbContext"/> for all <see cref="DbSet{TEntity}"/> properties
-        /// and registers corresponding repositories with scoped lifetime.
-        /// </remarks>
-        public static IServiceCollection AddEntityFrameworkCoreRepository<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+        /// <typeparam name="TDbContext">Type of the DbContext to scan for entities</typeparam>
+        /// <param name="services">The IServiceCollection to add services to</param>
+        /// <returns>The same service collection so that multiple calls can be chained</returns>
+        public static IServiceCollection AddDefaultEntityFrameworkRepository<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
         {
-            services.AddScoped<IUnitOfWork, UnitOfWork<TDbContext>>();
-            services.AddScoped<ITransactionFactory, TransactionFactory<TDbContext>>();
-
             var dbContextType = typeof(TDbContext);
             var entityTypes = dbContextType.GetProperties()
                 .Where(prop => prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
@@ -41,9 +30,76 @@ namespace AirSoft.EntityFrameworkCore
             {
                 var repositoryType = typeof(Repository<,>).MakeGenericType(entityType, dbContextType);
 
-                var interfaceType = typeof(IRepository<>).MakeGenericType(entityType);
+                var interfaceType = typeof(IEntityRepository<>).MakeGenericType(entityType);
                 services.AddScoped(interfaceType, repositoryType);
             }
+
+            return services;
+        }
+
+        /// <summary>
+        /// Registers read-only entity repositories for all DbSet&lt;T&gt; entities in the specified DbContext
+        /// as scoped services implementing IReadonlyEntityRepository&lt;T&gt;
+        /// </summary>
+        /// <typeparam name="TDbContext">Type of the DbContext to scan for entities</typeparam>
+        /// <param name="services">The IServiceCollection to add services to</param>
+        /// <returns>The same service collection so that multiple calls can be chained</returns>
+        public static IServiceCollection AddReadonlyEntityFrameworkRepository<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+        {
+            var dbContextType = typeof(TDbContext);
+            var entityTypes = dbContextType.GetProperties()
+                .Where(prop => prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+                .Select(prop => prop.PropertyType.GetGenericArguments()[0])
+                .ToImmutableArray();
+
+            foreach (var entityType in entityTypes)
+            {
+                var repositoryType = typeof(Repository<,>).MakeGenericType(entityType, dbContextType);
+
+                var interfaceType = typeof(IReadonlyEntityRepository<>).MakeGenericType(entityType);
+                services.AddScoped(interfaceType, repositoryType);
+            }
+
+            return services;
+        }
+
+        /// <summary>
+        /// Registers stateful (write) entity repositories for all DbSet&lt;T&gt; entities in the specified DbContext
+        /// as scoped services implementing IStatefulEntityRepository&lt;T&gt;
+        /// </summary>
+        /// <typeparam name="TDbContext">Type of the DbContext to scan for entities</typeparam>
+        /// <param name="services">The IServiceCollection to add services to</param>
+        /// <returns>The same service collection so that multiple calls can be chained</returns>
+        public static IServiceCollection AddStatefulEntityFrameworkRepository<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+        {
+            var dbContextType = typeof(TDbContext);
+            var entityTypes = dbContextType.GetProperties()
+                .Where(prop => prop.PropertyType.IsGenericType && prop.PropertyType.GetGenericTypeDefinition() == typeof(DbSet<>))
+                .Select(prop => prop.PropertyType.GetGenericArguments()[0])
+                .ToImmutableArray();
+
+            foreach (var entityType in entityTypes)
+            {
+                var repositoryType = typeof(Repository<,>).MakeGenericType(entityType, dbContextType);
+
+                var interfaceType = typeof(IStatefulEntityRepository<>).MakeGenericType(entityType);
+                services.AddScoped(interfaceType, repositoryType);
+            }
+
+            return services;
+        }
+
+        /// <summary>
+        /// Registers Unit of Work pattern implementations for the specified DbContext
+        /// including IUnitOfWork and ITransactionFactory as scoped services
+        /// </summary>
+        /// <typeparam name="TDbContext">Type of the DbContext to use with Unit of Work</typeparam>
+        /// <param name="services">The IServiceCollection to add services to</param>
+        /// <returns>The same service collection so that multiple calls can be chained</returns>
+        public static IServiceCollection AddUnitOfWork<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+        {
+            services.AddScoped<IUnitOfWork, UnitOfWork<TDbContext>>();
+            services.AddScoped<ITransactionFactory, TransactionFactory<TDbContext>>();
 
             return services;
         }
