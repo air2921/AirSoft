@@ -35,10 +35,10 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
         public bool AsSplitQuery { get; private set; } = false;
 
         /// <summary>
-        /// Indicates whether change tracking should be disabled.
+        /// Indicates whether change tracking should be enabled.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public bool AsNoTracking { get; private set; } = false;
+        public bool AsTracking { get; private set; } = true;
 
         /// <summary>
         /// Sets up includes using the fluent include builder.
@@ -125,13 +125,13 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Query
         }
 
         /// <summary>
-        /// Sets whether to disable change tracking.
+        /// Sets whether to enable change tracking.
         /// </summary>
-        /// <param name="noTracking">True to disable tracking.</param>
+        /// <param name="tracking">True to enable tracking.</param>
         /// <returns>The current builder instance.</returns>
-        public RangeQueryBuilder<TEntity> WithNoTracking(bool noTracking = true)
+        public RangeQueryBuilder<TEntity> WithTracking(bool tracking = true)
         {
-            AsNoTracking = noTracking;
+            AsTracking = tracking;
             return this;
         }
 

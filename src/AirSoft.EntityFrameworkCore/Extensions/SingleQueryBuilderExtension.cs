@@ -51,10 +51,10 @@ namespace AirSoft.EntityFrameworkCore.Extensions
             if (builder.IgnoreDefaultQueryFilters)
                 query = query.IgnoreQueryFilters();
 
-            if (builder.AsNoTracking)
-                query = query.AsNoTracking();
-            else
+            if (builder.AsTracking)
                 query = query.AsTracking();
+            else
+                query = query.AsNoTracking();
 
             if (builder.AsSplitQuery)
                 query = query.AsSplitQuery();
