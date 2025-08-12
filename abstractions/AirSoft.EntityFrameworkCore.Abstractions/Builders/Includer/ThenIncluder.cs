@@ -39,7 +39,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// <typeparam name="TProperty">The type of the related entity to include.</typeparam>
         /// <param name="expression">A lambda expression representing the navigation property.</param>
         /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
-        public IThenIncluder<TEntity, TProperty> WithThenInclude<TProperty>(Expression<Func<TPreviousProperty, TProperty>> expression) where TProperty : EntityBase
+        public IThenIncluder<TEntity, TProperty> WithThenInclude<TProperty>(Expression<Func<TPreviousProperty, TProperty?>> expression) where TProperty : EntityBase
         {
             _ = expression ?? throw new InvalidArgumentException($"Using {nameof(WithThenInclude)} without expression is not allowed");
             string nestedPath = GetNestedPathFromExpression(expression);
@@ -56,7 +56,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// <typeparam name="TProperty">The type of the related entities in the collection.</typeparam>
         /// <param name="expression">A lambda expression representing the collection navigation property.</param>
         /// <exception cref="InvalidArgumentException">Thrown when expression is null or invalid</exception>
-        public IThenIncluder<TEntity, TProperty> WithThenInclude<TProperty>(Expression<Func<TPreviousProperty, IEnumerable<TProperty>>> expression) where TProperty : EntityBase
+        public IThenIncluder<TEntity, TProperty> WithThenInclude<TProperty>(Expression<Func<TPreviousProperty, IEnumerable<TProperty?>?>> expression) where TProperty : EntityBase
         {
             _ = expression ?? throw new InvalidArgumentException($"Using {nameof(WithThenInclude)} without expression is not allowed");
             string nestedPath = GetNestedPathFromExpression(expression);
@@ -72,7 +72,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// </summary>
         /// <typeparam name="TProperty">The type of the related entity to include.</typeparam>
         /// <param name="expression">Lambda expression specifying the navigation property from root entity.</param>
-        public new IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, TProperty>> expression) where TProperty : EntityBase
+        public new IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, TProperty?>> expression) where TProperty : EntityBase
             => _rootIncluder.WithInclude(expression);
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// </summary>
         /// <typeparam name="TProperty">The type of entities in the collection to include.</typeparam>
         /// <param name="expression">Lambda expression specifying the collection navigation property from root entity.</param>
-        public new IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, IEnumerable<TProperty>>> expression) where TProperty : EntityBase
+        public new IThenIncluder<TEntity, TProperty> WithInclude<TProperty>(Expression<Func<TEntity, IEnumerable<TProperty?>?>> expression) where TProperty : EntityBase
             => _rootIncluder.WithInclude(expression);
     }
 }
