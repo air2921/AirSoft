@@ -31,6 +31,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         {
             _rootIncluder = rootIncluder;
             _currentPath = currentPath;
+            Paths = _rootIncluder.Paths;
         }
 
         /// <summary>

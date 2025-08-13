@@ -3,17 +3,32 @@ using AirSoft.EntityFrameworkCore.Abstractions.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Options;
 using System.Linq.Expressions;
 using System.Reflection;
 
 namespace AirSoft.EntityFrameworkCore.DbContexts
 {
     /// <summary>
-    /// Base database context with soft delete functionality and audit tracking
+    /// Base database context class with support for change auditing.
     /// </summary>
-    /// <param name="options">The options to be used by a DbContext</param>
-    public abstract class AuditableDbContext(DbContextOptions options) : DbContext(options)
+    public abstract class AuditableDbContext : DbContext
     {
+        /// <summary>
+        /// Initializes a new instance of the AuditableDbContext class using the default options.
+        /// </summary>
+        public AuditableDbContext() : base()
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the AuditableDbContext class with the specified options.
+        /// </summary>
+        /// <param name="options">The options for this context.</param>
+        public AuditableDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
         /// <summary>
         /// Restores a soft-deleted entity by marking it as active
         /// </summary>

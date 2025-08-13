@@ -23,7 +23,7 @@ namespace AirSoft.EntityFrameworkCore.Abstractions.Builders.Includer
         /// Gets the collection of include paths that have been specified.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public HashSet<string> Paths { get; } = [];
+        public HashSet<string> Paths { get; internal set; } = [];
 
         /// <summary>
         /// Specifies a related entity to include in the query results.
