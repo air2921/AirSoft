@@ -1,5 +1,6 @@
 ﻿using AirSoft.EntityFrameworkCore.Abstractions;
 using AirSoft.EntityFrameworkCore.Utils;
+using AirSoft.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -27,10 +28,28 @@ namespace AirSoft.EntityFrameworkCore.Implementations
 
         /// <inheritdoc/>
         public async Task<IDatabaseTransaction> BeginAsync(CancellationToken cancellationToken = default)
-            => new DatabaseTransaction(await dbContext.Database.BeginTransactionAsync(cancellationToken));
+        {
+            try
+            {
+                return new DatabaseTransaction(await dbContext.Database.BeginTransactionAsync(cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                throw new EntityException("Unable to begin transaction", ex);
+            }
+        }
 
         /// <inheritdoc/>
         public async Task<IDatabaseTransaction> BeginAsync(IsolationLevel isolation, CancellationToken cancellationToken = default)
-            => new DatabaseTransaction(await dbContext.Database.BeginTransactionAsync(isolation, cancellationToken));
+        {
+            try
+            {
+                return new DatabaseTransaction(await dbContext.Database.BeginTransactionAsync(isolation, cancellationToken));
+            }
+            catch (Exception ex)
+            {
+                throw new EntityException("Unable to begin transaction", ex);
+            }
+        }
     }
 }
